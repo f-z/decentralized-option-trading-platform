@@ -1,0 +1,143 @@
+<div class="container">
+  <div class="card login">
+    <img class="profile-photo" src="{{ this.user.photo }}" *ngIf="user!=null" (click)="goToMyProfile();">
+    <label class="welcome-label" *ngIf="user!=null">Welcome, {{ user.firstName }}!</label>
+    <h1 class="headline">UCL Bay</h1>
+    <button class="button" routerLink="/register" *ngIf="user==null">
+      <span>Register</span>
+    </button>
+    <button class="button" routerLink="/login" *ngIf="user==null">
+      <span>Login</span>
+    </button>
+    <button class="button" (click)="logout()" *ngIf="user!=null">
+      <span>Logout</span>
+    </button>
+    <button class="button" routerLink="/search" *ngIf="user!=null">
+      <span>Main Page</span>
+    </button>
+  </div>
+
+  <br>
+
+  <form id="add-item-form">
+    <br>
+    <br>
+
+    <div class="space-bot text-center">
+      <h2>New Auction</h2>
+    </div>
+
+    <div class="row">
+      <h4>Item Name</h4>
+      <div class="input col">
+        <input type="text" [(ngModel)]="name" name="name" placeholder="Add item name" class="item-name" maxlength="50"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <h4>Item Description</h4>
+      <div class="input col">
+        <textarea [(ngModel)]="description" name="description" maxlength="500" placeholder="Add item description" class="item-description" value="item?.description"></textarea>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+      <div class="col-half">
+        <div class="align">
+          <label for="category">Category: </label>
+
+          <select [(ngModel)]="selectedCategory" name="category" class="input-item">
+            <option *ngFor="let category of categories" [ngValue]="category.categoryName">{{category.categoryName}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="align">
+          <label for="condition">Condition: </label>
+          <select type="text inline-block" [(ngModel)]="condition" name="condition" id="condition" class="input-item">
+            <option value='New'>New</option>
+            <option value='Used'>Used</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="align">
+        <label for="quantity">Quantity: </label>
+        <input type="number" [(ngModel)]="quantity" value="1" min="0" max="100" step="1" id="quantity" class="input-q" name="quantity">
+      </div>
+    </div>
+    <br>
+    <h3 class="centred">Auction Schedule</h3>
+    <div class="row ">
+      <div class="inline-block">
+        <div class="align">
+          <label for="endDate">End Date: </label>
+          <input type="date" [(ngModel)]="endDate" name="endDate" id="endDate" class="time-input-date">
+        </div>
+      </div>
+
+      <div class="inline-block">
+        <div class="align">
+          <label for="endTime">End Time: </label>
+          <input type="time" [(ngModel)]="endTime" name="endTime" id="endTime" class="time-input-t">
+        </div>
+      </div>
+    </div>
+    <br>
+    <h3 class="centred">Auction Pricing</h3>
+    <div class="row">
+      <div class="col-half">
+        <div class="input">
+          <div class="align">
+            <label for="startPrice">Start Price: £</label>
+            <input type="number" class="inline-block" [(ngModel)]="startPrice" min="0" step=".01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+              name="startPrice" class="price-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-half">
+
+        <div class="input" title="If this price threshold is not met when the auction ends, the auction will expire without a winner.">
+          <div class="align">
+            <label for="reservePrice">Reserve Price: £</label>
+            <input type="number" class="inline-block" [(ngModel)]="reservePrice" min="0" step=".01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+              name="reservePrice" class="price-input" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input right">
+        <div class="align">
+          <label for="buyNowPrice">Buy-it-now Price: £</label>
+          <input type="number" class="inline-block" [(ngModel)]="buyNowPrice" min="0" step=".01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+            name="buyNowPrice" placeholder="(Optional)" class="price-input" />
+        </div>
+      </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+      <h3 class="centred">Item Photo</h3>
+      <input type="file" name="photo" ng2FileSelect [uploader]="uploader1" />
+      <br>
+      <br>
+      <div class="col-half">
+        <input type="button" id="cancel-button" value="Cancel" (click)="goBack()" />
+      </div>
+      <div class="col-half">
+        <input type="submit" value="Create Auction" (click)="validate()">
+      </div>
+    </div>
+
+  </form>
+</div>

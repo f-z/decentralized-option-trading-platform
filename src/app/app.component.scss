@@ -1,0 +1,62 @@
+ /* -------------- */
+
+ /* Search Card Styles */
+
+ /* -------------- */
+
+ .search {
+   position: relative;
+   width: 100%;
+   font-weight: 300;
+   min-width: 320px;
+   margin-top: 13%;
+   z-index: 2;
+   left: 50%;
+   -webkit-transform: translate(-50%, -50%);
+   -moz-transform: translate(-50%, -50%);
+   -ms-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+ }
+
+ .search .search-label {
+   font-weight: 400;
+   font-size: 1rem;
+   text-align: left;
+   font-family: inherit;
+ }
+
+ .search .search-input {
+   width: 100%;
+   display: inline-block;
+   font-weight: 100;
+   font-size: 1.3rem;
+   color: #475B62;
+   border: 1px solid #C5C5C5;
+   border-radius: 4px;
+   outline: 0;
+ }
+
+ .search .categories {
+   width: 100%;
+ }
+
+ :host {
+   display: block;
+   background: #f3f3f3;
+ }
+
+ .grid-list-container {
+   position: relative;
+   z-index: 4;
+   margin-top: -6%;
+ }
+
+ @import '../palette';
+ app-item {
+   cursor: pointer;
+ }
+
+ .grid-list-container{
+   margin-right: 10%;
+   margin-left: 10%;
+ }

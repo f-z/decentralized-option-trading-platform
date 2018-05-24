@@ -1,20 +1,92 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<!-- card login / registration -->
+<div class="card login">
+  <img class="profile-photo" src="{{ this.user.photo }}" *ngIf="user!=null" (click)="goToMyProfile();">
+  <label class="welcome-label" *ngIf="user!=null">Welcome, {{ user.firstName }}!
+  </label>
+  <h1 class="headline">UCL Bay</h1>
+  <button class="button" routerLink="/register" *ngIf="user==null">
+    <span>Register</span>
+  </button>
+  <button class="button" routerLink="/login" *ngIf="user==null">
+    <span>Login</span>
+  </button>
+  <button class="button" (click)="logout()" *ngIf="user!=null">
+    <span>Logout</span>
+  </button>
+  <button class="button" routerLink="/my-items" *ngIf="user!=null && user.role!='admin'">
+    <span>My Items</span>
+  </button>
+  <button class="button" *ngIf="user!=null && user.role=='admin'">
+    <span>Dashboard</span>
+  </button>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+<!-- card search -->
+<div class="card search">
+  <mat-button-toggle-group #categories="matButtonToggleGroup" class="categories" (change)="selectCategory(categories.value);">
+    <mat-button-toggle value="All" checked=true>
+      <mat-icon>check box</mat-icon>
+      <b>All items</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Electronics">
+      <mat-icon>devices</mat-icon>
+      <b>Electronics</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Books">
+      <mat-icon svgIcon="book"></mat-icon>
+      <b>Books</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Fashion">
+      <mat-icon svgIcon="fashion"></mat-icon>
+      <b>Fashion</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Sports">
+      <mat-icon svgIcon="sports"></mat-icon>
+      <b>Sports</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Home">
+      <mat-icon svgIcon="home"></mat-icon>
+      <b>Home</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Motors">
+      <mat-icon svgIcon="car"></mat-icon>
+      <b>Motors</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Collectables">
+      <mat-icon svgIcon="collectables"></mat-icon>
+      <b>Collectables</b>
+    </mat-button-toggle>
+    <mat-button-toggle value="Other">
+      <mat-icon>more</mat-icon>
+      <b>Other</b>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <br>
+  <br>
+
+  <label class="search-label">search
+    <span *ngIf="query" [innerHTML]="' for: ' + query"></span>
+  </label>
+  <input class="search-input" [(ngModel)]="term" placeholder="type in search term here" [ngModelOptions]="{updateOn: 'change'}"
+    onfocus="this.value=''">
+</div>
+
+<div class="grid-list-container" *ngIf="!term && user!=null && user.role!='admin'">
+  <h2 *ngIf="recommendedItems">Items we recommend for you</h2>
+  <mat-grid-list cols="3" gutterSize="16">
+    <mat-grid-tile *ngFor="let item of recommendedItems">
+      <app-item [item]="item" (click)="setItem(item)">
+      </app-item>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<div class="grid-list-container" *ngIf="term">
+  <mat-grid-list cols="3" gutterSize="16" *ngIf="term">
+    <mat-grid-tile *ngFor="let item of items | search : term">
+      <app-item [item]="item" (click)="setItem(item)">
+      </app-item>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

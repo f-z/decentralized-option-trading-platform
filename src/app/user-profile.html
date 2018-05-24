@@ -1,0 +1,178 @@
+<router-outlet></router-outlet>
+
+<!-- card logout -->
+<section>
+  <div class="card login">
+    <img class="profile-photo" src="{{ this.user.photo }}" *ngIf="user!=null" (click)="goToMyProfile();">
+    <label class="welcome-label" *ngIf="user!=null">Welcome, {{ user.firstName }}!</label>
+    <h1 class="headline">UCL Bay</h1>
+    <button class="button" routerLink="/register" *ngIf="user==null">
+      <span>Register</span>
+    </button>
+    <button class="button" routerLink="/login" *ngIf="user==null">
+      <span>Login</span>
+    </button>
+    <button class="button" (click)="logout()" *ngIf="user!=null">
+      <span>Logout</span>
+    </button>
+    <button class="button" routerLink="/search" *ngIf="user!=null">
+      <span>Main Page</span>
+    </button>
+  </div>
+</section>
+
+<br>
+
+<!-- user details -->
+<section class="user-details" *ngIf="user!=null">
+
+  <div>
+    <img class="viewingProfilePhoto centred" src="{{ profileUser?.photo }}">
+    <h2 class="viewingProfileName centred" *ngIf="user.userID != profileUser?.userID">{{ profileUser?.username }}</h2>
+    <h2 class="viewingProfileName centred" *ngIf="user.userID == profileUser?.userID">My Profile</h2>
+  </div>
+
+  <div class="ratings">
+    <div class="average-rating">
+      <h3 class="vertical-align">Seller Rating:&nbsp;</h3>
+      <div *ngIf="profileUser != null && !(averageSellerRating < 1)" class="star vertical-align" title="{{ profileUser.username }}'s average rating as a seller">
+        <div class="rating" [style.width.%]="averageSellerRating">
+          <span>&#x2605; &#x2605; &#x2605; &#x2605; &#x2605;</span>
+        </div>
+      </div>
+      <h6 class="ratingcount vertical-align" title="{{ sellerFeedbackCount }} people have rated {{ profileUser?.username }} as a seller."
+        *ngIf="sellerFeedbackCount != 1">&nbsp;({{ sellerFeedbackCount }})</h6>
+      <h6 class="ratingcount vertical-align" title="{{ sellerFeedbackCount }} person has rated {{ profileUser?.username }} as a seller."
+        *ngIf="sellerFeedbackCount == 1">&nbsp;({{ sellerFeedbackCount }})</h6>
+    </div>
+    <div *ngIf="profileUser != null" class="average-rating">
+      <h3 class="vertical-align">Buyer Rating:&nbsp;</h3>
+      <div class="star vertical-align" title="{{ profileUser.username }}'s average buyer rating" *ngIf="profileUser != null && !(averageBuyerRating < 1)">
+        <div class="rating" [style.width.%]="averageBuyerRating">
+          <span>&#x2605; &#x2605; &#x2605; &#x2605; &#x2605;</span>
+        </div>
+      </div>
+      <h6 class="ratingcount vertical-align" title="{{ buyerFeedbackCount }} people have rated {{ profileUser?.username }} as a buyer."
+        *ngIf="buyerFeedbackCount > 1">&nbsp;({{ buyerFeedbackCount }})</h6>
+      <h6 class="ratingcount vertical-align" title="{{ buyerFeedbackCount }} person has rated {{ profileUser?.username }} as a buyer."
+        *ngIf="buyerFeedbackCount == 1">&nbsp;({{ buyerFeedbackCount }})</h6>
+      <h6 class="ratingcount vertical-align" title="{{ profileUser?.username }} is yet unrated as a buyer." *ngIf="buyerFeedbackCount == 0">&nbsp;({{ buyerFeedbackCount }})</h6>
+    </div>
+  </div>
+
+  <div class="feedback" *ngIf="sellerFeedbackCount > 0">
+    <h3 *ngIf="sellerFeedbackCount > 0 " class="comments-title">Feedback from {{ profileUser?.username }}'s customers</h3>
+    <ul class="feedback-list cf">
+      <li class="feedbacklist-item cf" *ngFor="let feedback of userSellerFeedback">
+        <app-feedback-item class="content" [feedback]="feedback">
+        </app-feedback-item>
+      </li>
+    </ul>
+    <hr>
+  </div>
+
+  <div class="feedback" *ngIf="buyerFeedbackCount > 0">
+    <h3 *ngIf="buyerFeedbackCount > 0" class="comments-title">Feedback from {{ profileUser?.username }}'s sellers</h3>
+    <ul class="feedback-list cf">
+      <li class="feedbacklist-item cf" *ngFor="let feedback of userBuyerFeedback">
+        <app-feedback-item class="content" [feedback]="feedback">
+        </app-feedback-item>
+      </li>
+    </ul>
+    <hr>
+  </div>
+  <br>
+  <br>
+
+  <div class="container" *ngIf=" user.userID == profileUser?.userID">
+    <form id="change-details-form">
+      <h2 class="viewingProfileName centred" *ngIf="user.userID == profileUser?.userID">Personal Details</h2>
+
+      <div class="row">
+        <h4>Address</h4>
+        <div class="col-half">
+          <div class="input">
+            <input type="text" [(ngModel)]="street" name="street" placeholder="Street" autocomplete="street-address" />
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input">
+            <input type="text" [(ngModel)]="city" name="city" placeholder="City" autocomplete="address-level2" />
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input">
+            <input type="text" [(ngModel)]="postcode" name="postcode" placeholder="Postcode" autocomplete="postal-code" />
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input">
+            <input type="text" [(ngModel)]="phone" name="phone" placeholder="Phone number" autocomplete="tel-national" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <h4>Account</h4>
+        <div class="col-half">
+          <div class="input">
+            <input type="text" [(ngModel)]="username" name="username" placeholder="Username" autocomplete="username" />
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input">
+            <input type="password" [(ngModel)]="oldPassword" name="password" placeholder="Current password" autocomplete="new-password"
+            />
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input">
+            <input type="password" [(ngModel)]="password" name="password" placeholder="New password" autocomplete="new-password" />
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input">
+            <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Confirm password" autocomplete="new-password"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-half">
+          <h4>Date of Birth</h4>
+          <input type="date" [(ngModel)]="DOB" name="DOB" autocomplete="bday" />
+        </div>
+      </div>
+      <br>
+      <br>
+      <h4>Profile Photo</h4>
+      <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+      <br>
+      <br>
+      <br>
+      <input type="submit" class="save-changes-button" value="Save Changes" (click)="changeDetails()">
+    </form>
+  </div>
+</section>
+<br>
+<div class="user-auctions">
+  <h2 *ngIf="user.userID != profileUser?.userID">Auctions</h2>
+  <h2 *ngIf="user.userID == profileUser?.userID">My Auctions</h2>
+  <div *ngIf="userAuctions != null">
+    <h3 *ngIf="userAuctions.length == 0 && user.userID != profileUser?.userID" class="centred">There are no live auctions from this user at this time.</h3>
+    <h3 class="no-auctions-comment centred" *ngIf="userAuctions.length == 0 && user.userID == profileUser?.userID">You have no live auctions at this time</h3>
+  </div>
+  <button class="add-item-button" (click)="additem()" *ngIf=" user.userID == profileUser?.userID">
+    <span>Add New Auction</span>
+  </button>
+  <!-- item grid -->
+  <div class="grid-list-container">
+    <mat-grid-list cols="3" gutterSize="16">
+      <mat-grid-tile *ngFor="let item of userAuctions">
+        <app-item [item]="item" (click)="setItem(item)" [routerLink]="['/items', item.auctionID]">
+        </app-item>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>

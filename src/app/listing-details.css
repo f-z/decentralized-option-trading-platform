@@ -1,0 +1,300 @@
+.item-details {
+  margin-bottom: 30px;
+  background: white;
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+.img-container {
+  width: 100%;
+}
+
+.img-container img {
+  width: 100%;
+}
+
+.item-description {
+  position: relative;
+  clear: left;
+  top: 5%;
+}
+
+img.item-photo {
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 250px;
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+.item-description {
+  clear: left;
+  white-space: pre-wrap;
+}
+
+#newBid {
+  width: 200px;
+  display: inline-block;
+}
+
+#submit-bid {
+  width: 100px;
+  text-align: center;
+  display: inline-block;
+}
+
+.bid-box {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+}
+
+#buy-now-btn {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 150px;
+  display: inline-block;
+}
+
+#watch-btn {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 150px;
+}
+
+.item-name {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.reserve-notification {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.info-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.left-items {
+  grid-column: 1/2;
+}
+
+.left-items>* {
+  display: block;
+}
+
+.right-items {
+  grid-column: 2/3;
+}
+
+.userinfo-box {
+  top: 10%;
+  margin-bottom: 6%;
+}
+
+.vertical-align>* {
+  vertical-align: middle;
+}
+
+.sellerInfo {
+  display: inline-block;
+}
+
+.ratingcount {
+  display: inline-block;
+  font-size: 14px;
+}
+
+h3 {
+  font-size: 1.0em;
+  font-weight: 500;
+}
+
+.sellerName {
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* Stars */
+
+.star {
+  width: 95px;
+  position: relative;
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.rating {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.rating span {
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  color: gold;
+}
+
+.rating span:before {
+  content: "\2606 \2606 \2606 \2606 \2606";
+  position: absolute;
+  color: #bdbdbd;
+}
+
+.link {
+  cursor: pointer;
+  color: blue;
+}
+
+/* IMAGE CAROUSEL */
+
+/* Slideshow container */
+
+.slideshow-container {
+  position: relative;
+  margin: auto;
+}
+
+/* Next & previous buttons */
+
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Position the "next button" to the right */
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {
+    opacity: .4
+  }
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: .4
+  }
+  to {
+    opacity: 1
+  }
+}
+
+/* On smaller screens, decrease text size */
+
+@media only screen and (max-width: 300px) {
+  .prev,
+  .next,
+  .text {
+    font-size: 11px
+  }
+}
+
+.grid-list-container {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
+  z-index: 4;
+  border: none;
+}
+
+.recommended{
+  font-size: 1.2em;
+}
+
+.stopwatching {
+  width: 200px;
+}
+
+.reauction-button{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 30px;
+}
+
+.reauction-button span {
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.reauction-button span:after {
+  content: '\00bb';
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.reauction-button:hover span:after {
+  opacity: 1;
+}

@@ -1,0 +1,124 @@
+<div class="card login">
+  <h1 class="headline">UCL Bay</h1>
+  <br>
+  <br>
+  <br>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="container">
+  <div class="input-group">
+    <input type="radio" name="role" value="true" [(ngModel)]="loginPage" id="login-button" routerLink="/login" />
+    <label for="login-button">Login</label>
+    <input type="radio" name="role" value="false" [(ngModel)]="loginPage" id="register-button" routerLink="/register" />
+    <label for="register-button">Register</label>
+  </div>
+
+  <br>
+
+  <form id="register-form" autocomplete="on">
+
+    <div class="space-bot text-center">
+      <h2>Registration</h2>
+    </div>
+
+    <br>
+
+    <div class="row">
+      <h4>Name</h4>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="First name" autocomplete="given-name" />
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="lastName" name="lastName" placeholder="Last name" autocomplete="family-name" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h4>Address</h4>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="street" name="street" placeholder="Street" autocomplete="street-address" />
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="city" name="city" placeholder="City" autocomplete="address-level2" />
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="postcode" name="postcode" placeholder="Postcode" autocomplete="postal-code" />
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="phone" name="phone" placeholder="Phone number" autocomplete="tel-national" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h4>Account</h4>
+      <div class="col-half">
+        <div class="input">
+          <input type="text" [(ngModel)]="username" name="username" placeholder="Username" autocomplete="username" />
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="input">
+          <input type="email" [(ngModel)]="email" name="email" placeholder="Email address" autocomplete="email" />
+        </div>
+      </div>
+      <div class="col-half">
+        <div class="input">
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Password" autocomplete="new-password" />
+        </div>
+      </div>
+      <div class="input">
+        <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Confirm password" autocomplete="new-password"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-half">
+        <h4>Date of Birth</h4>
+        <input type="date" [(ngModel)]="DOB" name="dateOfBirth" autocomplete="bday" />
+      </div>
+    </div>
+    <br>
+
+    <h4>Profile Photo</h4>
+    <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+    <br>
+    <br>
+
+    <div class="row">
+      <h4>Terms and Conditions</h4>
+      <div class="input-group">
+        <input type="checkbox" id="terms" name="checkbox" [(ngModel)]="termsAccepted" />
+        <label for="terms">I accept the terms and conditions for signing up to this service, and hereby confirm I have read the privacy policy.</label>
+      </div>
+      <br>
+      <div class="col-half">
+        <input type="button" id="cancel-button" value="Cancel" routerLink="/search" />
+      </div>
+      <div class="col-half">
+        <input type="submit" value=Register (click)="validate()">
+      </div>
+    </div>
+
+  </form>
+
+</div>
+

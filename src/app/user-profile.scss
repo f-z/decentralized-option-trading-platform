@@ -1,0 +1,172 @@
+.user-details {
+  position: relative;
+  margin-top: 20px;
+}
+
+.login {
+  position: relative;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 75px;
+}
+
+.centred {
+  text-align: center;
+}
+
+.seller-feedback {
+  margin-bottom: 20px;
+}
+
+.viewingProfilePhoto {
+  position: relative;
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feedback {
+  position: relative;
+  margin-left: 15%;
+  margin-right: 15%;
+  background: white;
+}
+
+.ratingcount {
+  font-size: 0.9em;
+}
+
+.comments-title {
+  font-size: 1.3em;
+  padding-left: 20%;
+  background: white;
+  margin-bottom: 0;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+hr {
+  margin: 0;
+}
+
+.vertical-align {
+  vertical-align: middle;
+  margin-bottom: 0;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.ratings {
+  position: relative;
+  margin-left: 15%;
+  margin-right: 15%;
+  text-align: center;
+}
+
+.rating {
+  position: relative;
+}
+
+.user-auctions {
+  position: relative;
+  margin-top: 20px;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 50px;
+}
+
+/* Stars */
+
+.star {
+  width: 95px;
+  position: relative;
+  color: #bdbdbd;
+}
+
+.rating {
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+.rating span {
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  color: gold;
+}
+
+.rating span:before {
+  content: "\2606 \2606 \2606 \2606 \2606";
+  position: absolute;
+  color: #bdbdbd;
+}
+
+@import '../palette';
+app-item {
+  cursor: pointer;
+}
+
+.add-item-button span {
+  cursor: pointer;
+  display: inline-block;
+  transition: 0.5s;
+}
+
+.add-item-button span:after {
+  content: '\00bb';
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.add-item-button:hover span:after {
+  opacity: 1;
+}
+
+.no-auctions-comment {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.add-item-button {
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  width: 170px;
+  cursor: pointer;
+  padding: 10px 10px;
+  opacity: .95;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.save-changes-button {
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  width: 170px;
+  cursor: pointer;
+  opacity: .95;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

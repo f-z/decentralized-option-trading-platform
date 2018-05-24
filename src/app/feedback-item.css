@@ -1,0 +1,52 @@
+.feedback-item {
+  padding-bottom: 15px;
+  padding: 10px 20%;
+  position: relative;
+}
+
+.username {
+  margin-left: 20px;
+  font-size: 1.1em;
+}
+
+.inline-block {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.comment {
+  word-wrap: normal;
+}
+
+/* Stars  https://stackoverflow.com/questions/33858426/only-fill-60-percent-star-using-css-width*/
+
+.star {
+  width: 92px;
+  position: relative;
+  color: #bdbdbd;
+}
+
+.rating {
+  /* width inserted */
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 5;
+}
+
+.rating span {
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  color: gold;
+}
+
+.rating span:before {
+  content: "\2606 \2606 \2606 \2606 \2606";
+  position: absolute;
+  color: #bdbdbd;
+}
+
+.link {
+    cursor: pointer;
+    color: blue;
+}

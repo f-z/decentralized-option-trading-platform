@@ -1,0 +1,79 @@
+.col {
+  width: 100%;
+}
+
+.item-description {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 0;
+  resize: vertical;
+}
+
+label {
+  float: left;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.input-item {
+  width: 150px;
+}
+
+.input-q {
+  width: 150px;
+  height: 45px;
+}
+
+.row {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+option {
+  color: black;
+}
+
+select {
+  height: 45px;
+  line-height: normal;
+  padding-top: 11px;
+}
+
+.time-input-date {
+  width: 190px;
+  margin-right: 20px;
+}
+
+.time-input-t {
+  width: 120px;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.price-input {
+  width: 120px;
+  height: 45px;
+}
+
+.centred {
+  display: flex;
+  justify-content: center;
+}
+
+.right {
+  float: right;
+}
+
+h3 {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin-bottom: 20px;
+}

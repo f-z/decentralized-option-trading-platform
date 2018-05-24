@@ -1,0 +1,51 @@
+<div class="card login">
+  <h1 class="headline">UCL Bay</h1>
+  <br>
+  <br>
+  <br>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="container">
+  <div class="input-group">
+    <input type="radio" name="role" value="true" [(ngModel)]="loginPage" id="login-button" routerLink="/login"/>
+    <label for="login-button">Login</label>
+    <input type="radio" name="role" value="false" [(ngModel)]="loginPage" id="register-button" routerLink="/register"/>
+    <label for="register-button">Register</label>
+  </div>
+
+  <br>
+
+  <form id="register-form" autocomplete="on">
+
+    <div class="space-bot text-center">
+      <h2>Login</h2>
+    </div>
+
+    <br>
+
+    <div class="fullrow">
+      <input type="text" [(ngModel)]="username" name="username" placeholder="Username" autocomplete="username"/>
+    </div>
+
+    <div class="fullrow">
+      <input type="password" [(ngModel)]="password" name="password" placeholder="Password" autocomplete="current-password"/>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-half">
+        <input type="button" id="cancel-button" value="Cancel" routerLink="/search" />
+      </div>
+      <div class="col-half">
+        <input type="submit" value=Login (click)="login()">
+      </div>
+    </div>
+
+  </form>
+</div>
