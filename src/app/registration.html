@@ -1,5 +1,5 @@
 <div class="card login">
-  <h1 class="headline">UCL Bay</h1>
+  <h1 class="headline">OK!ERGO</h1>
   <br>
   <br>
   <br>
@@ -13,10 +13,10 @@
 
 <div class="container">
   <div class="input-group">
-    <input type="radio" name="role" value="true" [(ngModel)]="loginPage" id="login-button" routerLink="/login" />
-    <label for="login-button">Login</label>
-    <input type="radio" name="role" value="false" [(ngModel)]="loginPage" id="register-button" routerLink="/register" />
-    <label for="register-button">Register</label>
+    <input type="radio" name="role" value="true" [(ngModel)]="loginPage" id="login-button" routerLink="/eisodos" />
+    <label for="login-button">Είσοδος</label>
+    <input type="radio" name="role" value="false" [(ngModel)]="loginPage" id="register-button" routerLink="/eggrafi" />
+    <label for="register-button">Εγγραφή</label>
   </div>
 
   <br>
@@ -24,13 +24,13 @@
   <form id="register-form" autocomplete="on">
 
     <div class="space-bot text-center">
-      <h2>Registration</h2>
+      <h2>Εγγραφή</h2>
     </div>
 
     <br>
 
     <div class="row">
-      <h4>Name</h4>
+      <h4>Όνομα</h4>
       <div class="col-half">
         <div class="input">
           <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="First name" autocomplete="given-name" />
@@ -44,81 +44,59 @@
     </div>
 
     <div class="row">
-      <h4>Address</h4>
+      <h4>Περιοχή</h4>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="street" name="street" placeholder="Street" autocomplete="street-address" />
+          <input type="text" [(ngModel)]="region" name="region" placeholder="Περιοχή" autocomplete="address-level3" />
         </div>
       </div>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="city" name="city" placeholder="City" autocomplete="address-level2" />
-        </div>
-      </div>
-      <div class="col-half">
-        <div class="input">
-          <input type="text" [(ngModel)]="postcode" name="postcode" placeholder="Postcode" autocomplete="postal-code" />
-        </div>
-      </div>
-      <div class="col-half">
-        <div class="input">
-          <input type="text" [(ngModel)]="phone" name="phone" placeholder="Phone number" autocomplete="tel-national" />
+          <input type="text" [(ngModel)]="phone" name="phone" placeholder="Τηλέφωνο" autocomplete="tel-national" />
         </div>
       </div>
     </div>
 
     <div class="row">
-      <h4>Account</h4>
+      <h4>Λογαριασμός</h4>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="username" name="username" placeholder="Username" autocomplete="username" />
+          <input type="text" [(ngModel)]="username" name="username" placeholder="Όνομα πρόσβασης" autocomplete="username" />
         </div>
       </div>
       <div class="col-half">
         <div class="input">
-          <input type="email" [(ngModel)]="email" name="email" placeholder="Email address" autocomplete="email" />
+          <input type="email" [(ngModel)]="email" name="email" placeholder="Email" autocomplete="email" />
         </div>
       </div>
       <div class="col-half">
         <div class="input">
-          <input type="password" [(ngModel)]="password" name="password" placeholder="Password" autocomplete="new-password" />
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Κωδικός ασφαλείας" autocomplete="new-password"
+          />
         </div>
       </div>
       <div class="input">
-        <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Confirm password" autocomplete="new-password"
+        <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Επιβεβαίωση κωδικού" autocomplete="new-password"
         />
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-half">
-        <h4>Date of Birth</h4>
-        <input type="date" [(ngModel)]="DOB" name="dateOfBirth" autocomplete="bday" />
-      </div>
-    </div>
     <br>
 
-    <h4>Profile Photo</h4>
+    <h4>Φώτο προφίλ</h4>
     <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
     <br>
     <br>
 
     <div class="row">
-      <h4>Terms and Conditions</h4>
-      <div class="input-group">
-        <input type="checkbox" id="terms" name="checkbox" [(ngModel)]="termsAccepted" />
-        <label for="terms">I accept the terms and conditions for signing up to this service, and hereby confirm I have read the privacy policy.</label>
-      </div>
-      <br>
       <div class="col-half">
-        <input type="button" id="cancel-button" value="Cancel" routerLink="/search" />
+        <input type="button" id="cancel-button" value="Ακύρωση" routerLink="/anazitisi" />
       </div>
       <div class="col-half">
-        <input type="submit" value=Register (click)="validate()">
+        <input type="submit" value="Εγγραφή" (click)="validate()">
       </div>
     </div>
 
   </form>
 
 </div>
-

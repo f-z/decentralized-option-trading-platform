@@ -1,27 +1,27 @@
 <div class="feedback-box" id="feedback-box">
-	<h3 class="feedback-title">Have you completed the transation with {{ subject }}?
-		<br>
-		<br>Give them some feedback:
-	</h3>
-	<form>
-		<textarea [(ngModel)]="comment" name="comment" id="comment" placeholder="Enter your comments"></textarea>
-		<div class="text-centre">
-			<label for="rating" class="rating-label">Please rate your experience with {{ subject }} :</label>
-			<div class="rating">
-				<input id="star5" name="star" type="radio" value="5" class="radio-btn hide" [(ngModel)]="rating" />
-				<label for="star5">☆</label>
-				<input id="star4" name="star" type="radio" value="4" class="radio-btn hide" [(ngModel)]="rating" />
-				<label for="star4">☆</label>
-				<input id="star3" name="star" type="radio" value="3" class="radio-btn hide" [(ngModel)]="rating" />
-				<label for="star3">☆</label>
-				<input id="star2" name="star" type="radio" value="2" class="radio-btn hide" [(ngModel)]="rating" />
-				<label for="star2">☆</label>
-				<input id="star1" name="star" type="radio" value="1" class="radio-btn hide" [(ngModel)]="rating" />
-				<label for="star1">☆</label>
-			</div>
+  <h3 class="feedback-title">Have you completed the transation with {{ subject }}?
+    <br>
+    <br>Give them some feedback:
+  </h3>
+  <form>
+    <textarea [(ngModel)]="comment" name="comment" id="comment" placeholder="Enter your comments"></textarea>
+    <div class="text-centre">
+      <label for="rating" class="rating-label">Please rate your experience with {{ subject }} :</label>
+      <div class="rating">
+        <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" [(ngModel)]="rating" />
+        <label for="star5">☆</label>
+        <input id="star4" name="star" type="radio" value="4" class="radio-btn hide" [(ngModel)]="rating" />
+        <label for="star4">☆</label>
+        <input id="star3" name="star" type="radio" value="3" class="radio-btn hide" [(ngModel)]="rating" />
+        <label for="star3">☆</label>
+        <input id="star2" name="star" type="radio" value="2" class="radio-btn hide" [(ngModel)]="rating" />
+        <label for="star2">☆</label>
+        <input id="star1" name="star" type="radio" value="1" class="radio-btn hide" [(ngModel)]="rating" />
+        <label for="star1">☆</label>
+      </div>
 
-			<input type="submit" value="Submit" id="submit-feeback-btn" (click)="insertFeedback()">
-		</div>
-	</form>
+      <input type="submit" value="Submit" id="submit-feeback-btn" (click)="insertFeedback()">
+    </div>
+  </form>
 
 </div>

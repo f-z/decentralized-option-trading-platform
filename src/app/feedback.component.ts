@@ -5,11 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserService } from './shared/services/user.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import {
-  Item,
-  ItemService,
-  Auction,
+  Listing,
+  ListingService,
   Bid
-} from './shared/services/item.service';
+} from './shared/services/listing.service';
 
 @Component({
   selector: 'app-feedback',
@@ -20,14 +19,14 @@ export class FeedbackComponent implements OnInit {
   @Input() user: User;
   @Input() buyerID: number;
   @Input() subject: string;
-  @Input() item: Item;
+  @Input() item: Listing;
   private comment: string;
   private rating: number;
 
   constructor(
     public dialog: MatDialog,
     private userService: UserService,
-    private itemService: ItemService,
+    private itemService: ListingService,
     private http: HttpClient,
     private router: Router
   ) {}
@@ -39,7 +38,7 @@ export class FeedbackComponent implements OnInit {
       this.openDialog(
           'Please rate your experience:', '', true);
     } else {
-       if (this.user.userID === this.item.sellerID) {
+       if (this.user.username === this.item.sellerUsername) {
         this.insertSellerFeedback();
       } else {
         this.insertBuyerFeedback();
@@ -52,14 +51,14 @@ export class FeedbackComponent implements OnInit {
         'Content-Type': 'application/json'
       }),
       options: any = {
-        sellerID: this.item.sellerID,
+        sellerUsername: this.item.sellerUsername,
         buyerID: this.buyerID,
         buyerComment: this.comment,
         buyerRating: this.rating,
         auctionID: this.item.auctionID
       },
       url: any =
-        'https://php-group30.azurewebsites.net/insert_buyer_feedback.php';
+        'https://okergo.azurewebsites.net/php/insert_buyer_feedback.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -83,14 +82,14 @@ export class FeedbackComponent implements OnInit {
         'Content-Type': 'application/json'
       }),
       options: any = {
-        sellerID: this.item.sellerID,
+        sellerID: this.item.sellerUsername,
         buyerID: this.buyerID,
         sellerComment: this.comment,
         sellerRating: this.rating,
         auctionID: this.item.auctionID
       },
       url: any =
-        'https://php-group30.azurewebsites.net/insert_seller_feedback.php';
+        'https://okergo.azurewebsites.net/php/insert_seller_feedback.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {

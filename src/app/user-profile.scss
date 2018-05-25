@@ -71,7 +71,7 @@ hr {
   position: relative;
 }
 
-.user-auctions {
+.user-listings {
   position: relative;
   margin-top: 20px;
   margin-left: 15%;
@@ -111,28 +111,28 @@ app-item {
   cursor: pointer;
 }
 
-.add-item-button span {
+.add-listing-button span {
   cursor: pointer;
   display: inline-block;
   transition: 0.5s;
 }
 
-.add-item-button span:after {
+.add-listing-button span:after {
   content: '\00bb';
   opacity: 0;
   transition: 0.5s;
 }
 
-.add-item-button:hover span:after {
+.add-listing-button:hover span:after {
   opacity: 1;
 }
 
-.no-auctions-comment {
+.no-listings-comment {
   position: relative;
   margin-bottom: 20px;
 }
 
-.add-item-button {
+.add-listing-button {
   position: relative;
   text-align: center;
   font-size: 16px;

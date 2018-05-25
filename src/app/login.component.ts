@@ -32,10 +32,10 @@ export class LoginComponent {
 
   login(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { username: this.username, password: this.password },
-      url: any = 'https://php-group30.azurewebsites.net/login.php';
+      url: any = 'https://okergo.azurewebsites.net/php/login.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -69,16 +69,12 @@ export class LoginComponent {
 
     dialogRef.afterOpen().subscribe(result => {
       setTimeout(dialogRef.close(), 4000);
-      });
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (succeeded) {
         this.setUser(this.user);
-        if (this.user.role === 'seller') {
-          this.router.navigate(['/my-items']);
-        } else {
-          this.router.navigate(['/search']);
-        }
+        this.router.navigate(['/search']);
       }
     });
   }

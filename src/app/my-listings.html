@@ -3,32 +3,32 @@
 <!-- card logout -->
 <div class="card login">
   <img class="profile-photo" src="{{ this.user.photo }}" *ngIf="user!=null" (click)="goToMyProfile();">
-  <label class="welcome-label" *ngIf="user!=null">Welcome, {{ user.firstName }}!</label>
-  <h1 class="headline">UCL Bay</h1>
-  <button class="button" routerLink="/register" *ngIf="user==null">
-    <span>Register</span>
+  <label class="welcome-label" *ngIf="user!=null">Καλώς ήρθες, {{ user.firstName }}!</label>
+  <h1 class="headline">OK!ERGO</h1>
+  <button class="button" routerLink="/eggrafi" *ngIf="user==null">
+    <span>Έγγραφή</span>
   </button>
-  <button class="button" routerLink="/login" *ngIf="user==null">
-    <span>Login</span>
+  <button class="button" routerLink="/eisodos" *ngIf="user==null">
+    <span>Είσοδος</span>
   </button>
   <button class="button" (click)="logout()" *ngIf="user!=null">
-    <span>Logout</span>
+    <span>Έξοδος</span>
   </button>
-  <button class="button" routerLink="/search" *ngIf="user!=null">
-    <span>Main Page</span>
+  <button class="button" routerLink="/anazitisi" *ngIf="user!=null">
+    <span>Κύρια σελίδα</span>
   </button>
 </div>
 
 <!-- item details -->
-<section class="card my-items" *ngIf="user!=null">
+<section class="card my-listings" *ngIf="user!=null">
   <br>
   <div class="space-bot text-center">
-    <h2>My Items</h2>
+    <h2>Οι αγγελίες μου</h2>
   </div>
   <br>
 
-  <button class="add-item-button" (click)="additem()">
-    <span>Add New Item</span>
+  <button class="add-listing-button" (click)="addListing()">
+    <span>Νέα αγγελία</span>
   </button>
   <br>
 </section>

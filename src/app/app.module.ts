@@ -9,7 +9,7 @@ import { FeedbackItemComponent } from './feedback-item.component';
 import { ListingDetailsComponent } from './listing-details.component';
 import { RegistrationComponent } from './registration.component';
 import { LoginComponent } from './login.component';
-import { MyItemsComponent } from './my-items.component';
+import { MyListingsComponent } from './my-listings.component';
 import { AddListingComponent } from './add-listing.component';
 import { FeedbackComponent } from './feedback.component';
 import { ProfileComponent } from './user-profile.component';
@@ -47,7 +47,7 @@ import { FileSelectDirective } from 'ng2-file-upload';
     AppComponent,
     RegistrationComponent,
     LoginComponent,
-    MyItemsComponent,
+    MyListingsComponent,
     AddListingComponent,
     ItemComponent,
     FeedbackItemComponent,
@@ -68,4 +68,4 @@ import { FileSelectDirective } from 'ng2-file-upload';
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [DialogComponent, BidHistoryComponent]
 })
-export class AppModule {}
+export class AppModule { }

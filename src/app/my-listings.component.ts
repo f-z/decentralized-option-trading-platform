@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Item, ItemService } from './shared/services/item.service';
+import { Listing, ListingService } from './shared/services/listing.service';
 import { User, UserService } from './shared/services/user.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {MatTabsModule} from '@angular/material/tabs';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
-  selector: 'app-my-items',
-  templateUrl: './my-items.html',
-  styleUrls: ['./my-items.scss']
+  selector: 'app-my-listings',
+  templateUrl: './my-listings.html',
+  styleUrls: ['./my-listings.scss']
 })
-export class MyItemsComponent implements OnInit {
-  item: Item;
-  userAuctions: Observable<Item[]> = null;
-  userTopBids: Observable<Item[]> = null;
-  userWatching: Observable<Item[]> = null;
-  userOutbid: Observable<Item[]> = null;
+export class MyListingsComponent implements OnInit {
+  listing: Listing;
+  userAuctions: Observable<Listing[]> = null;
+  userTopBids: Observable<Listing[]> = null;
+  userWatching: Observable<Listing[]> = null;
+  userOutbid: Observable<Listing[]> = null;
 
   private user: User;
 
   constructor(
     private userService: UserService,
-    private itemService: ItemService,
+    private listingService: ListingService,
     private router: Router,
     private http: HttpClient
   ) {}
@@ -33,8 +33,8 @@ export class MyItemsComponent implements OnInit {
     this.getItems();
   }
 
-  additem(): void {
-    this.itemService.setItem(null);
+  addListing(): void {
+    this.listingService.setListing(null);
     this.router.navigate(['add-item']);
   }
 
@@ -43,11 +43,11 @@ export class MyItemsComponent implements OnInit {
         'Content-Type': 'application/json'
       }),
       options: any = {
-        userID: this.user.userID,
+        username: this.user.username,
         includeExpired: true
       },
       url: any =
-        'https://php-group30.azurewebsites.net/retrieve_user_items.php';
+        'https://okergo.azurewebsites.net/php/retrieve_user_items.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -65,8 +65,8 @@ export class MyItemsComponent implements OnInit {
     );
   }
 
-  setItem(item: Item): void {
-    this.itemService.setItem(item);
+  setListing(listing: Listing): void {
+    this.listingService.setListing(listing);
   }
 
   getUser(): User {
@@ -78,12 +78,12 @@ export class MyItemsComponent implements OnInit {
   }
 
   goToMyProfile(): void {
-    this.router.navigate(['/profile', this.user.userID]);
+    this.router.navigate(['/profil', this.user.username]);
   }
 
   logout(): void {
     this.user = null;
     this.setUser(null);
-    this.router.navigate(['/search']);
+    this.router.navigate(['/anazitisi']);
   }
 }

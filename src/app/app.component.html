@@ -1,23 +1,20 @@
 <!-- card login / registration -->
 <div class="card login">
   <img class="profile-photo" src="{{ this.user.photo }}" *ngIf="user!=null" (click)="goToMyProfile();">
-  <label class="welcome-label" *ngIf="user!=null">Welcome, {{ user.firstName }}!
+  <label class="welcome-label" *ngIf="user!=null">Καλώς ήρθες, {{ user.firstName }}!
   </label>
-  <h1 class="headline">UCL Bay</h1>
-  <button class="button" routerLink="/register" *ngIf="user==null">
-    <span>Register</span>
+  <h1 class="headline">OK!ERGO</h1>
+  <button class="button" routerLink="/eggrafi" *ngIf="user==null">
+    <span>Εγγραφή</span>
   </button>
-  <button class="button" routerLink="/login" *ngIf="user==null">
-    <span>Login</span>
+  <button class="button" routerLink="/eisodos" *ngIf="user==null">
+    <span>Είσοδος</span>
   </button>
   <button class="button" (click)="logout()" *ngIf="user!=null">
-    <span>Logout</span>
+    <span>Έξοδος</span>
   </button>
-  <button class="button" routerLink="/my-items" *ngIf="user!=null && user.role!='admin'">
-    <span>My Items</span>
-  </button>
-  <button class="button" *ngIf="user!=null && user.role=='admin'">
-    <span>Dashboard</span>
+  <button class="button" routerLink="/oi-aggelies-mou" *ngIf="user!=null">
+    <span>Οι αγγελίες μου</span>
   </button>
 </div>
 
@@ -73,10 +70,10 @@
 </div>
 
 <div class="grid-list-container" *ngIf="!term && user!=null && user.role!='admin'">
-  <h2 *ngIf="recommendedItems">Items we recommend for you</h2>
+  <h2 *ngIf="recommendedItems">Προτάσεις</h2>
   <mat-grid-list cols="3" gutterSize="16">
     <mat-grid-tile *ngFor="let item of recommendedItems">
-      <app-item [item]="item" (click)="setItem(item)">
+      <app-item [item]="item" (click)="setListing(item)">
       </app-item>
     </mat-grid-tile>
   </mat-grid-list>
@@ -85,7 +82,7 @@
 <div class="grid-list-container" *ngIf="term">
   <mat-grid-list cols="3" gutterSize="16" *ngIf="term">
     <mat-grid-tile *ngFor="let item of items | search : term">
-      <app-item [item]="item" (click)="setItem(item)">
+      <app-item [item]="item" (click)="setListing(item)">
       </app-item>
     </mat-grid-tile>
   </mat-grid-list>

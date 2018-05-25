@@ -111,11 +111,11 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getSellerRating(sellerID: number): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { sellerID: sellerID },
       url: any =
-        'https://php-group30.azurewebsites.net/retrieve_seller_rating.php';
+        'https://okergo.azurewebsites.net/php/retrieve_seller_rating.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -139,13 +139,13 @@ export class ListingDetailsComponent implements OnDestroy {
 
   isUserWatching(auctionID): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         buyerID: this.user.username,
         auctionID: auctionID
       },
-      url: any = 'https://php-group30.azurewebsites.net/is_user_watching.php';
+      url: any = 'https://okergo.azurewebsites.net/php/is_user_watching.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -174,13 +174,13 @@ export class ListingDetailsComponent implements OnDestroy {
 
   stopWatching(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         buyerID: this.user.username,
         auctionID: this.listing.auctionID
       },
-      url: any = 'https://php-group30.azurewebsites.net/stop_watching.php';
+      url: any = 'https://okergo.azurewebsites.net/php/stop_watching.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -200,11 +200,11 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getAuctionInformation(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { auctionID: +this.route.snapshot.url[1].path },
       url: any =
-        'https://php-group30.azurewebsites.net/retrieve_auction_information.php';
+        'https://okergo.azurewebsites.net/php/retrieve_auction_information.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -245,13 +245,13 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getViewings(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         auctionID: +this.route.snapshot.url[1].path,
         userID: this.user.username
       },
-      url: any = 'https://php-group30.azurewebsites.net/retrieve_viewings.php';
+      url: any = 'https://okergo.azurewebsites.net/php/retrieve_viewings.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -271,16 +271,16 @@ export class ListingDetailsComponent implements OnDestroy {
 
   incrementViewings(auctionID: number): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         auctionID: auctionID,
         userID: this.user.username
       },
-      url: any = 'https://php-group30.azurewebsites.net/increment_viewings.php';
+      url: any = 'https://okergo.azurewebsites.net/php/increment_viewings.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
-      (data: any) => {},
+      (data: any) => { },
       (error: any) => {
         console.log(error);
       }
@@ -291,10 +291,10 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getFeedback(auctionID): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { auctionID: auctionID },
-      url: any = 'https://php-group30.azurewebsites.net/retrieve_feedback.php';
+      url: any = 'https://okergo.azurewebsites.net/php/retrieve_feedback.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -327,10 +327,10 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getWatchers(auctionID): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { auctionID: auctionID },
-      url: any = 'https://php-group30.azurewebsites.net/retrieve_watchers.php';
+      url: any = 'https://okergo.azurewebsites.net/php/retrieve_watchers.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -353,14 +353,14 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getAllBids(auctionID): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { auctionID: auctionID },
-      url: any = 'https://php-group30.azurewebsites.net/retrieve_all_auction_bids.php';
+      url: any = 'https://okergo.azurewebsites.net/php/retrieve_all_auction_bids.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
-          this.bids = data;
+        this.bids = data;
       },
       (error: any) => {
         // If there is an error, return to main search page.
@@ -376,11 +376,11 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getHighestBid(auctionID): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = { auctionID: auctionID },
       url: any =
-        'https://php-group30.azurewebsites.net/retrieve_bid_information.php';
+        'https://okergo.azurewebsites.net/php/retrieve_bid_information.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -409,14 +409,14 @@ export class ListingDetailsComponent implements OnDestroy {
     // If the details supplied are incomplete/incorrect, do not proceed with the transaction.
     if (this.validateBid()) {
       const headers: any = new HttpHeaders({
-          'Content-Type': 'application/json'
-        }),
+        'Content-Type': 'application/json'
+      }),
         options: any = {
           buyerID: this.user.username,
           auctionID: this.listing.auctionID,
           price: this.newBid
         },
-        url: any = 'https://php-group30.azurewebsites.net/insert_bid.php';
+        url: any = 'https://okergo.azurewebsites.net/php/insert_bid.php';
 
       this.http.post(url, JSON.stringify(options), headers).subscribe(
         (data: any) => {
@@ -453,14 +453,14 @@ export class ListingDetailsComponent implements OnDestroy {
   buyItNow(): void {
     if (this.buyItNowPrice > 0) {
       const headers: any = new HttpHeaders({
-          'Content-Type': 'application/json'
-        }),
+        'Content-Type': 'application/json'
+      }),
         options: any = {
           buyerID: this.user.username,
           auctionID: this.listing.auctionID,
           price: this.buyItNowPrice
         },
-        url: any = 'https://php-group30.azurewebsites.net/insert_bid.php';
+        url: any = 'https://okergo.azurewebsites.net/php/insert_bid.php';
 
       this.http.post(url, JSON.stringify(options), headers).subscribe(
         (data: any) => {
@@ -492,19 +492,19 @@ export class ListingDetailsComponent implements OnDestroy {
 
   endAuction(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         auctionID: this.listing.auctionID
       },
-      url: any = 'https://php-group30.azurewebsites.net/end_auction.php';
+      url: any = 'https://okergo.azurewebsites.net/php/end_auction.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
         console.log(data);
         this.isExpired = true;
       },
-      (error: any) => {}
+      (error: any) => { }
     );
     return null;
   }
@@ -528,8 +528,8 @@ export class ListingDetailsComponent implements OnDestroy {
 
   notifyCurrentBidder(auctionID, buyerID, newBid): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options1: any = {
         auctionID: auctionID,
         buyerID: buyerID,
@@ -537,13 +537,13 @@ export class ListingDetailsComponent implements OnDestroy {
         itemID: this.itemID
       },
       url: any =
-        'https://php-group30.azurewebsites.net/notify_current_bidder.php';
+        'https://okergo.azurewebsites.net/php/notify_current_bidder.php';
 
     this.http.post(url, JSON.stringify(options1), headers).subscribe(
       (data: any) => {
         console.log('Previous highest bidder: ' + this.highestBidderID);
       },
-      (error: any) => {}
+      (error: any) => { }
     );
 
     return null;
@@ -553,21 +553,21 @@ export class ListingDetailsComponent implements OnDestroy {
     console.log('Previous Highest Bidder: ' + highestBidderID);
     console.log('New Highest Bidder: ' + newBuyer);
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options1: any = {
         auctionID: auctionID,
         prevBidderID: this.highestBidderID,
         newBuyer: newBuyer,
         itemID: this.itemID
       },
-      url: any = 'https://php-group30.azurewebsites.net/notify_prev_bidder.php';
+      url: any = 'https://okergo.azurewebsites.net/php/notify_prev_bidder.php';
 
     this.http.post(url, JSON.stringify(options1), headers).subscribe(
       (data: any) => {
         // console.log(data);
       },
-      (error: any) => {}
+      (error: any) => { }
     );
 
     return null;
@@ -575,20 +575,20 @@ export class ListingDetailsComponent implements OnDestroy {
 
   notifyWatchers(auctionID, newBid): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options1: any = {
         auctionID: auctionID,
         highestBid: newBid,
         itemID: this.itemID
       },
-      url: any = 'https://php-group30.azurewebsites.net/notify_watchers.php';
+      url: any = 'https://okergo.azurewebsites.net/php/notify_watchers.php';
 
     this.http.post(url, JSON.stringify(options1), headers).subscribe(
       (data: any) => {
         console.log(data);
       },
-      (error: any) => {}
+      (error: any) => { }
     );
 
     return null;
@@ -596,14 +596,14 @@ export class ListingDetailsComponent implements OnDestroy {
 
   watchAuction(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         buyerID: this.user.username,
         auctionID: this.listing.auctionID,
         price: 0
       },
-      url: any = 'https://php-group30.azurewebsites.net/insert_bid.php';
+      url: any = 'https://okergo.azurewebsites.net/php/insert_bid.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -639,8 +639,8 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getUsers(buyerUsername: string, sellerUsername: string): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         buyerUsername: buyerUsername,
         sellerUsername: sellerUsername
@@ -676,7 +676,7 @@ export class ListingDetailsComponent implements OnDestroy {
     window.clearInterval(localStorage['counter']);
 
     const counter = setInterval(
-      (window.onload = function() {
+      (window.onload = function () {
         // Get todays date and time
         const now = new Date().getTime();
 
@@ -791,7 +791,7 @@ export class ListingDetailsComponent implements OnDestroy {
     ) as HTMLCollectionOf<HTMLElement>;
     const dots = document.getElementsByClassName('dot') as HTMLCollectionOf<
       HTMLElement
-    >;
+      >;
 
     if (n > slides.length) {
       this.slideIndex = 1;
@@ -811,8 +811,8 @@ export class ListingDetailsComponent implements OnDestroy {
 
   getAuctionRecommendations(auctionID: number): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         auctionID: auctionID
       },

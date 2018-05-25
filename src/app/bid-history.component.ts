@@ -9,7 +9,7 @@ import { MatTableModule } from '@angular/material/table';
   styleUrls: ['./bid-history.css']
 })
 export class BidHistoryComponent {
-  displayedColumns = ['username', 'price', 'time'];
+  displayedColumns = ['username', 'price', 'date'];
   dataSource: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {

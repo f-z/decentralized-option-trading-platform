@@ -37,7 +37,7 @@ export class ListingService {
         listingID: listingID
       },
       url: any =
-        'https://okergo.azurewebsites.net/retrieve_listing_from_ID.php';
+        'https://okergo.azurewebsites.net/php/retrieve_listing_from_id.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {

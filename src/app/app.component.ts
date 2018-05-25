@@ -14,13 +14,13 @@ import { DialogComponent } from './dialog.component';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-home',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   listing: Listing;
-  items: Observable<Listing[]> = null;
+  listings: Observable<Listing[]> = null;
   recommendedItems: Observable<Listing[]> = null;
   public selectedCategory: string;
   private user: User;
@@ -65,24 +65,24 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.getUser();
     this.term = 'All';
-    this.getItems();
+    // this.getListings();
 
     if (this.user != null) {
-      this.getUserRecommendations();
+      // this.getUserRecommendations();
     }
   }
 
-  getItems(): void {
+  getListings(): void {
     this.http
       .get(
         'https://okergo.azurewebsites.net/php/retrieve_all_listings.php'
       )
       .subscribe(
         (data: any) => {
-          this.items = data;
+          this.listings = data;
           for (let i = 0; i < data.length; i++) {
             // Format the end date and time.
-            const endDate = new Date(this.items[i].endTime).getTime();
+            const endDate = new Date(this.listings[i].endTime).getTime();
             const now = new Date().getTime();
             // Find the distance between now and the end date.
             const distance = endDate - now;
@@ -118,11 +118,11 @@ export class AppComponent implements OnInit {
     return null;
   }
 
-  setItem(listing: Listing): void {
+  setListing(listing: Listing): void {
     this.itemService.setListing(listing);
 
     if (this.user === null) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/eisodos']);
     } else {
       this.router.navigate(['/aggelies', listing.title]);
     }
@@ -141,7 +141,7 @@ export class AppComponent implements OnInit {
   }
 
   goToMyProfile(): void {
-    this.router.navigate(['/profile', this.user.username]);
+    this.router.navigate(['/profil', this.user.username]);
   }
 
   logout(): void {

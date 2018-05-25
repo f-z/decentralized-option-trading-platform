@@ -1,6 +1,6 @@
 <?php
-    // default page script
+    // Default page script
     echo "OK!ERGO";
     echo "<br>";
-    echo "Default PHP Page";
+    echo "Home PHP Page";
 ?>

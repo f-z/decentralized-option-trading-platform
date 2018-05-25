@@ -10,7 +10,7 @@ import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-profil',
   templateUrl: './user-profile.html',
   styleUrls: ['./user-profile.scss']
 })

@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Item, Feedback, ItemService } from './shared/services/item.service';
+import { Listing, Feedback, ListingService } from './shared/services/listing.service';
 import { User, UserService } from './shared/services/user.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-feedback-item',
@@ -13,26 +12,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class FeedbackItemComponent implements OnInit {
   @Input() feedback: Feedback;
   feedbackPercentage: number;
-  item: Item;
+  item: Listing;
   feedbackUser: User;
 
   constructor( private userService: UserService,
-               private itemService: ItemService,
+               private itemService: ListingService,
                private router: Router,
                private route: ActivatedRoute,
                public http: HttpClient) {}
 
   ngOnInit(): void {
     this.feedbackPercentage = this.feedback.rating * 20;
-    this.getItem(this.feedback.auctionID);
+    this.getItem(this.feedback.listingID);
   }
 
   visitProfile(): void {
-    this.router.navigate(['/profile', this.feedback.userID]);
+    this.router.navigate(['/profil', this.feedback.username]);
   }
 
   setItem(): void {
-    this.itemService.setItem(this.item);
+    this.itemService.setListing(this.item);
   }
 
   getItem(auctionID: number): void {
@@ -41,7 +40,7 @@ export class FeedbackItemComponent implements OnInit {
       }),
       options: any = { auctionID: auctionID },
       url: any =
-        'https://php-group30.azurewebsites.net/retrieve_item.php';
+        'https://okergo.azurewebsites.net/php/retrieve_item.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
@@ -64,7 +63,7 @@ export class FeedbackItemComponent implements OnInit {
         buyerID: userID,
       },
       url: any =
-        'https://php-group30.azurewebsites.net/retrieve_user.php';
+        'https://okergo.azurewebsites.net/php/retrieve_user.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {

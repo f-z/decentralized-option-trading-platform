@@ -1,36 +1,36 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Item } from './shared/services/item.service';
+import { Listing } from './shared/services/listing.service';
 
 @Pipe({
   name: 'search',
   pure: false
 })
 export class SearchPipe implements PipeTransform {
-  transform(items: Item[], term: string): Item[] {
+  transform(listings: Listing[], term: string): Listing[] {
     if (term === 'All') {
-      return items;
+      return listings;
     }
 
     term = term.toLowerCase();
 
-    const filteredItems: Item[] = [];
+    const filteredListings: Listing[] = [];
 
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].name.toLowerCase().includes(term)) {
-        filteredItems.push(items[i]);
+    for (let i = 0; i < listings.length; i++) {
+      if (listings[i].title.toLowerCase().includes(term)) {
+        filteredListings.push(listings[i]);
       } else if (
-        items[i].categoryName != null &&
-        items[i].categoryName.toLowerCase().includes(term)
+        listings[i].categoryName != null &&
+        listings[i].categoryName.toLowerCase().includes(term)
       ) {
-        filteredItems.push(items[i]);
+        filteredListings.push(listings[i]);
       } else if (
-        items[i].description != null &&
-        items[i].description.toLowerCase().includes(term)
+        listings[i].description != null &&
+        listings[i].description.toLowerCase().includes(term)
       ) {
-        filteredItems.push(items[i]);
+        filteredListings.push(listings[i]);
       }
     }
 
-    return filteredItems;
+    return filteredListings;
   }
 }
