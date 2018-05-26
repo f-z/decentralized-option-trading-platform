@@ -17,17 +17,17 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./add-listing.css']
 })
 export class AddListingComponent implements OnInit {
-  private listing: Listing;
-  private user: User;
+  listing: Listing;
+  user: User;
 
-  private name: string;
-  private description: string;
-  private condition: string;
-  private category: string;
-  private photo: string;
+  name: string;
+  description: string;
+  condition: string;
+  category: string;
+  photo: string;
 
-  private categories: Observable<Category[]> = null;
-  private selectedCategory: string;
+  categories: Observable<Category[]> = null;
+  selectedCategory: string;
 
   public uploader1: FileUploader = new FileUploader({
     url: 'https://okergo.azurewebsites.net/php/upload_image.php',
@@ -35,11 +35,11 @@ export class AddListingComponent implements OnInit {
   });
 
   constructor(
-    private userService: UserService,
-    private listingService: ListingService,
+    public userService: UserService,
+    public listingService: ListingService,
     public http: HttpClient,
     public dialog: MatDialog,
-    private router: Router
+    public router: Router
   ) {
     this.photo = null;
   }

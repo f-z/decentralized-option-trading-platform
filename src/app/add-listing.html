@@ -65,66 +65,6 @@
       </div>
     </div>
 
-    <div class="row">
-
-      <div class="align">
-        <label for="quantity">Quantity: </label>
-        <input type="number" [(ngModel)]="quantity" value="1" min="0" max="100" step="1" id="quantity" class="input-q" name="quantity">
-      </div>
-    </div>
-    <br>
-    <h3 class="centred">Auction Schedule</h3>
-    <div class="row ">
-      <div class="inline-block">
-        <div class="align">
-          <label for="endDate">End Date: </label>
-          <input type="date" [(ngModel)]="endDate" name="endDate" id="endDate" class="time-input-date">
-        </div>
-      </div>
-
-      <div class="inline-block">
-        <div class="align">
-          <label for="endTime">End Time: </label>
-          <input type="time" [(ngModel)]="endTime" name="endTime" id="endTime" class="time-input-t">
-        </div>
-      </div>
-    </div>
-    <br>
-    <h3 class="centred">Auction Pricing</h3>
-    <div class="row">
-      <div class="col-half">
-        <div class="input">
-          <div class="align">
-            <label for="startPrice">Start Price: £</label>
-            <input type="number" class="inline-block" [(ngModel)]="startPrice" min="0" step=".01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
-              name="startPrice" class="price-input" />
-          </div>
-        </div>
-      </div>
-
-      <div class="col-half">
-
-        <div class="input" title="If this price threshold is not met when the auction ends, the auction will expire without a winner.">
-          <div class="align">
-            <label for="reservePrice">Reserve Price: £</label>
-            <input type="number" class="inline-block" [(ngModel)]="reservePrice" min="0" step=".01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
-              name="reservePrice" class="price-input" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="input right">
-        <div class="align">
-          <label for="buyNowPrice">Buy-it-now Price: £</label>
-          <input type="number" class="inline-block" [(ngModel)]="buyNowPrice" min="0" step=".01" onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
-            name="buyNowPrice" placeholder="(Optional)" class="price-input" />
-        </div>
-      </div>
-
-    </div>
-
     <br>
 
     <div class="row">

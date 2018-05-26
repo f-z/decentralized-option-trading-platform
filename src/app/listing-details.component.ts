@@ -19,47 +19,47 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./listing-details.css']
 })
 export class ListingDetailsComponent implements OnDestroy {
-  private listing: Listing;
+  listing: Listing;
 
-  private loadComplete = false;
+  loadComplete = false;
 
-  private distinctViewers = 0;
-  private totalViews = 0;
-  private numberBids = 0;
-  private highestBid: number;
-  private buyItNowPrice: number;
-  private reservePrice: number;
-  private highestBidderID: number;
-  private highestBidder: User;
-  private emailHighest: string;
-  private seller: User;
-  private sellerRating: number;
-  private sellerFeedbackCount: number;
+  distinctViewers = 0;
+  totalViews = 0;
+  numberBids = 0;
+  highestBid: number;
+  buyItNowPrice: number;
+  reservePrice: number;
+  highestBidderID: number;
+  highestBidder: User;
+  emailHighest: string;
+  seller: User;
+  sellerRating: number;
+  sellerFeedbackCount: number;
 
-  private auctionID: number;
-  private itemID: number;
-  private sub: any;
-  private user: User;
-  private newBid: number;
-  private watchers: number;
+  auctionID: number;
+  itemID: number;
+  sub: any;
+  user: User;
+  newBid: number;
+  watchers: number;
 
-  private isExpired: boolean;
-  private feedback: Feedback;
-  private sellerFeedbackGiven: boolean;
-  private buyerFeedbackGiven: boolean;
-  private isWatching: boolean;
-  private isOutbid: boolean;
+  isExpired: boolean;
+  feedback: Feedback;
+  sellerFeedbackGiven: boolean;
+  buyerFeedbackGiven: boolean;
+  isWatching: boolean;
+  isOutbid: boolean;
 
-  private slideIndex: number;
+  slideIndex: number;
 
-  private recommendedAuctions: Observable<Listing[]> = null;
-  private bids: Observable<Bid[]> = null;
+  recommendedAuctions: Observable<Listing[]> = null;
+  bids: Observable<Bid[]> = null;
 
   constructor(
-    private userService: UserService,
-    private listingService: ListingService,
-    private router: Router,
-    private route: ActivatedRoute,
+    public userService: UserService,
+    public listingService: ListingService,
+    public router: Router,
+    public route: ActivatedRoute,
     public http: HttpClient,
     public dialog: MatDialog,
     public bidHistoryDialog: MatDialog

@@ -18,13 +18,13 @@ export class MyListingsComponent implements OnInit {
   userWatching: Observable<Listing[]> = null;
   userOutbid: Observable<Listing[]> = null;
 
-  private user: User;
+  user: User;
 
   constructor(
-    private userService: UserService,
-    private listingService: ListingService,
-    private router: Router,
-    private http: HttpClient
+    public userService: UserService,
+    public listingService: ListingService,
+    public router: Router,
+    public http: HttpClient
   ) {}
 
   ngOnInit(): void {

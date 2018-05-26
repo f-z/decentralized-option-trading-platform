@@ -16,16 +16,16 @@ export class LoginComponent {
   username: string;
   password: string;
 
-  private localURI: string;
-  private remoteURI: string;
+  localURI: string;
+  remoteURI: string;
 
-  private user: User;
+  user: User;
 
   constructor(
     public http: HttpClient,
     public dialog: MatDialog,
-    private router: Router,
-    private userService: UserService
+    public router: Router,
+    public userService: UserService
   ) {
     this.loginPage = 'true';
   }
@@ -39,15 +39,15 @@ export class LoginComponent {
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
-        // If the request was successful, set the current user and notify him/her.
+        // If the request was successful, set the current user and notify him/her
         this.user = data;
 
-        this.openDialog('Congratulations, logging in...', '', true);
+        this.openDialog('Συγχαρητήρια, γίνεται είσοδος...', '', true);
       },
       (error: any) => {
-        // If the supplied username and password do not match, notify the user.
+        // If the supplied username and password do not match, notify the user
         this.openDialog(
-          'The supplied username and password are incorrect!',
+          'Το όνομα χρήστη και ο κωδικός πρόσβασης δεν είναι σωστά!',
           '',
           false
         );
@@ -74,7 +74,7 @@ export class LoginComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (succeeded) {
         this.setUser(this.user);
-        this.router.navigate(['/search']);
+        this.router.navigate(['/anazitisi']);
       }
     });
   }

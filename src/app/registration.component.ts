@@ -35,7 +35,7 @@ export class RegistrationComponent implements OnInit {
   constructor(
     public http: HttpClient,
     public dialog: MatDialog,
-    private router: Router
+    public router: Router
   ) {
     this.loginPage = 'false';
     this.imageAdded = false;

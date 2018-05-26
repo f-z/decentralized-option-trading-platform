@@ -15,10 +15,10 @@ export class FeedbackItemComponent implements OnInit {
   item: Listing;
   feedbackUser: User;
 
-  constructor( private userService: UserService,
-               private itemService: ListingService,
-               private router: Router,
-               private route: ActivatedRoute,
+  constructor( public userService: UserService,
+               public itemService: ListingService,
+               public router: Router,
+               public route: ActivatedRoute,
                public http: HttpClient) {}
 
   ngOnInit(): void {

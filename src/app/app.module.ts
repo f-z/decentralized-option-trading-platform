@@ -26,7 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
-import { FileSelectDirective } from 'ng2-file-upload';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   imports: [
@@ -40,7 +40,8 @@ import { FileSelectDirective } from 'ng2-file-upload';
     MatIconModule,
     MatGridListModule,
     MatTabsModule,
-    MatTableModule
+    MatTableModule,
+    FileUploadModule
   ],
   declarations: [
     HomeComponent,
@@ -57,7 +58,6 @@ import { FileSelectDirective } from 'ng2-file-upload';
     SearchPipe,
     DialogComponent,
     BidHistoryComponent,
-    FileSelectDirective
   ],
   bootstrap: [HomeComponent],
   providers: [

@@ -15,33 +15,33 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./user-profile.scss']
 })
 export class ProfileComponent {
-  private user: User; // the logged-in user
-  private userID: number;
-  private street: string;
-  private city: string;
-  private postcode: string;
-  private username: string;
-  private email: string;
-  private password: string;
-  private confirmedPassword: string;
-  private oldPassword: string;
-  private DOB: string;
-  private phone: string;
-  private photo: string;
-  private imageAdded: boolean;
+  user: User; // the logged-in user
+  userID: number;
+  street: string;
+  city: string;
+  postcode: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmedPassword: string;
+  oldPassword: string;
+  DOB: string;
+  phone: string;
+  photo: string;
+  imageAdded: boolean;
 
-  private profileUserID: number;
-  private profileUser: User; // the user whose profile we 're viewing
-  private listing: Listing;
-  private userListings: Observable<Listing[]> = null;
+  profileUserID: number;
+  profileUser: User; // the user whose profile we 're viewing
+  listing: Listing;
+  userListings: Observable<Listing[]> = null;
 
-  private averageSellerRating: number;
-  private sellerFeedbackCount: number;
-  private userSellerFeedback: Observable<Feedback[]> = null;
+  averageSellerRating: number;
+  sellerFeedbackCount: number;
+  userSellerFeedback: Observable<Feedback[]> = null;
 
-  private averageBuyerRating: number;
-  private buyerFeedbackCount: number;
-  private userBuyerFeedback: Observable<Feedback[]> = null;
+  averageBuyerRating: number;
+  buyerFeedbackCount: number;
+  userBuyerFeedback: Observable<Feedback[]> = null;
 
   public uploader: FileUploader = new FileUploader({
     url: 'https://okergo.azurewebsites.net/php/upload_image.php',
@@ -49,12 +49,12 @@ export class ProfileComponent {
   });
 
   constructor(
-    private userService: UserService,
-    private itemService: ListingService,
-    private router: Router,
+    public userService: UserService,
+    public itemService: ListingService,
+    public router: Router,
     public dialog: MatDialog,
-    private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    public activatedRoute: ActivatedRoute,
+    public http: HttpClient
   ) {
     activatedRoute.params.subscribe(val => {
       this.profileUserID = +this.activatedRoute.snapshot.url[1].path;

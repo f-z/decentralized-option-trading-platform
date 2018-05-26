@@ -5,9 +5,7 @@ import { User, UserService } from './shared/services/user.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconRegistry } from '@angular/material';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { DomSanitizer } from '@angular/platform-browser';
 import { query } from '@angular/animations';
 import { MatDialog } from '@angular/material';
 import { DialogComponent } from './dialog.component';
@@ -23,44 +21,17 @@ export class AppComponent implements OnInit {
   listings: Observable<Listing[]> = null;
   recommendedItems: Observable<Listing[]> = null;
   public selectedCategory: string;
-  private user: User;
-  private term: string;
+  user: User;
+  term: string;
   categories: any;
 
   constructor(
-    private itemService: ListingService,
-    private userService: UserService,
+    public itemService: ListingService,
+    public userService: UserService,
     public dialog: MatDialog,
-    private router: Router,
-    private http: HttpClient,
-    iconRegistry: MatIconRegistry,
-    sanitizer: DomSanitizer
-  ) {
-    iconRegistry.addSvgIcon(
-      'car',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/car.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'book',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/book.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'fashion',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/clothes.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'sports',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/ball.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'home',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/home.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'collectables',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/collectables.svg')
-    );
-  }
+    public router: Router,
+    public http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.user = this.getUser();

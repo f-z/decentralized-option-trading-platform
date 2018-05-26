@@ -20,15 +20,15 @@ export class FeedbackComponent implements OnInit {
   @Input() buyerID: number;
   @Input() subject: string;
   @Input() item: Listing;
-  private comment: string;
-  private rating: number;
+  comment: string;
+  rating: number;
 
   constructor(
     public dialog: MatDialog,
-    private userService: UserService,
-    private itemService: ListingService,
-    private http: HttpClient,
-    private router: Router
+    public userService: UserService,
+    public itemService: ListingService,
+    public http: HttpClient,
+    public router: Router
   ) {}
 
   ngOnInit(): void {}

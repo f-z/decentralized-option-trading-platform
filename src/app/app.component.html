@@ -22,39 +22,30 @@
 <div class="card search">
   <mat-button-toggle-group #categories="matButtonToggleGroup" class="categories" (change)="selectCategory(categories.value);">
     <mat-button-toggle value="All" checked=true>
-      <mat-icon>check box</mat-icon>
       <b>All items</b>
     </mat-button-toggle>
     <mat-button-toggle value="Electronics">
-      <mat-icon>devices</mat-icon>
       <b>Electronics</b>
     </mat-button-toggle>
     <mat-button-toggle value="Books">
-      <mat-icon svgIcon="book"></mat-icon>
       <b>Books</b>
     </mat-button-toggle>
     <mat-button-toggle value="Fashion">
-      <mat-icon svgIcon="fashion"></mat-icon>
       <b>Fashion</b>
     </mat-button-toggle>
     <mat-button-toggle value="Sports">
-      <mat-icon svgIcon="sports"></mat-icon>
       <b>Sports</b>
     </mat-button-toggle>
     <mat-button-toggle value="Home">
-      <mat-icon svgIcon="home"></mat-icon>
       <b>Home</b>
     </mat-button-toggle>
     <mat-button-toggle value="Motors">
-      <mat-icon svgIcon="car"></mat-icon>
       <b>Motors</b>
     </mat-button-toggle>
     <mat-button-toggle value="Collectables">
-      <mat-icon svgIcon="collectables"></mat-icon>
       <b>Collectables</b>
     </mat-button-toggle>
     <mat-button-toggle value="Other">
-      <mat-icon>more</mat-icon>
       <b>Other</b>
     </mat-button-toggle>
   </mat-button-toggle-group>
@@ -63,13 +54,10 @@
   <br>
 
   <label class="search-label">search
-    <span *ngIf="query" [innerHTML]="' for: ' + query"></span>
   </label>
-  <input class="search-input" [(ngModel)]="term" placeholder="type in search term here" [ngModelOptions]="{updateOn: 'change'}"
-    onfocus="this.value=''">
 </div>
 
-<div class="grid-list-container" *ngIf="!term && user!=null && user.role!='admin'">
+<div class="grid-list-container" *ngIf="!term && user!=null">
   <h2 *ngIf="recommendedItems">Προτάσεις</h2>
   <mat-grid-list cols="3" gutterSize="16">
     <mat-grid-tile *ngFor="let item of recommendedItems">

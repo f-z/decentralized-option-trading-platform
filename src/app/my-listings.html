@@ -38,7 +38,7 @@
   <mat-card-content>
     <mat-tab-group class="tab-group" mat-stretch-tabs>
       <mat-tab label="My Auctions" class="tab">
-        <h2 *ngIf="userAuctions !== null && userAuctions.length !== 0">Items that you are selling:</h2>
+        <h2 *ngIf="userAuctions !== null">Items that you are selling:</h2>
         <mat-grid-list class="grid-list-container" cols="3" gutterSize="16">
           <mat-grid-tile *ngFor="let item of userAuctions">
             <app-item [item]="item" (click)="setItem(item)" [routerLink]="['/items', item.auctionID]">
@@ -47,14 +47,14 @@
         </mat-grid-list>
       </mat-tab>
       <mat-tab label="My Bids" class="tab">
-        <h2 *ngIf="userTopBids !== null && userTopBids.length !== 0">Auctions where you are the current top bidder:</h2>
+        <h2 *ngIf="userTopBids !== null">Auctions where you are the current top bidder:</h2>
         <mat-grid-list class="grid-list-container" cols="3" gutterSize="16">
           <mat-grid-tile *ngFor="let item of userTopBids">
             <app-item [item]="item" (click)="setItem(item)" [routerLink]="['/items', item.auctionID]">
             </app-item>
           </mat-grid-tile>
         </mat-grid-list>
-        <h2 *ngIf="userOutbid !== null && userOutbid.length !== 0">Auctions where you have been outbid:</h2>
+        <h2 *ngIf="userOutbid !== null">Auctions where you have been outbid:</h2>
         <mat-grid-list class="grid-list-container" cols="3" gutterSize="16">
           <mat-grid-tile *ngFor="let item of userOutbid">
             <app-item [item]="item" (click)="setItem(item)" [routerLink]="['/items', item.auctionID]">
@@ -63,7 +63,7 @@
         </mat-grid-list>
       </mat-tab>
       <mat-tab label="Watching" class="tab">
-        <h2 *ngIf="userWatching !== null && userWatching.length !== 0">Auctions that you are watching:</h2>
+        <h2 *ngIf="userWatching !== null">Auctions that you are watching:</h2>
         <mat-grid-list class="grid-list-container" cols="3" gutterSize="16">
           <mat-grid-tile *ngFor="let item of userWatching">
             <app-item [item]="item" (click)="setItem(item)" [routerLink]="['/items', item.auctionID]">
