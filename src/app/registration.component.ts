@@ -24,7 +24,7 @@ export class RegistrationComponent implements OnInit {
   confirmedPassword: string;
   phone: number;
   photo: string;
-  termsAccepted: boolean;
+  registrationNumber: string;
   imageAdded: boolean;
 
   public uploader: FileUploader = new FileUploader({
@@ -59,8 +59,8 @@ export class RegistrationComponent implements OnInit {
 
   register(): void {
     const headers: any = new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
+      'Content-Type': 'application/json'
+    }),
       options: any = {
         firstName: this.firstName,
         lastName: this.lastName,
@@ -68,15 +68,15 @@ export class RegistrationComponent implements OnInit {
         username: this.username,
         email: this.email,
         password: this.password,
-        confirmedPassword: this.confirmedPassword,
         phone: this.phone,
-        photo: this.photo
+        photo: this.photo,
+        registrationNumber: this.registrationNumber
       },
       url: any = 'https://okergo.azurewebsites.net/php/register.php';
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
-        // If the request was successful, notify the user.
+        // If the request was successful, notify the user
         this.openDialog(
           'Συγχαρητήρια, έγινε εγγραφή: ',
           this.username,
@@ -84,7 +84,7 @@ export class RegistrationComponent implements OnInit {
         );
       },
       (error: any) => {
-        // If the supplied username or email already exist in the database, notify the user.
+        // If the supplied username or email already exist in the database, notify the user
         this.openDialog(
           'Το όνομα χρήστη ή το email είναι ήδη σε χρήση!',
           '',
@@ -95,7 +95,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   validate(): boolean {
-    // If the details supplied are incomplete/incorrect, do not proceed with the transaction.
+    // If the details supplied are incomplete/incorrect, do not proceed with the transaction
     const pw_regex_number = /[0-9]/;
     const pw_regex_lowercase = /[a-z]/;
     const pw_regex_uppercase = /[A-Z]/;
@@ -112,7 +112,7 @@ export class RegistrationComponent implements OnInit {
       this.confirmedPassword == null ||
       this.phone == null
     ) {
-      // If there are any empty fields, notify the user.
+      // If there are any empty fields, notify the user
       this.openDialog('Παρακαλώ συμπληρώστε όλα τα πεδία!', '', false);
       return false;
     } else if (
@@ -127,20 +127,12 @@ export class RegistrationComponent implements OnInit {
       this.phone.toString().length < 5 ||
       this.phone.toString().length > 15
     ) {
-      // If there are any incorrect details entered, notify the user.
+      // If there are any incorrect details entered, notify the user
       this.openDialog('Παρακαλώ συμπληρώστε τα σωστά στοιχεία!', '', false);
       return false;
     } else if (this.password !== this.confirmedPassword) {
-      // If passwords do not match, notify the user.
+      // If passwords do not match, notify the user
       this.openDialog('Οι κωδικοί ασφαλείας δεν ταιριάζουν!', '', false);
-      return false;
-    } else if (!this.termsAccepted) {
-      // If the user has not accepted the terms and conditions, do not allow them to proceed with registration.
-      this.openDialog(
-        'Παρακαλώ αποδεχθείτε τους όρους για να συνεχίσετε!',
-        '',
-        false
-      );
       return false;
     } else if (this.password.length < 8) {
       this.openDialog(
@@ -167,12 +159,12 @@ export class RegistrationComponent implements OnInit {
       );
       return false;
     } else if (!email_regex.test(this.email)) {
-      this.openDialog('Please enter a valid email address!', '', false);
+      this.openDialog('Παρακαλώ εισάγετε σωστή διεύθυνση email!', '', false);
       return false;
     }
 
     // If all the checks have passed, then proceed with uploading the image
-    // and creating the registration record in the database.
+    // and creating the registration record in the database
     this.uploader.uploadAll();
     return true;
   }
@@ -187,12 +179,12 @@ export class RegistrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (succeeded) {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/eisodos']);
       }
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/search']);
+    this.router.navigate(['/anazitisi']);
   }
 }

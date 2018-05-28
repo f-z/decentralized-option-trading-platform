@@ -33,12 +33,12 @@
       <h4>Όνομα</h4>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="First name" autocomplete="given-name" />
+          <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="Όνομα" autocomplete="given-name" />
         </div>
       </div>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="lastName" name="lastName" placeholder="Last name" autocomplete="family-name" />
+          <input type="text" [(ngModel)]="lastName" name="lastName" placeholder="Επώνυμο" autocomplete="family-name" />
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
       <h4>Λογαριασμός</h4>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="username" name="username" placeholder="Όνομα πρόσβασης" autocomplete="username" />
+          <input type="text" [(ngModel)]="username" name="username" placeholder="Όνομα χρήστη" autocomplete="username" />
         </div>
       </div>
       <div class="col-half">
@@ -71,7 +71,7 @@
       </div>
       <div class="col-half">
         <div class="input">
-          <input type="password" [(ngModel)]="password" name="password" placeholder="Κωδικός ασφαλείας" autocomplete="new-password"
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Κωδικός πρόσβασης" autocomplete="new-password"
           />
         </div>
       </div>
@@ -79,6 +79,13 @@
         <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Επιβεβαίωση κωδικού" autocomplete="new-password"
         />
       </div>
+
+      <div class="col-half">
+        <div class="input">
+          <input type="" [(ngModel)]="registrationNumber" placeholder="Αριθμός μητρώου" />
+        </div>
+      </div>
+
     </div>
 
     <br>

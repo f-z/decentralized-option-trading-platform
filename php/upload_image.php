@@ -9,32 +9,32 @@
     $uploadOk = 1;
     $imageFileType = pathinfo($targetFile, PATHINFO_EXTENSION);
 
-    // Validating that the image file is a real image.
+    // Validating that the image file is a real image
     $validate = getimagesize($_FILES["photo"]["tmp_name"]);
     if($validate !== false) {
         $uploadOk = 1;
-        // Checking that the image size is not too large.
+        // Checking that the image size is not too large
         if ($_FILES["photo"]["size"] > 5000000) {
             $result .= "Error: the image is too large!"; 
             $error =true;
             $uploadOk = 0;
         } else {
-            // Checking that the image is in one of the accepted file formats.
+            // Checking that the image is in one of the accepted file formats
             if($imageFileType != "jpg" && $imageFileType != "jpeg" && $imageFileType != "png" && $imageFileType != "gif") {
                 $error = true;
                 $result .= "Error: please upload a JPG, JPEG, PNG, or GIF file!";
                 $uploadOk = 0;
             } else {
-                // Checking if there has been some other type of error.
+                // Checking if there has been some other type of error
                 if ($uploadOk == 0) {
                     $result .= "Error: the file has not been uploaded!";
                     $error = true;
                 } else {
-                    // If all checks pass, attempt to upload the image.
+                    // If all checks pass, attempt to upload the image
                     $temp = explode(".", $_FILES["photo"]["name"]);
                     $uploadedFileName = $imageName . round(microtime(true)) . '.' . end($temp);
                     if (move_uploaded_file($_FILES["photo"]["tmp_name"], $targetDir . $uploadedFileName)) {
-                        $result = 'https://php-group30.azurewebsites.net/uploads/' . $uploadedFileName;
+                        $result = 'https://okergo.azurewebsites.net/php/uploads/' . $uploadedFileName;
                         $status = 200;
                         $error = false;       
                     } else {

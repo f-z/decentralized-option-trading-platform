@@ -15,6 +15,7 @@
                         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
                         PDO::ATTR_EMULATE_PREPARES   => false,
+                        PDO::MYSQL_ATTR_SSL_CA => getenv('MYSQL_SSL_CA')
                     );
     try {
         // Creating a PDO instance (connecting to the database)
