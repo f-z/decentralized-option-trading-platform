@@ -1,7 +1,0 @@
-input[type="radio"]+label,
-select {
-  width: 50%;
-  text-align: center;
-  float: left;
-  border-radius: 0;
-}

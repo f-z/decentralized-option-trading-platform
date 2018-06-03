@@ -59,8 +59,8 @@ export class RegistrationComponent implements OnInit {
 
   register(): void {
     const headers: any = new HttpHeaders({
-      'Content-Type': 'application/json'
-    }),
+        'Content-Type': 'application/json'
+      }),
       options: any = {
         firstName: this.firstName,
         lastName: this.lastName,
@@ -76,15 +76,9 @@ export class RegistrationComponent implements OnInit {
 
     this.http.post(url, JSON.stringify(options), headers).subscribe(
       (data: any) => {
-        // If the request was successful, notify the user
-        this.openDialog(
-          'Συγχαρητήρια, έγινε εγγραφή: ',
-          this.username,
-          true
-        );
+        this.openDialog('Συγχαρητήρια, έγινε εγγραφή: ', this.username, true);
       },
       (error: any) => {
-        // If the supplied username or email already exist in the database, notify the user
         this.openDialog(
           'Το όνομα χρήστη ή το email είναι ήδη σε χρήση!',
           '',
@@ -95,7 +89,6 @@ export class RegistrationComponent implements OnInit {
   }
 
   validate(): boolean {
-    // If the details supplied are incomplete/incorrect, do not proceed with the transaction
     const pw_regex_number = /[0-9]/;
     const pw_regex_lowercase = /[a-z]/;
     const pw_regex_uppercase = /[A-Z]/;
@@ -112,7 +105,6 @@ export class RegistrationComponent implements OnInit {
       this.confirmedPassword == null ||
       this.phone == null
     ) {
-      // If there are any empty fields, notify the user
       this.openDialog('Παρακαλώ συμπληρώστε όλα τα πεδία!', '', false);
       return false;
     } else if (
@@ -127,11 +119,9 @@ export class RegistrationComponent implements OnInit {
       this.phone.toString().length < 5 ||
       this.phone.toString().length > 15
     ) {
-      // If there are any incorrect details entered, notify the user
       this.openDialog('Παρακαλώ συμπληρώστε τα σωστά στοιχεία!', '', false);
       return false;
     } else if (this.password !== this.confirmedPassword) {
-      // If passwords do not match, notify the user
       this.openDialog('Οι κωδικοί ασφαλείας δεν ταιριάζουν!', '', false);
       return false;
     } else if (this.password.length < 8) {
@@ -142,7 +132,11 @@ export class RegistrationComponent implements OnInit {
       );
       return false;
     } else if (!pw_regex_number.test(this.password)) {
-      this.openDialog('Οι κωδικοί ασφαλείας πρέπει να περιέχουν τουλάχιστον ένα νούμερο!', '', false);
+      this.openDialog(
+        'Οι κωδικοί ασφαλείας πρέπει να περιέχουν τουλάχιστον ένα νούμερο!',
+        '',
+        false
+      );
       return false;
     } else if (!pw_regex_lowercase.test(this.password)) {
       this.openDialog(
@@ -163,8 +157,6 @@ export class RegistrationComponent implements OnInit {
       return false;
     }
 
-    // If all the checks have passed, then proceed with uploading the image
-    // and creating the registration record in the database
     this.uploader.uploadAll();
     return true;
   }

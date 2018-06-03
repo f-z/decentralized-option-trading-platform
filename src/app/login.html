@@ -13,10 +13,10 @@
 
 <div class="container">
   <div class="input-group">
-    <input type="radio" name="role" value="true" [(ngModel)]="loginPage" id="login-button" routerLink="/login"/>
-    <label for="login-button">Login</label>
-    <input type="radio" name="role" value="false" [(ngModel)]="loginPage" id="register-button" routerLink="/register"/>
-    <label for="register-button">Register</label>
+    <input type="radio" name="role" value="true" [(ngModel)]="loginPage" id="login-button" routerLink="/eisodos" />
+    <label for="login-button">Είσοδος</label>
+    <input type="radio" name="role" value="false" [(ngModel)]="loginPage" id="register-button" routerLink="/eggrafi" />
+    <label for="register-button">Εγγραφή</label>
   </div>
 
   <br>
@@ -24,28 +24,30 @@
   <form id="register-form" autocomplete="on">
 
     <div class="space-bot text-center">
-      <h2>Login</h2>
+      <h2>Είσοδος</h2>
     </div>
 
     <br>
 
     <div class="fullrow">
-      <input type="text" [(ngModel)]="username" name="username" placeholder="Username" autocomplete="username"/>
+      <input type="text" [(ngModel)]="username" name="username" placeholder="Όνομα χρήστη" autocomplete="username" />
     </div>
 
     <div class="fullrow">
-      <input type="password" [(ngModel)]="password" name="password" placeholder="Password" autocomplete="current-password"/>
+      <input type="password" [(ngModel)]="password" name="password" placeholder="Κωδικός πρόσβασης" autocomplete="current-password"
+      />
     </div>
 
     <br>
     <div class="row">
       <div class="col-half">
-        <input type="button" id="cancel-button" value="Cancel" routerLink="/search" />
+        <input type="button" id="cancel-button" value="Ακύρωση" routerLink="/anazitisi" />
       </div>
       <div class="col-half">
-        <input type="submit" value=Login (click)="login()">
+        <input type="submit" value="Είσοδος" (click)="login()">
       </div>
     </div>
 
   </form>
 </div>
+

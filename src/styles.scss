@@ -815,3 +815,11 @@ select:last-of-type {
 .item-details .monitoring {
   float: right;
 }
+
+input[type="radio"]+label,
+select {
+  width: 50%;
+  text-align: center;
+  float: left;
+  border-radius: 0;
+}

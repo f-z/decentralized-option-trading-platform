@@ -44,10 +44,10 @@
     </div>
 
     <div class="row">
-      <h4>Περιοχή</h4>
+      <h4>Διέυθυνση</h4>
       <div class="col-half">
         <div class="input">
-          <input type="text" [(ngModel)]="region" name="region" placeholder="Περιοχή" autocomplete="address-level3" />
+          <input type="text" [(ngModel)]="region" name="region" placeholder="Νομός" autocomplete="address-level3" />
         </div>
       </div>
       <div class="col-half">
@@ -75,14 +75,25 @@
           />
         </div>
       </div>
-      <div class="input">
-        <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Επιβεβαίωση κωδικού" autocomplete="new-password"
-        />
-      </div>
-
       <div class="col-half">
         <div class="input">
-          <input type="" [(ngModel)]="registrationNumber" placeholder="Αριθμός μητρώου" />
+          <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" placeholder="Επιβεβαίωση κωδικού" autocomplete="new-password"
+          />
+        </div>
+      </div>
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <h4>Παρακαλώ εισάγετε τον επαγγελματικό αριθμό μητρώου σας,</h4>
+      <h4>εάν είστε μηχανικός:</h4>
+      <div class="col-half">
+        <div class="input">
+          <input type="" [(ngModel)]="registrationNumber" name="registrationNumber" placeholder="Α.Μ. ΕΕΤΕΜ ή ΤΕΕ" />
         </div>
       </div>
 
@@ -92,6 +103,7 @@
 
     <h4>Φώτο προφίλ</h4>
     <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+    <br>
     <br>
     <br>
 
