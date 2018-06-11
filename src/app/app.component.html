@@ -1,77 +1,25 @@
-<!-- card login / registration -->
-<div class="card login">
-  <img class="profile-photo" src="{{ this.user.photo }}" *ngIf="user!=null" (click)="goToMyProfile();">
-  <label class="welcome-label" *ngIf="user!=null">Καλώς ήρθες, {{ user.firstName }}!
-  </label>
-  <h1 class="headline">OK!ERGO</h1>
-  <button class="button" routerLink="/eggrafi" *ngIf="user==null">
-    <span>Εγγραφή</span>
-  </button>
-  <button class="button" routerLink="/eisodos" *ngIf="user==null">
-    <span>Είσοδος</span>
-  </button>
-  <button class="button" (click)="logout()" *ngIf="user!=null">
-    <span>Έξοδος</span>
-  </button>
-  <button class="button" routerLink="/oi-aggelies-mou" *ngIf="user!=null">
-    <span>Οι αγγελίες μου</span>
-  </button>
-</div>
-
-<!-- card search -->
-<div class="card search">
-  <mat-button-toggle-group #categories="matButtonToggleGroup" class="categories" (change)="selectCategory(categories.value);">
-    <mat-button-toggle value="All" checked=true>
-      <b>All items</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Electronics">
-      <b>Electronics</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Books">
-      <b>Books</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Fashion">
-      <b>Fashion</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Sports">
-      <b>Sports</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Home">
-      <b>Home</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Motors">
-      <b>Motors</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Collectables">
-      <b>Collectables</b>
-    </mat-button-toggle>
-    <mat-button-toggle value="Other">
-      <b>Other</b>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
-
+<div *ngIf="loading">
+  <h3 align="center">Loading - please wait...</h3>
+  <mat-progress-bar mode="buffer"></mat-progress-bar>
   <br>
-  <br>
-
-  <label class="search-label">search
-  </label>
 </div>
 
-<div class="grid-list-container" *ngIf="!term && user!=null">
-  <h2 *ngIf="recommendedItems">Προτάσεις</h2>
-  <mat-grid-list cols="3" gutterSize="16">
-    <mat-grid-tile *ngFor="let item of recommendedItems">
-      <app-item [item]="item" (click)="setListing(item)">
-      </app-item>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
+<div align="center">
+  <h3>Please login:</h3>
+  <mat-form-field class="input-field">
+    <input matInput type="text" [(ngModel)]="username" name="username" placeholder="enter username" class="username" (keyup.enter)="getUser(username)"
+    />
+  </mat-form-field>
 
-<div class="grid-list-container" *ngIf="term">
-  <mat-grid-list cols="3" gutterSize="16" *ngIf="term">
-    <mat-grid-tile *ngFor="let item of items | search : term">
-      <app-item [item]="item" (click)="setListing(item)">
-      </app-item>
-    </mat-grid-tile>
-  </mat-grid-list>
+  <p>
+  </p>
+
+    <mat-form-field class="input-field">
+      <input matInput type="password" [(ngModel)]="password" name="password" placeholder="enter password" class="password" (keyup.enter)="getUser(username)"
+      />
+    </mat-form-field>
+
+    <p>
+
+      <button mat-raised-button color="primary" (click)="getUser(username)">Login</button>
 </div>
