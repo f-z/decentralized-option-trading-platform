@@ -1,3 +1,14 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+      <span>
+        OK!ERGO
+      </span>
+    <span class="fill-remaining-space"></span>
+    <button mat-button>About</button>
+    <button mat-button>Contact</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <div *ngIf="loading">
   <h3 align="center">Loading - please wait...</h3>
   <mat-progress-bar mode="buffer"></mat-progress-bar>
@@ -7,19 +18,23 @@
 <div align="center">
   <h3>Please login:</h3>
   <mat-form-field class="input-field">
-    <input matInput type="text" [(ngModel)]="username" name="username" placeholder="enter username" class="username" (keyup.enter)="getUser(username)"
+    <input matInput type="text" [(ngModel)]="username" name="username" placeholder="enter username" class="username" (keyup.enter)="authenticateUser(username)"
     />
   </mat-form-field>
 
   <p>
   </p>
 
-    <mat-form-field class="input-field">
-      <input matInput type="password" [(ngModel)]="password" name="password" placeholder="enter password" class="password" (keyup.enter)="getUser(username)"
-      />
-    </mat-form-field>
+  <mat-form-field class="input-field">
+    <input matInput type="password" [(ngModel)]="password" name="password" placeholder="enter password" class="password" (keyup.enter)="authenticateUser(username)"
+    />
+  </mat-form-field>
 
-    <p>
+  <p>
 
-      <button mat-raised-button color="primary" (click)="getUser(username)">Login</button>
+    <div>
+      <button mat-raised-button class="button" color="primary" (click)="authenticateUser(username)">Login</button>
+      <div class="divider"></div>
+      <button mat-raised-button class="button" color="primary" (click)="registerUser(username)">Register</button>
+    </div>
 </div>

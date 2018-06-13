@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { UserApiService } from './user-api.service';
-import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-root',
@@ -27,19 +26,19 @@ export class AppComponent {
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
-    // displaying an example chart upon load
     // this.getAllData(this.term, this.minDate, this.maxDate);
-    this.getUser('5b1edfaa2311d622234b762d');
   }
 
   addUser(term, date, count) {
     this.users.addUser(term, date, count);
   }
 
-  getUser(username): any {
+  authenticateUser(username): void {
     this.users.getUser(username).subscribe(res => {
-      console.log(res);
-      return res;
+      if (res._id === username) {
+        this.user = res;
+        console.log('logged in');
+      }
     });
   }
 }

@@ -6,3 +6,13 @@ p {
   min-width: 70px;
   max-width: 700px;
 }
+
+.divider {
+  width: 5px;
+  height: auto;
+  display: inline-block;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}

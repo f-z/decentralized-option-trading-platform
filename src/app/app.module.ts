@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserApiService } from './user-api.service';
 
-import { MatButtonModule, MatProgressBarModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatProgressBarModule, MatInputModule, MatToolbarModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { MatButtonModule, MatProgressBarModule, MatInputModule } from '@angular/
     MatButtonModule,
     MatProgressBarModule,
     MatInputModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatToolbarModule
   ],
   providers: [ UserApiService ],
   bootstrap: [ AppComponent ]
