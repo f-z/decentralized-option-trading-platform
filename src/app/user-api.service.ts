@@ -6,9 +6,9 @@ import { Observable } from 'rxjs/internal/Observable';
   providedIn: 'root'
 })
 export class UserApiService {
-  apiString = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi';
-  params = '?db=pubmed&rettype=count&retmode=json&sort=pub+date&usehistory=y';
-
+  url = 'https://www.alphavantage.co/query?';
+  params = 'function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=CNY&apikey=demo';
+  apiKey = 'G1EXLX22YPP5TVD1';
   uri = 'http://localhost:4000/users';
 
   constructor(private http: HttpClient) {}
@@ -16,7 +16,7 @@ export class UserApiService {
   getPublicationCount(term: string, date: number): any {
     return new Promise(resolve => {
       this.http
-        .get(this.apiString + this.params + '&term=' + term + '&mindate=' + date + '&maxdate=' + date)
+        .get(this.url + this.params + '&term=' + term + '&apikey=' + this.apiKey)
         .subscribe(data => {
           resolve(data);
         });
