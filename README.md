@@ -1,17 +1,22 @@
-# MEAN-stack-Chart.js
+# MEAN-stack-Web3.js
 A sample web application built using the MEAN stack.
-The app retrieves custom data from an API and creates a chart using Chart.js.
-It also stores them in MongoDB.
+The app retrieves custom data from an API and connects to the Ethereum mainnet using web3.
+It also stores information in MongoDB.
 
-## MongoDB
+## Database: MongoDB
 mongod --dbpath ./data/db --port 27018
 
 mongo --host 127.0.0.1:27018
 
 Recommended MongoDB GUI and IDE: Studio 3T
 
-## Node.js
+## Server: Express (Node.js)
 nodemon server
+or node server
 
-## Angular
+## Client: Angular front-end
+cd client
 ng serve --o
+
+-- Access development server at: http://localhost:4200
+-- Access API at: http://localhost:8080
