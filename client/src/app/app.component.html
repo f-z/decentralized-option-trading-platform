@@ -1,13 +1,9 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-      <span>
-        OK!ERGO
-      </span>
-    <span class="fill-remaining-space"></span>
-    <button mat-button>About</button>
-    <button mat-button>Contact</button>
-  </mat-toolbar-row>
-</mat-toolbar>
+<app-navbar></app-navbar>
+
+<div class="container">
+  <flash-messages></flash-messages>
+  <router-outlet></router-outlet>
+</div>
 
 <div *ngIf="loading">
   <h3 align="center">Loading - please wait...</h3>

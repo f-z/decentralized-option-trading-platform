@@ -1,0 +1,21 @@
+<nav class="navbar navbar-default">
+  <div class="container">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <span routerLink="/">
+          OK!ERGO
+        </span>
+        <span class="fill-remaining-space"></span>
+        <button mat-button [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Home</button>
+        <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+          routerLink="/dashboard">Dashboard</button>
+        <button mat-button *ngIf="authService.loggedIn()" routerLink="/profile">Profile</button>
+        <button mat-button *ngIf="authService.loggedIn()" routerLink="/blog">Blog</button>
+        <button mat-button *ngIf="!authService.loggedIn()" routerLink="/login">Login</button>
+        <button mat-button *ngIf="authService.loggedIn()" (click)="onLogoutClick()">Logout</button>
+        <button mat-button *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+          routerLink="/register">Register</button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+</nav>
