@@ -1,7 +1,7 @@
 <br>
 <br>
 
-<h2 class="page-header" align="center">Login</h2>
+<h2 class="page-header" align="center">Login Page</h2>
 <br>
 
 <!-- Login form -->
@@ -15,7 +15,7 @@
           formControlName="username" />
       </mat-form-field>
       <!-- Validation -->
-      <h4 class="help-block" *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</h4>
+      <h5 class="help-block" *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required!</h5>
     </div>
   </div>
 
@@ -27,7 +27,7 @@
           class="form-control" (keyup.enter)="authenticateUser(username)" />
       </mat-form-field>
       <!-- Validation -->
-      <h4 class="help-block" *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</h4>
+      <h5 class="help-block" *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required!</h5>
     </div>
   </div>
 

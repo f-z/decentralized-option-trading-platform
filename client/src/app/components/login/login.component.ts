@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
     // On page load, check if user was redirected to login
     if (this.authGuard.redirectUrl) {
       this.messageClass = 'alert alert-danger'; // Set error message: need to login
-      this.message = 'You must be logged in to view that page.'; // Set message
+      this.message = 'You must be logged in to view that page!'; // Set message
       this.previousUrl = this.authGuard.redirectUrl; // Set the previous URL user was redirected from
       this.authGuard.redirectUrl = undefined; // Erase previous URL
     }

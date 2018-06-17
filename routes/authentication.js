@@ -9,15 +9,15 @@ module.exports = (router) => {
   router.post('/register', (req, res) => {
     // Check if email was provided
     if (!req.body.email) {
-      res.json({ success: false, message: 'You must provide an e-mail' }); // Return error
+      res.json({ success: false, message: 'You must provide an e-mail!' }); // Return error
     } else {
       // Check if username was provided
       if (!req.body.username) {
-        res.json({ success: false, message: 'You must provide a username' }); // Return error
+        res.json({ success: false, message: 'You must provide a username!' }); // Return error
       } else {
         // Check if password was provided
         if (!req.body.password) {
-          res.json({ success: false, message: 'You must provide a password' }); // Return error
+          res.json({ success: false, message: 'You must provide a password!' }); // Return error
         } else {
           // Create new user object and apply user input
           let user = new User({
@@ -31,7 +31,7 @@ module.exports = (router) => {
             if (err) {
               // Check if error is an error indicating duplicate account
               if (err.code === 11000) {
-                res.json({ success: false, message: 'Username or e-mail already exists' }); // Return error
+                res.json({ success: false, message: 'Username or e-mail already exists!' }); // Return error
               } else {
                 // Check if error is a validation rror
                 if (err.errors) {
@@ -52,11 +52,11 @@ module.exports = (router) => {
                     }
                   }
                 } else {
-                  res.json({ success: false, message: 'Could not save user. Error: ', err }); // Return error if not related to validation
+                  res.json({ success: false, message: 'Could not save user! Error: ', err }); // Return error if not related to validation
                 }
               }
             } else {
-              res.json({ success: true, message: 'Acount registered!' }); // Return success
+              res.json({ success: true, message: 'Acount registered successfully!' }); // Return success
             }
           });
         }
@@ -70,7 +70,7 @@ module.exports = (router) => {
   router.get('/checkEmail/:email', (req, res) => {
     // Check if email was provided in paramaters
     if (!req.params.email) {
-      res.json({ success: false, message: 'E-mail was not provided' }); // Return error
+      res.json({ success: false, message: 'E-mail was not provided!' }); // Return error
     } else {
       // Search for user's e-mail in database;
       User.findOne({ email: req.params.email }, (err, user) => {
@@ -79,9 +79,9 @@ module.exports = (router) => {
         } else {
           // Check if user's e-mail is taken
           if (user) {
-            res.json({ success: false, message: 'E-mail is already taken' }); // Return as taken e-mail
+            res.json({ success: false, message: 'E-mail is already taken!' }); // Return as taken e-mail
           } else {
-            res.json({ success: true, message: 'E-mail is available' }); // Return as available e-mail
+            res.json({ success: true, message: 'E-mail is available!' }); // Return as available e-mail
           }
         }
       });
@@ -94,7 +94,7 @@ module.exports = (router) => {
   router.get('/checkUsername/:username', (req, res) => {
     // Check if username was provided in paramaters
     if (!req.params.username) {
-      res.json({ success: false, message: 'Username was not provided' }); // Return error
+      res.json({ success: false, message: 'Username was not provided!' }); // Return error
     } else {
       // Look for username in database
       User.findOne({ username: req.params.username }, (err, user) => { // Check if connection error was found
@@ -103,7 +103,7 @@ module.exports = (router) => {
         } else {
           // Check if user's username was found
           if (user) {
-            res.json({ success: false, message: 'Username is already taken' }); // Return as taken username
+            res.json({ success: false, message: 'Username is already taken!' }); // Return as taken username
           } else {
             res.json({ success: true, message: 'Username is available' }); // Return as vailable username
           }
@@ -118,11 +118,11 @@ module.exports = (router) => {
   router.post('/login', (req, res) => {
     // Check if username was provided
     if (!req.body.username) {
-      res.json({ success: false, message: 'No username was provided' }); // Return error
+      res.json({ success: false, message: 'No username was provided!' }); // Return error
     } else {
       // Check if password was provided
       if (!req.body.password) {
-        res.json({ success: false, message: 'No password was provided.' }); // Return error
+        res.json({ success: false, message: 'No password was provided!' }); // Return error
       } else {
         // Check if username exists in database
         User.findOne({ username: req.body.username.toLowerCase() }, (err, user) => {
@@ -132,12 +132,12 @@ module.exports = (router) => {
           } else {
             // Check if username was found
             if (!user) {
-              res.json({ success: false, message: 'Username not found.' }); // Return error
+              res.json({ success: false, message: 'Username not found!' }); // Return error
             } else {
               const validPassword = user.comparePassword(req.body.password); // Compare password provided to password in database
               // Check if password is a match
               if (!validPassword) {
-                res.json({ success: false, message: 'Password invalid' }); // Return error
+                res.json({ success: false, message: 'Password invalid!' }); // Return error
               } else {
                 const token = jwt.sign({ userId: user._id }, config.secret, { expiresIn: '24h' }); // Create a token for client
                 res.json({
@@ -147,7 +147,7 @@ module.exports = (router) => {
                   user: {
                     username: user.username
                   }
-                }); // Return success and token to frontend
+                }); // Return success and token to front-end
               }
             }
           }
@@ -163,7 +163,7 @@ module.exports = (router) => {
     const token = req.headers['authorization']; // Create token found in headers
     // Check if token was found in headers
     if (!token) {
-      res.json({ success: false, message: 'No token provided' }); // Return error
+      res.json({ success: false, message: '' }); // Return error
     } else {
       // Verify the token is valid
       jwt.verify(token, config.secret, (err, decoded) => {
@@ -190,7 +190,7 @@ module.exports = (router) => {
       } else {
         // Check if user was found in database
         if (!user) {
-          res.json({ success: false, message: 'User not found' }); // Return error, user was not found in db
+          res.json({ success: false, message: 'User not found!' }); // Return error, user was not found in db
         } else {
           res.json({ success: true, user: user }); // Return success, send user object to frontend for profile
         }
@@ -204,17 +204,17 @@ module.exports = (router) => {
   router.get('/publicProfile/:username', (req, res) => {
     // Check if username was passed in the parameters
     if (!req.params.username) {
-      res.json({ success: false, message: 'No username was provided' }); // Return error message
+      res.json({ success: false, message: 'No username was provided!' }); // Return error message
     } else {
       // Check the database for username
       User.findOne({ username: req.params.username }).select('username email').exec((err, user) => {
         // Check if error was found
         if (err) {
-          res.json({ success: false, message: 'Something went wrong.' }); // Return error message
+          res.json({ success: false, message: 'Something went wrong!' }); // Return error message
         } else {
           // Check if user was found in the database
           if (!user) {
-            res.json({ success: false, message: 'Username not found.' }); // Return error message
+            res.json({ success: false, message: 'Username not found!' }); // Return error message
           } else {
             res.json({ success: true, user: user }); // Return the public user's profile data
           }
