@@ -1,38 +1,47 @@
-<h2 class="page-header">Login</h2>
+<br>
+<br>
 
-<!-- Custom Success/Error Message -->
-<div class="row show-hide-message">
+<h2 class="page-header" align="center">Login</h2>
+<br>
+
+<!-- Login form -->
+<form [formGroup]="form" (submit)="onLoginSubmit()" align="center">
+
+  <!-- Username field -->
+  <div class="form-group">
+    <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
+      <mat-form-field class="input-field">
+        <input matInput class="form-control" type="text" [(ngModel)]="username" name="username" placeholder="enter username" (keyup.enter)="authenticateUser(username)"
+          formControlName="username" />
+      </mat-form-field>
+      <!-- Validation -->
+      <h4 class="help-block" *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</h4>
+    </div>
+  </div>
+
+  <!-- Password field  -->
+  <div class="form-group">
+    <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
+      <mat-form-field class="input-field">
+        <input matInput type="password" [(ngModel)]="password" name="password" formControlName="password" placeholder="enter password"
+          class="form-control" (keyup.enter)="authenticateUser(username)" />
+      </mat-form-field>
+      <!-- Validation -->
+      <h4 class="help-block" *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</h4>
+    </div>
+  </div>
+
+  <br>
+
+  <!-- Submit button -->
+  <button mat-raised-button class="button" color="primary" [disabled]="!form.valid || processing" class="btn btn-primary" type="submit">Login</button>
+</form>
+
+<!-- Custom success/error message -->
+<div class="row show-hide-message" align="center">
+  <br>
+  <br>
   <div [ngClass]="messageClass">
     {{ message }}
   </div>
 </div>
-
-<!-- Login Form -->
-<form [formGroup]="form" (submit)="onLoginSubmit()">
-
-  <!-- Username Field -->
-  <div class="form-group">
-    <label for="username">Username</label>
-    <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
-      <input class="form-control" type="text" name="username" formControlName="username" />
-      <!-- Validation -->
-      <ul class="help-block">
-        <li *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Password Field  -->
-  <div class="form-group">
-    <label for="password">Password</label>
-    <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
-      <input class="form-control" type="password" name="password" formControlName="password" />
-      <!-- Validation -->
-      <ul class="help-block">
-        <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</li>
-      </ul>
-    </div>
-  </div>
-  <!-- Submit Button -->
-  <input [disabled]="!form.valid || processing" class="btn btn-primary" type="submit" value="Login" />
-</form>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { AuthGuard } from '../../guards/auth.guard';
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authGuard: AuthGuard
   ) {
-    this.createForm(); // Create Login Form when component is constructed
+    this.createForm(); // Create login form when component is constructed
   }
 
   // Function to create login form
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
     const user = {
       username: this.form.get('username').value, // Username input field
       password: this.form.get('password').value // Password input field
-    }
+    };
 
     // Function to send login data to API
     this.authService.login(user).subscribe(data => {
@@ -90,5 +90,4 @@ export class LoginComponent implements OnInit {
       this.authGuard.redirectUrl = undefined; // Erase previous URL
     }
   }
-
 }
