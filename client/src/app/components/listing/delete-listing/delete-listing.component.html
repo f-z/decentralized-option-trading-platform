@@ -1,4 +1,4 @@
-<h1 class="page-header">Delete Blog</h1>
+<h1 class="page-header">Delete Listing</h1>
 
 <!-- Custom Success/Error Message -->
 <div class="row show-hide-message" *ngIf="message">
@@ -8,7 +8,7 @@
 </div>
 
 <!-- Modal Confirmation Window -->
-<div class="col-md-6" *ngIf="foundBlog">
+<div class="col-md-6" *ngIf="foundListing">
   <!-- Model Outer Layer -->
   <div class="modal-content">
     <!-- Modal Header -->
@@ -19,17 +19,17 @@
       <h4 class="modal-title">Confirm</h4>
     </div>
 
-    <!-- Modal Body -->
+    <!-- Modal body -->
     <div class="modal-body">
-      <p>Are you sure you would like to delete this blog?</p>
+      <p>Are you sure you would like to delete this listing?</p>
     </div>
 
-    <!-- Modal Footer -->
+    <!-- Modal footer -->
     <div class="modal-footer">
-      <!-- Yes Button -->
-      <button [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="deleteBlog()">Yes</button>
-      <!-- No Button -->
-      <a routerLink="/blog"><button [disabled]="processing" type="button" name="button" class="btn btn-danger">No</button></a>
+      <!-- Yes button -->
+      <button [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="deleteListing()">Yes</button>
+      <!-- No button -->
+      <a routerLink="/listing"><button [disabled]="processing" type="button" name="button" class="btn btn-danger">No</button></a>
     </div>
   </div>
 
@@ -40,19 +40,19 @@
     <!-- Panel Heading -->
     <div class="panel-heading">
       <!-- Panel Title -->
-      <h3 class="panel-title">{{ blog.title }}</h3>
+      <h3 class="panel-title">{{ listing.title }}</h3>
     </div>
 
     <!-- Panel Body -->
     <div class="panel-body">
-      {{ blog.body }}
+      {{ listing.body }}
     </div>
 
     <!-- Panel Footer -->
     <div class="panel-footer">
-      <strong>Posted by: </strong> {{ blog.createdBy }}
+      <strong>Posted by: </strong> {{ listing.createdBy }}
       <br />
-      <strong>Date: </strong> {{ blog.createdAt | date:'MMM dd, yyyy' }}
+      <strong>Date: </strong> {{ listing.createdAt | date:'MMM dd, yyyy' }}
     </div>
   </div>
 

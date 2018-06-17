@@ -1,0 +1,184 @@
+<br>
+
+<div align="center">
+  <h2 class="page-header" align="center">Listing Feed</h2>
+
+  <!-- Custom success/error message -->
+  <div class="row show-hide-message" *ngIf="message && newPost" align="center">
+    <div [ngClass]="messageClass">
+      {{ message }}
+    </div>
+  </div>
+
+  <!-- New post button -->
+  <button type="button" name="button" class="btn btn-warning" *ngIf="!newPost" (click)="newListingForm()">New Post</button>
+
+  <!-- Reload button -->
+  <button [disabled]="loadingListings" type="button" name="button" class="btn btn-default" *ngIf="!newPost" (click)="reloadListings()">
+    <span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Reload</button>
+
+  <br />
+  <br />
+
+  <!-- New listing form -->
+  <form [formGroup]="form" name="listingForm" (submit)="onListingSubmit()" *ngIf="newPost">
+    <!-- Title input -->
+    <div class="form-group">
+      <label for="title">Title</label>
+      <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
+        <!-- Title input -->
+        <input type="text" name="title" class="form-control" placeholder="enter listing title" autocomplete="off" formControlName="title"
+        />
+        <!-- Validation -->
+        <ul class="help-block">
+          <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required!</li>
+          <li *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</li>
+          <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number!</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Body input -->
+    <div class="form-group">
+      <label for="body">Body</label>
+      <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
+        <!-- Body input -->
+        <textarea name="body" rows="8" cols="80" placeholder="enter body" class="form-control" formControlName="body"></textarea>
+        <!-- Validation -->
+        <ul class="help-block">
+          <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
+          <li *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 500, Min length: 5</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Go back button -->
+    <button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go back</button>
+    <!-- Submit button -->
+    <button [disabled]="processing || !form.valid" type="submit" name="button" class="btn btn-success">Submit</button>
+
+  </form>
+  <!-- New Listing Form -->
+
+  <!-- Panel Start -->
+  <div *ngIf="!newPost">
+    <!-- Panel Outer Layer -->
+    <div class="panel panel-primary" *ngFor="let listing of ListingPosts">
+
+      <!-- Panel Title -->
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ listing.title }}</h3>
+      </div>
+
+      <!-- Panel Body -->
+      <div class="panel-body">
+        {{ listing.body }}
+      </div>
+
+      <!-- Panel Footer Start -->
+      <div class="panel-footer">
+        <strong>Posted by: </strong>{{ listing.createdBy }}
+        <br />
+        <strong>Date: </strong>{{ listing.createdAt | date:'MMM dd, yyyy' }}
+        <br />
+        <div *ngIf="username === listing.createdBy">
+          <strong>Likes: </strong>{{ listing.likes }}
+          <br />
+          <strong>Dislikes: </strong>{{ listing.dislikes }}
+        </div>
+
+        <!-- Edit button -->
+        <a [routerLink]="['/edit-listing/', listing._id]" *ngIf="username === listing.createdBy">
+          <button type="button" name="button" class="btn btn-sm btn-info">Edit</button>
+        </a>
+        <!-- Delete button -->
+        <a [routerLink]="['/delete-listing/', listing._id]" *ngIf="username === listing.createdBy">
+          <button type="button" name="button" class="btn btn-sm btn-danger">Delete</button>
+        </a>
+
+        <!-- Likes dropdown  -->
+        <div class="dropdown">
+          <!-- Like button -->
+          <button [disabled]="listing.likedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== listing.createdBy"
+            (click)="likeListing(listing._id)">
+            <span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: {{ listing.likes }}</button>
+          <!-- Dropdown Menu Items -->
+          <div class="dropdown-content">
+            <a [routerLink]="['/user/', liker]" *ngFor="let liker of listing.likedBy">{{ liker }}</a>
+          </div>
+        </div>
+
+        <!-- Dislikes dropdown  -->
+        <div class="dropdown">
+          <!-- Dislike nutton -->
+          <button [disabled]="listing.dislikedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-warning"
+            *ngIf="username !== listing.createdBy" (click)="dislikeListing(listing._id)">
+            <span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: {{ listing.dislikes }}</button>
+          <!-- Dropdown menu items -->
+          <div class="dropdown-content">
+            <a [routerLink]="['/user/', disliker]" *ngFor="let disliker of listing.dislikedBy">{{ disliker }}</a>
+          </div>
+        </div>
+
+      </div>
+      <!-- Panel footer end -->
+
+      <!-- Post comment box: start -->
+      <ul class="list-group">
+        <li class="list-group-item">
+          <!-- Post comment button -->
+          <button type="button" name="button" class="btn btn-sm btn-danger" (click)="draftComment(listing._id)" [disabled]="newComment.indexOf(listing._id) > -1">Post comment</button>
+          <br />
+          <br />
+          <div *ngIf="newComment.indexOf(listing._id) > -1">
+
+            <!-- Form: comment form start -->
+            <form [formGroup]="commentForm">
+              <!-- Textarea input -->
+              <textarea name="comment" rows="10" cols="30" class="form-control" formControlName="comment"></textarea>
+              <!-- Validation -->
+              <div [ngClass]="{'has-success': !commentForm.controls.comment.errors && commentForm.controls.comment.dirty, 'has-error': commentForm.controls.comment.dirty && commentForm.controls.comment.errors}">
+                <ul class="help-block">
+                  <li *ngIf="commentForm.controls.comment.errors?.required && commentForm.controls.comment.dirty">This field is required!</li>
+                  <li *ngIf="(commentForm.controls.comment.errors?.maxlength && commentForm.controls.comment.dirty) ||(commentForm.controls.comment.errors?.minlength && commentForm.controls.comment.dirty)">Comment must be at least 1 character but no more than 200!</li>
+                </ul>
+              </div>
+              <!-- Post button -->
+              <button [disabled]="!commentForm.valid || processing" type="submit" name="button" class="btn btn-sm btn-info" (click)="postComment(listing._id)">Post</button>
+              <!-- Cancel button -->
+              <button [disabled]="processing" type="button" name="button" class="btn btn-sm btn-danger" (click)="cancelSubmission(listing._id)">Cancel</button>
+            </form>
+            <!-- Form: comment form end -->
+
+          </div>
+
+          <!-- Show comments -->
+          <li *ngIf="enabledComments.indexOf(listing._id) === -1 && listing.comments.length > 0" class="list-group-item">
+            <span (click)="expand(listing._id)">
+              Show comments&nbsp;&nbsp;
+              <div class="glyphicon glyphicon-comment"></div>
+            </span>
+          </li>
+
+          <!-- Hide comments -->
+          <li *ngIf="enabledComments.indexOf(listing._id) > -1" class="list-group-item">
+            <span (click)="collapse(listing._id)">
+              Hide comments&nbsp;&nbsp;
+              <div class="glyphicon glyphicon-comment"></div>
+            </span>
+          </li>
+
+          <!-- Comment -->
+          <div *ngIf="enabledComments.indexOf(listing._id) > -1">
+            <li *ngFor="let comment of listing.comments" class="list-group-item">
+              <strong>{{ comment.commentator }}:</strong> {{ comment.comment }}
+            </li>
+          </div>
+      </ul>
+      <!-- Post comment box: end -->
+
+    </div>
+    <!-- Panel outer layer -->
+  </div>
+  <!-- Panel end -->
+</div>

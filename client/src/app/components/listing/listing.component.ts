@@ -1,42 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormControl,
-  FormGroup,
   FormBuilder,
   Validators
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { BlogService } from '../../services/blog.service';
+import { ListingService } from '../../services/listing.service';
 
 @Component({
-  selector: 'app-blog',
-  templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.css']
+  selector: 'app-listing',
+  templateUrl: './listing.component.html',
+  styleUrls: ['./listing.component.css']
 })
-export class BlogComponent implements OnInit {
+export class ListingComponent implements OnInit {
   messageClass;
   message;
   newPost = false;
-  loadingBlogs = false;
+  loadingListings = false;
   form;
   commentForm;
   processing = false;
   username;
-  blogPosts;
+  ListingPosts;
   newComment = [];
   enabledComments = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private blogService: BlogService
+    private listingService: ListingService
   ) {
-    this.createNewBlogForm(); // Create new blog form on start up
-    this.createCommentForm(); // Create form for posting comments on a user's blog post
+    this.createNewListingForm(); // Create new Listing form on start up
+    this.createCommentForm(); // Create form for posting comments on a user's Listing post
   }
 
-  // Function to create new blog form
-  createNewBlogForm() {
+  // Function to create new Listing form
+  createNewListingForm() {
     this.form = this.formBuilder.group({
       // Title field
       title: [
@@ -84,14 +82,14 @@ export class BlogComponent implements OnInit {
     this.commentForm.get('comment').disable(); // Disable comment field
   }
 
-  // Enable new blog form
-  enableFormNewBlogForm() {
+  // Enable new Listing form
+  enableFormNewListingForm() {
     this.form.get('title').enable(); // Enable title field
     this.form.get('body').enable(); // Enable body field
   }
 
-  // Disable new blog form
-  disableFormNewBlogForm() {
+  // Disable new Listing form
+  disableFormNewListingForm() {
     this.form.get('title').disable(); // Disable title field
     this.form.get('body').disable(); // Disable body field
   }
@@ -107,21 +105,21 @@ export class BlogComponent implements OnInit {
     }
   }
 
-  // Function to display new blog form
-  newBlogForm() {
-    this.newPost = true; // Show new blog form
+  // Function to display new Listing form
+  newListingForm() {
+    this.newPost = true; // Show new Listing form
   }
 
-  // Reload blogs on current page
-  reloadBlogs() {
-    this.loadingBlogs = true; // Used to lock button
-    this.getAllBlogs(); // Add any new blogs to the page
+  // Reload Listings on current page
+  reloadListings() {
+    this.loadingListings = true; // Used to lock button
+    this.getAllListings(); // Add any new Listings to the page
     setTimeout(() => {
-      this.loadingBlogs = false; // Release button lock after four seconds
+      this.loadingListings = false; // Release button lock after four seconds
     }, 4000);
   }
 
-  // Function to post a new comment on blog post
+  // Function to post a new comment on Listing post
   draftComment(id) {
     this.commentForm.reset(); // Reset the comment form each time users starts a new comment
     this.newComment = []; // Clear array so only one post can be commented on at a time
@@ -130,44 +128,44 @@ export class BlogComponent implements OnInit {
 
   // Function to cancel new post transaction
   cancelSubmission(id) {
-    const index = this.newComment.indexOf(id); // Check the index of the blog post in the array
+    const index = this.newComment.indexOf(id); // Check the index of the Listing post in the array
     this.newComment.splice(index, 1); // Remove the id from the array to cancel post submission
     this.commentForm.reset(); // Reset  the form after cancellation
     this.enableCommentForm(); // Enable the form after cancellation
     this.processing = false; // Enable any buttons that were locked
   }
 
-  // Function to submit a new blog post
-  onBlogSubmit() {
+  // Function to submit a new Listing post
+  onListingSubmit() {
     this.processing = true; // Disable submit button
-    this.disableFormNewBlogForm(); // Lock form
+    this.disableFormNewListingForm(); // Lock form
 
-    // Create blog object from form fields
-    const blog = {
+    // Create Listing object from form fields
+    const Listing = {
       title: this.form.get('title').value, // Title field
       body: this.form.get('body').value, // Body field
       createdBy: this.username // CreatedBy field
     };
 
-    // Function to save blog into database
-    this.blogService.newBlog(blog).subscribe(data => {
-      // Check if blog was saved to database or not
+    // Function to save Listing into database
+    this.listingService.newListing(Listing).subscribe(data => {
+      // Check if Listing was saved to database or not
       if (!data.success) {
         this.messageClass = 'alert alert-danger'; // Return error class
         this.message = data.message; // Return error message
         this.processing = false; // Enable submit button
-        this.enableFormNewBlogForm(); // Enable form
+        this.enableFormNewListingForm(); // Enable form
       } else {
         this.messageClass = 'alert alert-success'; // Return success class
         this.message = data.message; // Return success message
-        this.getAllBlogs();
+        this.getAllListings();
         // Clear form data after two seconds
         setTimeout(() => {
           this.newPost = false; // Hide form
           this.processing = false; // Enable submit button
           this.message = false; // Erase error/success message
           this.form.reset(); // Reset all form fields
-          this.enableFormNewBlogForm(); // Enable the form fields
+          this.enableFormNewListingForm(); // Enable the form fields
         }, 2000);
       }
     });
@@ -178,27 +176,27 @@ export class BlogComponent implements OnInit {
     window.location.reload(); // Clear all variable states
   }
 
-  // Function to get all blogs from the database
-  getAllBlogs() {
-    // Function to GET all blogs from database
-    this.blogService.getAllBlogs().subscribe(data => {
-      this.blogPosts = data.blogs; // Assign array to use in HTML
+  // Function to get all Listings from the database
+  getAllListings() {
+    // Function to GET all Listings from database
+    this.listingService.getAllListings().subscribe(data => {
+      this.ListingPosts = data.listings; // Assign array to use in HTML
     });
   }
 
-  // Function to like a blog post
-  likeBlog(id) {
-    // Service to like a blog post
-    this.blogService.likeBlog(id).subscribe(data => {
-      this.getAllBlogs(); // Refresh blogs after like
+  // Function to like a Listing post
+  likeListing(id) {
+    // Service to like a Listing post
+    this.listingService.likeListing(id).subscribe(data => {
+      this.getAllListings(); // Refresh Listings after like
     });
   }
 
-  // Function to disliked a blog post
-  dislikeBlog(id) {
-    // Service to dislike a blog post
-    this.blogService.dislikeBlog(id).subscribe(data => {
-      this.getAllBlogs(); // Refresh blogs after dislike
+  // Function to disliked a Listing post
+  dislikeListing(id) {
+    // Service to dislike a Listing post
+    this.listingService.dislikeListing(id).subscribe(data => {
+      this.getAllListings(); // Refresh Listings after dislike
     });
   }
 
@@ -208,9 +206,9 @@ export class BlogComponent implements OnInit {
     this.processing = true; // Lock buttons while saving comment to database
     const comment = this.commentForm.get('comment').value; // Get the comment value to pass to service function
     // Function to save the comment to the database
-    this.blogService.postComment(id, comment).subscribe(data => {
-      this.getAllBlogs(); // Refresh all blogs to reflect the new comment
-      const index = this.newComment.indexOf(id); // Get the index of the blog id to remove from array
+    this.listingService.postComment(id, comment).subscribe(data => {
+      this.getAllListings(); // Refresh all Listings to reflect the new comment
+      const index = this.newComment.indexOf(id); // Get the index of the Listing id to remove from array
       this.newComment.splice(index, 1); // Remove id from the array
       this.enableCommentForm(); // Re-enable the form
       this.commentForm.reset(); // Reset the comment form
@@ -224,7 +222,7 @@ export class BlogComponent implements OnInit {
 
   // Expand the list of comments
   expand(id) {
-    this.enabledComments.push(id); // Add the current blog post id to array
+    this.enabledComments.push(id); // Add the current Listing post id to array
   }
 
   // Collapse the list of comments
@@ -236,9 +234,9 @@ export class BlogComponent implements OnInit {
   ngOnInit() {
     // Get profile username on page load
     this.authService.getProfile().subscribe(profile => {
-      this.username = profile.user.username; // Used when creating new blog posts and comments
+      this.username = profile.user.username; // Used when creating new Listing posts and comments
     });
 
-    this.getAllBlogs(); // Get all blogs on component load
+    this.getAllListings(); // Get all Listings on component load
   }
 }

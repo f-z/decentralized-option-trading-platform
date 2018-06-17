@@ -6,9 +6,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
-import { BlogComponent } from './components/blog/blog.component';
-import { EditBlogComponent } from './components/blog/edit-blog/edit-blog.component';
-import { DeleteBlogComponent } from './components/blog/delete-blog/delete-blog.component';
+import { ListingComponent } from './components/listing/listing.component';
+import { EditListingComponent } from './components/listing/edit-listing/edit-listing.component';
+import { DeleteListingComponent } from './components/listing/delete-listing/delete-listing.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 
@@ -16,46 +16,46 @@ import { NotAuthGuard } from './guards/notAuth.guard';
 const appRoutes: Routes = [
   {
     path: '',
-    component: HomeComponent // Default Route
+    component: HomeComponent // Default route
   },
   {
     path: 'dashboard',
-    component: DashboardComponent, // Dashboard Route,
+    component: DashboardComponent, // Dashboard route,
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
     path: 'register',
-    component: RegisterComponent, // Register Route
+    component: RegisterComponent, // Register route
     canActivate: [NotAuthGuard] // User must NOT be logged in to view this route
   },
   {
     path: 'login',
-    component: LoginComponent, // Login Route
+    component: LoginComponent, // Login route
     canActivate: [NotAuthGuard] // User must NOT be logged in to view this route
   },
   {
     path: 'profile',
-    component: ProfileComponent, // Profile Route
+    component: ProfileComponent, // Profile route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
-    path: 'blog',
-    component: BlogComponent, // Blog Route,
+    path: 'listing',
+    component: ListingComponent, // Listing route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
-    path: 'edit-blog/:id',
-    component: EditBlogComponent, // Edit Blog Route
+    path: 'edit-listing/:id',
+    component: EditListingComponent, // Edit listing route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
-    path: 'delete-blog/:id',
-    component: DeleteBlogComponent, // Delete Blog Route
+    path: 'delete-listing/:id',
+    component: DeleteListingComponent, // Delete listing route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
     path: 'user/:username',
-    component: PublicProfileComponent, // Public Profile Route
+    component: PublicProfileComponent, // Public profile route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   { path: '**', component: HomeComponent } // "Catch-All" Route

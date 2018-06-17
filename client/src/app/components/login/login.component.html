@@ -11,8 +11,8 @@
   <div class="form-group">
     <div [ngClass]="{'has-error': form.controls.username.errors && form.controls.username.dirty, 'has-success': form.controls.username.valid && form.controls.username.dirty }">
       <mat-form-field class="input-field">
-        <input matInput class="form-control" type="text" [(ngModel)]="username" name="username" placeholder="enter username" (keyup.enter)="authenticateUser(username)"
-          formControlName="username" />
+        <input matInput class="form-control" type="text" name="username" placeholder="enter username" (keyup.enter)="authenticateUser(username)"
+          formControlName="username" autocomplete="username" />
       </mat-form-field>
       <!-- Validation -->
       <h5 class="help-block" *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">This field is required!</h5>
@@ -23,8 +23,8 @@
   <div class="form-group">
     <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
       <mat-form-field class="input-field">
-        <input matInput type="password" [(ngModel)]="password" name="password" formControlName="password" placeholder="enter password"
-          class="form-control" (keyup.enter)="authenticateUser(username)" />
+        <input matInput type="password" name="password" formControlName="password" placeholder="enter password" class="form-control"
+          (keyup.enter)="authenticateUser(username)" autocomplete="current-password" />
       </mat-form-field>
       <!-- Validation -->
       <h5 class="help-block" *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required!</h5>

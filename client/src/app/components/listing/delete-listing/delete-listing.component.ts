@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { BlogService } from '../../../services/blog.service';
+import { ListingService } from '../../../services/listing.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-delete-blog',
-  templateUrl: './delete-blog.component.html',
-  styleUrls: ['./delete-blog.component.css']
+  selector: 'app-delete-listing',
+  templateUrl: './delete-listing.component.html',
+  styleUrls: ['./delete-listing.component.css']
 })
-export class DeleteBlogComponent implements OnInit {
+export class DeleteListingComponent implements OnInit {
   message;
   messageClass;
-  foundBlog = false;
+  foundListing = false;
   processing = false;
-  blog;
+  listing;
   currentUrl;
 
   constructor(
-    private blogService: BlogService,
+    private listingService: ListingService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) { }
 
-  // Function to delete blogs
-  deleteBlog() {
+  // Function to delete listings
+  deleteListing() {
     this.processing = true; // Disable buttons
     // Function for DELETE request
-    this.blogService.deleteBlog(this.currentUrl.id).subscribe(data => {
+    this.listingService.deleteListing(this.currentUrl.id).subscribe(data => {
       // Check if delete request worked
       if (!data.success) {
         this.messageClass = 'alert alert-danger'; // Return error bootstrap class
@@ -33,9 +33,9 @@ export class DeleteBlogComponent implements OnInit {
       } else {
         this.messageClass = 'alert alert-success'; // Return bootstrap success class
         this.message = data.message; // Return success message
-        // After two second timeout, route to blog page
+        // After two second timeout, route to listing page
         setTimeout(() => {
-          this.router.navigate(['/blog']); // Route users to blog page
+          this.router.navigate(['/listing']); // Route users to listing page
         }, 2000);
       }
     });
@@ -43,23 +43,22 @@ export class DeleteBlogComponent implements OnInit {
 
   ngOnInit() {
     this.currentUrl = this.activatedRoute.snapshot.params; // Get URL paramaters on page load
-    // Function for GET request to retrieve blog
-    this.blogService.getSingleBlog(this.currentUrl.id).subscribe(data => {
+    // Function for GET request to retrieve listing
+    this.listingService.getSingleListing(this.currentUrl.id).subscribe(data => {
       // Check if request was successfull
       if (!data.success) {
         this.messageClass = 'alert alert-danger'; // Return bootstrap error class
         this.message = data.message; // Return error message
       } else {
-        // Create the blog object to use in HTML
-        this.blog = {
-          title: data.blog.title, // Set title
-          body: data.blog.body, // Set body
-          createdBy: data.blog.createdBy, // Set created_by field
-          createdAt: data.blog.createdAt // Set created_at field
-        }
-        this.foundBlog = true; // Displaly blog window
+        // Create the listing object to use in HTML
+        this.listing = {
+          title: data.listing.title, // Set title
+          body: data.listing.body, // Set body
+          createdBy: data.listing.createdBy, // Set created_by field
+          createdAt: data.listing.createdAt // Set created_at field
+        };
+        this.foundListing = true; // Displaly listing window
       }
     });
   }
-
 }

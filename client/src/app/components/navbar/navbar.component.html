@@ -10,7 +10,7 @@
         <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
           routerLink="/dashboard">Dashboard</button>
         <button mat-button *ngIf="authService.loggedIn()" routerLink="/profile">Profile</button>
-        <button mat-button *ngIf="authService.loggedIn()" routerLink="/blog">Blog</button>
+        <button mat-button *ngIf="authService.loggedIn()" routerLink="/listing">Listings</button>
         <button mat-button *ngIf="!authService.loggedIn()" routerLink="/login">Login</button>
         <button mat-button *ngIf="authService.loggedIn()" (click)="onLogoutClick()">Logout</button>
         <button mat-button *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"

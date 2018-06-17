@@ -27,7 +27,7 @@
   <div class="form-group">
     <div [ngClass]="{'has-error': (form.controls.email.errors && form.controls.email.dirty) || (!emailValid && form.controls.email.dirty), 'has-success': !form.controls.email.errors && emailValid}">
       <mat-form-field class="input-field">
-        <input matInput type="text" name="email" class="form-control" autocomplete="off" placeholder="enter email" formControlName="email"
+        <input matInput type="text" name="email" class="form-control" autocomplete="email" placeholder="enter email" formControlName="email"
           (blur)="checkEmail()" />
       </mat-form-field>
       <!-- Validation -->
@@ -43,7 +43,7 @@
   <div class="form-group">
     <div [ngClass]="{'has-error': (form.controls.password.errors && form.controls.password.dirty), 'has-success': !form.controls.password.errors}">
       <mat-form-field class="input-field">
-        <input matInput type="password" name="password" class="form-control" autocomplete="off" placeholder="password" formControlName="password"
+        <input matInput type="password" name="password" class="form-control" autocomplete="off" placeholder="enter password" formControlName="password"
         />
       </mat-form-field>
       <!-- Validation -->
@@ -78,7 +78,7 @@
 <!-- Registration form /-->
 
 <!-- Custom success/error message -->
-<div class="row show-hide-message">
+<div class="row show-hide-message" align="center">
   <br>
   <br>
   <div [ngClass]="messageClass">

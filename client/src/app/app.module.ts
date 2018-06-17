@@ -12,15 +12,15 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
-import { BlogService } from './services/blog.service';
+import { ListingService } from './services/listing.service';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
-import { BlogComponent } from './components/blog/blog.component';
-import { EditBlogComponent } from './components/blog/edit-blog/edit-blog.component';
-import { DeleteBlogComponent } from './components/blog/delete-blog/delete-blog.component';
+import { ListingComponent } from './components/listing/listing.component';
+import { EditListingComponent } from './components/listing/edit-listing/edit-listing.component';
+import { DeleteListingComponent } from './components/listing/delete-listing/delete-listing.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 import { MatButtonModule, MatProgressBarModule, MatInputModule, MatToolbarModule } from '@angular/material';
@@ -34,9 +34,9 @@ import { MatButtonModule, MatProgressBarModule, MatInputModule, MatToolbarModule
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    BlogComponent,
-    EditBlogComponent,
-    DeleteBlogComponent,
+    ListingComponent,
+    EditListingComponent,
+    DeleteListingComponent,
     PublicProfileComponent
   ],
   imports: [
@@ -53,7 +53,7 @@ import { MatButtonModule, MatProgressBarModule, MatInputModule, MatToolbarModule
     BrowserAnimationsModule,
     MatToolbarModule
   ],
-  providers: [ AuthService, AuthGuard, NotAuthGuard, BlogService, FlashMessagesService ],
+  providers: [ AuthService, AuthGuard, NotAuthGuard, ListingService, FlashMessagesService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
 @Injectable()
-export class BlogService {
+export class ListingService {
   options;
   domain = this.authService.domain;
 
@@ -21,72 +21,72 @@ export class BlogService {
     });
   }
 
-  // Function to create a new blog post
-  newBlog(blog) {
+  // Function to create a new listing post
+  newListing(listing) {
     this.createAuthenticationHeaders(); // Create headers
     return this.http
-      .post(this.domain + 'blogs/newBlog', blog, this.options)
+      .post(this.domain + 'listings/newListing', listing, this.options)
       .map(res => res.json());
   }
 
-  // Function to get all blogs from the database
-  getAllBlogs() {
+  // Function to get all listings from the database
+  getAllListings() {
     this.createAuthenticationHeaders(); // Create headers
     return this.http
-      .get(this.domain + 'blogs/allBlogs', this.options)
+      .get(this.domain + 'listings/allListings', this.options)
       .map(res => res.json());
   }
 
-  // Function to get the blog using the id
-  getSingleBlog(id) {
+  // Function to get the listing using the id
+  getSingleListing(id) {
     this.createAuthenticationHeaders(); // Create headers
     return this.http
-      .get(this.domain + 'blogs/singleBlog/' + id, this.options)
+      .get(this.domain + 'listings/singleListing/' + id, this.options)
       .map(res => res.json());
   }
 
-  // Function to edit/update blog post
-  editBlog(blog) {
+  // Function to edit/update listing post
+  editListing(listing) {
     this.createAuthenticationHeaders(); // Create headers
     return this.http
-      .put(this.domain + 'blogs/updateBlog/', blog, this.options)
+      .put(this.domain + 'listings/updateListing/', listing, this.options)
       .map(res => res.json());
   }
 
-  // Function to delete a blog
-  deleteBlog(id) {
+  // Function to delete a listing
+  deleteListing(id) {
     this.createAuthenticationHeaders(); // Create headers
     return this.http
-      .delete(this.domain + 'blogs/deleteBlog/' + id, this.options)
+      .delete(this.domain + 'listings/deleteListing/' + id, this.options)
       .map(res => res.json());
   }
 
-  // Function to like a blog post
-  likeBlog(id) {
-    const blogData = { id: id };
+  // Function to like a listing post
+  likeListing(id) {
+    const listingData = { id: id };
     return this.http
-      .put(this.domain + 'blogs/likeBlog/', blogData, this.options)
+      .put(this.domain + 'listings/likeListing/', listingData, this.options)
       .map(res => res.json());
   }
 
-  // Function to dislike a blog post
-  dislikeBlog(id) {
-    const blogData = { id: id };
+  // Function to dislike a listing post
+  dislikeListing(id) {
+    const listingData = { id: id };
     return this.http
-      .put(this.domain + 'blogs/dislikeBlog/', blogData, this.options)
+      .put(this.domain + 'listings/dislikeListing/', listingData, this.options)
       .map(res => res.json());
   }
 
-  // Function to post a comment on a blog post
+  // Function to post a comment on a listing post
   postComment(id, comment) {
     this.createAuthenticationHeaders(); // Create headers
-    // Create blogData to pass to backend
-    const blogData = {
+    // Create listingData to pass to back-end
+    const listingData = {
       id: id,
       comment: comment
     };
     return this.http
-      .post(this.domain + 'blogs/comment', blogData, this.options)
+      .post(this.domain + 'listings/comment', listingData, this.options)
       .map(res => res.json());
   }
 }
