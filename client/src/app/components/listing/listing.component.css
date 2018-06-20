@@ -44,3 +44,10 @@
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+.divider {
+    width: 5px;
+    height: auto;
+    display: inline-block;
+  }
+  

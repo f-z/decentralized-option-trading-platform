@@ -10,12 +10,13 @@
     </div>
   </div>
 
-  <!-- New post button -->
-  <button type="button" name="button" class="btn btn-warning" *ngIf="!newPost" (click)="newListingForm()">New Post</button>
+  <br />
 
+  <!-- New post button -->
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="newListingForm()" *ngIf="!newPost">New Listing</button>
   <!-- Reload button -->
-  <button [disabled]="loadingListings" type="button" name="button" class="btn btn-default" *ngIf="!newPost" (click)="reloadListings()">
-    <span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Reload</button>
+  <div class="divider"></div>
+  <button mat-raised-button [disabled]="loadingListings" class="button" name="button" color="primary" *ngIf="!newPost" (click)="reloadListings()">Reload</button>
 
   <br />
   <br />
