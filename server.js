@@ -1,10 +1,10 @@
 /* ===================
-   Import Node Modules
+   Importing Node modules
 =================== */
 const env = require("./env");
-const express = require("express"); // Fast, unopinionated, minimalist web framework for node.
-const app = express(); // Initiate Express Application
-const router = express.Router(); // Creates a new router object.
+const express = require("express"); // Fast, unopinionated, minimalist web framework for node
+const app = express(); // Initiate Express application
+const router = express.Router(); // Creating a new router object
 const mongoose = require("mongoose"); // Node tool for MongoDB
 mongoose.Promise = global.Promise;
 const config = require("./config/database"); // Mongoose Ccnfig
@@ -13,12 +13,12 @@ const authentication = require("./routes/authentication")(router); // Importing 
 const listings = require("./routes/listings")(router); // Importing listing routes
 const bodyParser = require("body-parser"); // Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 const cors = require("cors"); // CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
-const port = process.env.PORT || 8080; // Allows heroku to set port
+const port = process.env.PORT || 8080; // Allows Azure to set port
+
 // Database connection
-mongoose.connect(
-  config.uri,
+mongoose.connect(config.uri,
   err => {
-    // Check if database was able to connect
+    // Checking if database was able to connect
     if (err) {
       console.log("Could NOT connect to database: ", err); // Return error message
     } else {
@@ -35,12 +35,12 @@ app.use(express.static(__dirname + "/public")); // Provide static directory for 
 app.use("/authentication", authentication); // Use Authentication routes in application
 app.use("/listings", listings); // Use listing routes in application
 
-// Connect server to Angular 2 Index.html
+// Connecting server to Angular index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/src/index.html"));
 });
 
-// Start Server: Listen on port 8080
+// Start server: listening on port 8080
 app.listen(port, () => {
   console.log(
     "Listening on port " + port + " in " + process.env.NODE_ENV + " mode"
