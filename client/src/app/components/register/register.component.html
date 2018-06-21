@@ -23,6 +23,20 @@
     </div>
   </div>
 
+   <!-- Region input -->
+   <div class="form-group">
+    <div [ngClass]="{'has-error': (form.controls.region.errors && form.controls.region.dirty), 'has-success': !form.controls.region.errors}">
+      <mat-form-field class="input-field">
+        <input matInput type="text" name="region" class="form-control" autocomplete="administrative_area_level_1" placeholder="enter region" formControlName="region"
+        />
+      </mat-form-field>
+      <!-- Validation -->
+      <div class="help-block">
+        <h5 *ngIf="form.controls.region.errors?.minlength && form.controls.region.dirty || form.controls.region.errors?.maxlength && form.controls.region.dirty ">Must be between 3 and 35 characters!</h5>
+      </div>
+    </div>
+  </div>
+
   <!-- Email input -->
   <div class="form-group">
     <div [ngClass]="{'has-error': (form.controls.email.errors && form.controls.email.dirty) || (!emailValid && form.controls.email.dirty), 'has-success': !form.controls.email.errors && emailValid}">

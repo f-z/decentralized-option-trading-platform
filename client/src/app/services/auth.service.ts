@@ -14,21 +14,21 @@ export class AuthService {
 
   constructor(private http: Http) {}
 
-  // Function to create headers, add token, to be used in HTTP requests
+  // Function to create headers and add token; to be used in HTTP requests
   createAuthenticationHeaders() {
     this.loadToken(); // Get token so it can be attached to headers
     // Headers configuration options
     this.options = new RequestOptions({
       headers: new Headers({
-        'Content-Type': 'application/json', // Format set to JSON
-        authorization: this.authToken // Attach token
+        'Content-Type': 'application/json', // Setting format to JSON
+        authorization: this.authToken // Attaching token
       })
     });
   }
 
   // Function to get token from client local storage
   loadToken() {
-    this.authToken = localStorage.getItem('token'); // Get token and asssign to variable to be used elsewhere
+    this.authToken = localStorage.getItem('token'); // Getting token and assigning to variable to be used elsewhere
   }
 
   // Function to register user accounts
@@ -61,22 +61,22 @@ export class AuthService {
 
   // Function to logout
   logout() {
-    this.authToken = null; // Set token to null
-    this.user = null; // Set user to null
-    localStorage.clear(); // Clear local storage
+    this.authToken = null; // Setting token to null
+    this.user = null; // Setting user to null
+    localStorage.clear(); // Clearing local storage
   }
 
   // Function to store user's data in client local storage
   storeUserData(token, user) {
-    localStorage.setItem('token', token); // Set token in local storage
-    localStorage.setItem('user', JSON.stringify(user)); // Set user in local storage as string
-    this.authToken = token; // Assign token to be used elsewhere
-    this.user = user; // Set user to be used elsewhere
+    localStorage.setItem('token', token); // Setting token in local storage
+    localStorage.setItem('user', JSON.stringify(user)); // Setting user in local storage as string
+    this.authToken = token; // Assigning token to be used elsewhere
+    this.user = user; // Setting user to be used elsewhere
   }
 
   // Function to get user's profile data
   getProfile() {
-    this.createAuthenticationHeaders(); // Create headers before sending to API
+    this.createAuthenticationHeaders(); // Creating headers before sending to API
     return this.http
       .get(this.domain + 'authentication/profile', this.options)
       .map(res => res.json());
@@ -84,7 +84,7 @@ export class AuthService {
 
   // Function to get public profile data
   getPublicProfile(username) {
-    this.createAuthenticationHeaders(); // Create headers before sending to API
+    this.createAuthenticationHeaders(); // Creating headers before sending to API
     return this.http
       .get(
         this.domain + 'authentication/publicProfile/' + username,
