@@ -16,7 +16,10 @@ import { ListingService } from './services/listing.service';
 import { PriceApiService } from './services/priceApi.service';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
+import {
+  FlashMessagesModule,
+  FlashMessagesService
+} from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 import { ListingComponent } from './components/listing/listing.component';
@@ -24,7 +27,14 @@ import { EditListingComponent } from './components/listing/edit-listing/edit-lis
 import { DeleteListingComponent } from './components/listing/delete-listing/delete-listing.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
-import { MatButtonModule, MatProgressBarModule, MatInputModule, MatToolbarModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatProgressBarModule,
+  MatInputModule,
+  MatToolbarModule,
+  MatGridListModule,
+  MatSortModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -52,9 +62,18 @@ import { MatButtonModule, MatProgressBarModule, MatInputModule, MatToolbarModule
     MatProgressBarModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatGridListModule,
+    MatSortModule
   ],
-  providers: [ AuthService, AuthGuard, NotAuthGuard, ListingService, PriceApiService, FlashMessagesService ],
-  bootstrap: [ AppComponent ]
+  providers: [
+    AuthService,
+    AuthGuard,
+    NotAuthGuard,
+    ListingService,
+    PriceApiService,
+    FlashMessagesService
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

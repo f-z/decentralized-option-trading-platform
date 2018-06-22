@@ -4,13 +4,3 @@
   <flash-messages></flash-messages>
   <router-outlet></router-outlet>
 </div>
-
-<div *ngIf="loading">
-  <h3 align="center">Loading - please wait...</h3>
-  <mat-progress-bar mode="buffer"></mat-progress-bar>
-  <br>
-</div>
-
-<div>
-  <canvas id="canvas" width="900" height="280">{{ chart }}</canvas>
-</div>

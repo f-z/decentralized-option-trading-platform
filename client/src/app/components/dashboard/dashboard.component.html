@@ -1,2 +1,29 @@
 <br>
-<h2 class="page-header" align="center">Dashboard Route</h2>
+<h2 class="page-header" align="center">Dashboard</h2>
+
+<div *ngIf="loading">
+  <h3 align="center">Loading - please wait...</h3>
+  <mat-progress-bar mode="buffer"></mat-progress-bar>
+  <br>
+</div>
+
+<mat-grid-list cols="4" rowHeight="100px">
+  <mat-grid-tile [colspan]="3" [rowspan]="3" [style.background]="white">
+    <canvas id="canvas" width="900" height="280">{{ chart }}</canvas>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="3" [style.background]="white">
+    <table matSort (matSortChange)="sortData($event)">
+      <tr>
+        <th mat-sort-header="name">Ticker Symbol</th>
+        <th mat-sort-header="divider">&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th mat-sort-header="calories">Price</th>
+      </tr>
+    
+      <tr *ngFor="let dessert of sortedData">
+        <td>{{ dessert.name }}</td>
+        <td></td>
+        <td>{{ dessert.calories }}</td>
+      </tr>
+    </table>
+  </mat-grid-tile>
+</mat-grid-list>
