@@ -13,12 +13,11 @@ export class PriceApiService {
 
   constructor(private http: HttpClient) {}
 
-  getCurrentPrice(symbol: string, date: string): any {
+  getCurrentPrice(symbol: string): any {
     return new Promise(resolve => {
       this.http
         .get(this.apiString + this.params + '&symbol=' + symbol + '&apikey=' + this.apiKey)
         .subscribe(data => {
-          console.log(data['Time Series (Digital Currency Daily)'][date]['4a. close (GBP)']);
           resolve(data);
         });
     });

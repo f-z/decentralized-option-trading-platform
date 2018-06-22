@@ -11,15 +11,15 @@ module.exports = (router) => {
   router.post('/newListing', (req, res) => {
     // Checking if listing title was provided
     if (!req.body.title) {
-      res.json({ success: false, message: 'Listing title is required.' }); // Return error message
+      res.json({ success: false, message: 'Listing title is required!' }); // Return error message
     } else {
       // Check if listing body was provided
       if (!req.body.body) {
-        res.json({ success: false, message: 'Listing body is required.' }); // Return error message
+        res.json({ success: false, message: 'Listing body is required!' }); // Return error message
       } else {
         // Check if listing's creator was provided
         if (!req.body.createdBy) {
-          res.json({ success: false, message: 'Listing creator is required.' }); // Return error
+          res.json({ success: false, message: 'Listing creator is required!' }); // Return error
         } else {
           // Create the listing object for insertion into database
           const listing = new Listing({
@@ -68,7 +68,7 @@ module.exports = (router) => {
       } else {
         // Check if listings were found in database
         if (!listings) {
-          res.json({ success: false, message: 'No listings found.' }); // Return error of no listings found
+          res.json({ success: false, message: 'No listings found!' }); // Return error of no listings found
         } else {
           res.json({ success: true, listings: listings }); // Return success and listings array
         }
@@ -125,17 +125,17 @@ module.exports = (router) => {
   router.put('/updateListing', (req, res) => {
     // Check if id was provided
     if (!req.body._id) {
-      res.json({ success: false, message: 'No listing id provided' }); // Return error message
+      res.json({ success: false, message: 'No listing id provided!' }); // Return error message
     } else {
       // Check if id exists in database
       Listing.findOne({ _id: req.body._id }, (err, listing) => {
         // Check if id is a valid ID
         if (err) {
-          res.json({ success: false, message: 'Not a valid listing id' }); // Return error message
+          res.json({ success: false, message: 'Not a valid listing id!' }); // Return error message
         } else {
           // Check if id was found in the database
           if (!listing) {
-            res.json({ success: false, message: 'Listing id was not found.' }); // Return error message
+            res.json({ success: false, message: 'Listing id was not found!' }); // Return error message
           } else {
             // Check who user is that is requesting listing update
             User.findOne({ _id: req.decoded.userId }, (err, user) => {

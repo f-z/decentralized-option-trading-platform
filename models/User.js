@@ -149,7 +149,8 @@ let User = new Schema({
     type: String
   },
   region: {
-    type: String
+    type: String,
+    required: true
   },
   phone: {
     type: Number
