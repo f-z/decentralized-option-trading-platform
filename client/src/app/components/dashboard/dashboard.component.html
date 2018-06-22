@@ -14,15 +14,15 @@
   <mat-grid-tile [colspan]="1" [rowspan]="3" [style.background]="white">
     <table matSort (matSortChange)="sortData($event)">
       <tr>
-        <th mat-sort-header="name">Ticker Symbol</th>
+        <th mat-sort-header="symbol">Ticker Symbol</th>
         <th mat-sort-header="divider">&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th mat-sort-header="calories">Price</th>
+        <th mat-sort-header="price">Price</th>
       </tr>
     
-      <tr *ngFor="let dessert of sortedData">
-        <td>{{ dessert.name }}</td>
+      <tr *ngFor="let token of sortedPrices">
+        <td>{{ token.symbol }}</td>
         <td></td>
-        <td>{{ dessert.calories }}</td>
+        <td>{{ token.price }}</td>
       </tr>
     </table>
   </mat-grid-tile>

@@ -19,54 +19,17 @@ export class DashboardComponent implements OnInit {
 
   loading: boolean;
 
-  desserts = [
-    {
-      name: 'Frozen yogurt',
-      calories: '159',
-      fat: '6',
-      carbs: '24',
-      protein: '4'
-    },
-    {
-      name: 'Ice cream sandwich',
-      calories: '237',
-      fat: '9',
-      carbs: '37',
-      protein: '4'
-    },
-    { name: 'Eclair', calories: '262', fat: '16', carbs: '24', protein: '6' },
-    { name: 'Cupcake', calories: '305', fat: '4', carbs: '67', protein: '4' },
-    {
-      name: 'Gingerbread',
-      calories: '356',
-      fat: '16',
-      carbs: '49',
-      protein: '4'
-    }
-  ];
+  tokens = [];
 
-  sortedData;
+  sortedPrices;
 
   constructor(private priceService: PriceApiService) {
     this.loading = true;
     this.symbol = 'BTC';
+    this.tokens.push({ symbol: 'BTC', price: '5000' });
+    this.tokens.push({ symbol: 'ETH', price: '5000' });
 
-    const today = new Date();
-    let day = (today.getDate() - 1).toString();
-    let month = (today.getMonth() + 1).toString();
-    const year = today.getFullYear().toString();
-
-    if (today.getDate() < 10) {
-      day = '0' + today.getDate();
-    }
-
-    if (today.getMonth() + 1 < 10) {
-      month = '0' + (today.getMonth() + 1);
-    }
-
-    this.yesterday = year + '-' + month + '-' + day;
-
-    this.sortedData = this.desserts.slice();
+    this.sortedPrices = this.tokens.slice();
   }
 
   ngOnInit() {
@@ -78,15 +41,22 @@ export class DashboardComponent implements OnInit {
       for (key in this.results) {
         if (this.results.hasOwnProperty(key)) {
           // console.log(data['Time Series (Digital Currency Daily)'][date]['4a. close (GBP)']);
-          // console.log(this.results[key]['4a. close (GBP)']);
           this.data.push(this.results[key]['4a. close (GBP)']);
         }
       }
       this.data = this.data.reverse();
-      // console.log(res['Time Series (Digital Currency Daily)']);
       this.createChart(this.data);
       this.loading = false;
     });
+
+    for (let i = 0; i < this.tokens.length; i++) {
+      this.priceService.getCurrentPrice(this.tokens[i].symbol).then(res => {
+        // console.log(res[Object.keys(res)[Object.keys(res).length - 1]]);
+        // this.mostRecentPrices[0].price = res['Time Series (Digital Currency Daily)']['2018-06-22']['4a. close (GBP)'];
+        // tslint:disable-next-line:max-line-length
+        this.tokens[i].price = Math.round(res['Time Series (Digital Currency Daily)'][Object.keys(res['Time Series (Digital Currency Daily)'])[0]]['4a. close (GBP)'] * 100) / 100;
+      });
+    }
   }
 
   createChart(data: any) {
@@ -150,25 +120,19 @@ export class DashboardComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    const data = this.desserts.slice();
+    const data = this.tokens.slice();
     if (!sort.active || sort.direction === '') {
-      this.sortedData = data;
+      this.sortedPrices = data;
       return;
     }
 
-    this.sortedData = data.sort((a, b) => {
+    this.sortedPrices = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name':
-          return compare(a.name, b.name, isAsc);
-        case 'calories':
-          return compare(+a.calories, +b.calories, isAsc);
-        case 'fat':
-          return compare(+a.fat, +b.fat, isAsc);
-        case 'carbs':
-          return compare(+a.carbs, +b.carbs, isAsc);
-        case 'protein':
-          return compare(+a.protein, +b.protein, isAsc);
+        case 'symbol':
+          return compare(a.symbol, b.symbol, isAsc);
+        case 'price':
+          return compare(+a.price, +b.price, isAsc);
         default:
           return 0;
       }
