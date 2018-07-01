@@ -1,7 +1,7 @@
 <br>
 
 <div align="center">
-  <h2 class="page-header" align="center">Listing Feed</h2>
+  <h2 class="page-header" align="center">My Listing Feed</h2>
 
   <!-- Custom success/error message -->
   <div class="row show-hide-message" *ngIf="message && newPost" align="center">
@@ -13,7 +13,7 @@
   <br />
 
   <!-- New post button -->
-  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="newListingForm()" *ngIf="!newPost">New Listing</button>
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="newListingForm()" *ngIf="!newPost">New listing</button>
   <!-- Reload button -->
   <div class="divider"></div>
   <button mat-raised-button [disabled]="loadingListings" class="button" name="button" color="primary" *ngIf="!newPost" (click)="reloadListings()">Reload</button>
@@ -25,39 +25,41 @@
   <form [formGroup]="form" name="listingForm" (submit)="onListingSubmit()" *ngIf="newPost">
     <!-- Title input -->
     <div class="form-group">
-      <label for="title">Title</label>
       <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
         <!-- Title input -->
-        <input type="text" name="title" class="form-control" placeholder="enter listing title" autocomplete="off" formControlName="title"
-        />
+        <mat-form-field class="input-field">
+          <input matInput type="text" name="title" formControlName="title" placeholder="enter listing title" class="form-control" (keyup.enter)="authenticateUser(username)"
+            autocomplete="off" />
+        </mat-form-field>
         <!-- Validation -->
-        <ul class="help-block">
-          <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required!</li>
-          <li *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</li>
-          <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number!</li>
-        </ul>
+        <div class="help-block">
+          <h5 *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required!</h5>
+          <h5 *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</h5>
+          <h5 *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number!</h5>
+        </div>
       </div>
     </div>
 
     <!-- Body input -->
     <div class="form-group">
-      <label for="body">Body</label>
       <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
         <!-- Body input -->
-        <textarea name="body" rows="8" cols="80" placeholder="enter body" class="form-control" formControlName="body"></textarea>
+        <mat-form-field class="input-field">
+          <textarea matInput name="body" rows="3" cols="80" placeholder="enter body" class="form-control" formControlName="body"></textarea>
+        </mat-form-field>
         <!-- Validation -->
-        <ul class="help-block">
-          <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
-          <li *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 500, Min length: 5</li>
-        </ul>
+        <div class="help-block">
+          <h5 *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required!</h5>
+          <h5 *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 500, Min length: 5</h5>
+        </div>
       </div>
     </div>
 
     <!-- Go back button -->
-    <button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go back</button>
+    <button mat-raised-button class="button" color="primary" [disabled]="processing" type="button" name="button" (click)="goBack()">Go back</button>
+    <div class="divider"></div>
     <!-- Submit button -->
-    <button [disabled]="processing || !form.valid" type="submit" name="button" class="btn btn-success">Submit</button>
-
+    <button mat-raised-button class="button" color="primary" [disabled]="processing || !form.valid" type="submit" name="button">Submit</button>
   </form>
   <!-- New Listing Form -->
 
