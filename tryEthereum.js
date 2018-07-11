@@ -4,7 +4,7 @@ var tx = require('ethereumjs-tx');
 var lightwallet = require('eth-lightwallet');
 var txutils = lightwallet.txutils;
 var web3 = new Web3(
-    new Web3.providers.HttpProvider('https://rinkeby.infura.io/')
+    new Web3.providers.HttpProvider('https://ropsten.infura.io/')
 );
 var address = '0x8D68583e625CAaE969fA9249502E105a21435EbF';
 var key = '1ce642301e680f60227b9d8ffecad474f15155b6d8f8a2cb6bde8e85c8a4809a';

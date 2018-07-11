@@ -35,6 +35,7 @@ import {
   MatGridListModule,
   MatSortModule
 } from '@angular/material';
+import { ContractsService } from './services/contract.service';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import {
     NotAuthGuard,
     ListingService,
     PriceApiService,
-    FlashMessagesService
+    FlashMessagesService,
+    ContractsService
   ],
   bootstrap: [AppComponent]
 })
