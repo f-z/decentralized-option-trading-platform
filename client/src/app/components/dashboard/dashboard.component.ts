@@ -26,14 +26,16 @@ export class DashboardComponent implements OnInit {
   constructor(private priceService: PriceApiService) {
     this.loading = true;
     this.symbol = 'BTC';
-    this.tokens.push({ symbol: 'BTC', price: '5000' });
-    this.tokens.push({ symbol: 'ETH', price: '5000' });
+    this.tokens.push({ symbol: 'BTC', price: '5000', type: 'crypto' });
+    this.tokens.push({ symbol: 'ETH', price: '5000', type: 'crypto' });
+    this.tokens.push({ symbol: 'MSFT', price: '5000', type: 'stock' });
 
     this.sortedPrices = this.tokens.slice();
   }
 
   ngOnInit() {
-    this.priceService.getCurrentPrice(this.symbol).then(res => {
+    // retrieving historical prices for chart
+    this.priceService.getCurrentPrice('DIGITAL_CURRENCY_DAILY', this.symbol).then(res => {
       this.labels = Object.keys(res['Time Series (Digital Currency Daily)']);
       this.labels = this.labels.reverse();
       this.results = res['Time Series (Digital Currency Daily)'];
@@ -49,12 +51,24 @@ export class DashboardComponent implements OnInit {
       this.loading = false;
     });
 
+    // retrieving last closing price for each token in table
     for (let i = 0; i < this.tokens.length; i++) {
-      this.priceService.getCurrentPrice(this.tokens[i].symbol).then(res => {
+      let func: string, title: string, subtitle: string;
+      if (this.tokens[i].type === 'crypto') {
+        func = 'DIGITAL_CURRENCY_DAILY';
+        title = 'Time Series (Digital Currency Daily)';
+        subtitle = '4a. close (GBP)';
+      } else {
+        func = 'TIME_SERIES_DAILY_ADJUSTED';
+        title = 'Time Series (Daily)';
+        subtitle = '5. adjusted close';
+      }
+
+      this.priceService.getCurrentPrice(func, this.tokens[i].symbol).then(res => {
         // console.log(res[Object.keys(res)[Object.keys(res).length - 1]]);
         // this.mostRecentPrices[0].price = res['Time Series (Digital Currency Daily)']['2018-06-22']['4a. close (GBP)'];
         // tslint:disable-next-line:max-line-length
-        this.tokens[i].price = Math.round(res['Time Series (Digital Currency Daily)'][Object.keys(res['Time Series (Digital Currency Daily)'])[0]]['4a. close (GBP)'] * 100) / 100;
+        this.tokens[i].price = Math.round(res[title][Object.keys(res[title])[0]][subtitle] * 100) / 100;
       });
     }
   }

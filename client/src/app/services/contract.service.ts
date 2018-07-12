@@ -7,8 +7,8 @@ declare let window: any;
 @Injectable()
 export class ContractsService {
   private _account: string = null;
-  private _web3: any;
-  tokenAbi = require('./tokenContract.json');
+  private web3: any;
+  private tokenABI = require('./tokenContract.json');
 
   private _tokenContract: any;
   private _tokenContractAddress = '0xbc84f3bf7dd607a37f9e5848a6333e6c188d926c';
@@ -17,26 +17,26 @@ export class ContractsService {
     // this.tokenAbi = JSON.parse(this.tokenAbi);
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
-      this._web3 = new Web3(window.web3.currentProvider);
+      this.web3 = new Web3(window.web3.currentProvider);
 
-      if (this._web3.version.network !== '4') {
-        alert('Please connect to the Rinkeby network');
+      if (this.web3.version.network !== '4') {
+        alert('Please connect to the Rinkeby network!');
       }
     } else {
       console.warn(
-        'Please use a dapp browser like mist or MetaMask plugin for chrome'
+        'Please use a DApp browser like Mist or the MetaMask plugin for Chrome!'
       );
     }
 
-    this._tokenContract = this._web3.eth.contract(this.tokenAbi).at(this._tokenContractAddress);
+    this._tokenContract = this.web3.eth.contract(this.tokenABI).at(this._tokenContractAddress);
   }
 
   private async getAccount(): Promise<string> {
     if (this._account == null) {
       this._account = await new Promise((resolve, reject) => {
-        this._web3.eth.getAccounts((err, accs) => {
+        this.web3.eth.getAccounts((err, accs) => {
           if (err != null) {
-            alert('There was an error fetching your accounts.');
+            alert('There was an error fetching your accounts!');
             return;
           }
 
@@ -50,7 +50,7 @@ export class ContractsService {
         });
       }) as string;
 
-      this._web3.eth.defaultAccount = this._account;
+      this.web3.eth.defaultAccount = this._account;
     }
 
     return Promise.resolve(this._account);
@@ -60,13 +60,13 @@ export class ContractsService {
     const account = await this.getAccount();
 
     return new Promise((resolve, reject) => {
-      const _web3 = this._web3;
+      const web3 = this.web3;
       this._tokenContract.balanceOf.call(account, function (err, result) {
         if (err != null) {
           reject(err);
         }
 
-        resolve(_web3.fromWei(result));
+        resolve(web3.fromWei(result));
       });
     }) as Promise<number>;
   }
