@@ -20,10 +20,10 @@ export class HomeComponent implements OnInit {
     public authService: AuthService,
     cs: ContractsService
   ) {
-    cs.getUserBalance().then(balance => {
-    this.balance = balance;
-      console.log(balance);
-    });
+    // cs.getUserBalance().then(balance => {
+    // this.balance = balance;
+      // console.log(balance);
+    // });
     // console.log(web3);
   }
 
@@ -50,8 +50,8 @@ export class HomeComponent implements OnInit {
 
   startApp() {
     // require('dotenv').config();
-//var BigNumber = require('bignumber.js');
-// var Web3 = require('web3')
+    //var BigNumber = require('bignumber.js');
+    // var Web3 = require('web3')
 
 
 //var balance = web3.eth.getBalance(process.env.ACCOUNT, function (error, result) {

@@ -1,7 +1,15 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { PriceApiService } from '../../services/priceApi.service';
 import { Chart } from 'chart.js';
 import { Sort } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
+
+export interface Element {
+  symbol: string;
+  price: number;
+  type: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +17,12 @@ import { Sort } from '@angular/material';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  tokens: Element[] = [];
+
+  displayedColumns: string[] = ['select', 'symbol', 'price', 'type'];
+  dataSource = new MatTableDataSource<Element>(this.tokens);
+  selection = new SelectionModel<Element>(true, []);
+
   symbol: string;
   yesterday: string;
 
@@ -19,17 +33,15 @@ export class DashboardComponent implements OnInit {
 
   loading: boolean;
 
-  tokens = [];
-
   sortedPrices;
 
   constructor(private priceService: PriceApiService) {
     this.loading = true;
     this.symbol = 'BTC';
-    this.tokens.push({ symbol: 'BTC', price: '5000', type: 'crypto' });
-    this.tokens.push({ symbol: 'ETH', price: '5000', type: 'crypto' });
-    this.tokens.push({ symbol: 'MSFT', price: '5000', type: 'stock' });
-
+    this.tokens.push({ symbol: 'BTC', price: 5000, type: 'crypto' });
+    this.tokens.push({ symbol: 'ETH', price: 5000, type: 'crypto' });
+    this.tokens.push({ symbol: 'GOOGL', price: 5000, type: 'stock' });
+    this.tokens.push({ symbol: 'AAPL', price: 5000, type: 'stock' });
     this.sortedPrices = this.tokens.slice();
   }
 
