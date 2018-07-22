@@ -21,6 +21,11 @@ export class HomeComponent implements OnInit {
     contractService: ContractsService
   ) {
     contractService.getAccount().then(value => this.currentAccount = value);
+    contractService.deployContract().then(value => {
+      // 1 ether = 1000000000000000000 wei
+      // contractService.deposit(10000000000000000);
+      contractService.getContractBalance().then(balance => this.balance = balance);
+    });
     // cs.getUserBalance().then(balance => {
     // this.balance = balance;
       // console.log(balance);
@@ -30,7 +35,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     /*
-
     // this.web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/lbsGNvd6Dz5L6qcjpLT3'));
     console.log(this.web3); // {eth: .., shh: ...} // it's here!
 
