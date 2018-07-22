@@ -1,5 +1,17 @@
 [{
     "constant": true,
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [{
       "name": "",
       "type": "uint256"
@@ -11,6 +23,18 @@
     }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_value",
+      "type": "uint256"
+    }],
+    "name": "setMinimumDepositValue",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -27,7 +51,8 @@
       {
         "name": "exercisePrice",
         "type": "uint256"
-      }, {
+      },
+      {
         "name": "timeToExpiration",
         "type": "uint256"
       }
@@ -35,7 +60,23 @@
     "payable": false,
     "stateMutability": "view",
     "type": "function"
-  }, {
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "_owner",
+      "type": "address"
+    }],
+    "name": "getOptionsByOwner",
+    "outputs": [{
+      "name": "",
+      "type": "uint256[]"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "owner",
@@ -45,6 +86,15 @@
     }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "deposit",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -62,9 +112,27 @@
   {
     "constant": false,
     "inputs": [{
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
         "name": "asset",
         "type": "string"
-      }, {
+      },
+      {
         "name": "exercisePrice",
         "type": "uint256"
       },
@@ -83,8 +151,34 @@
     "anonymous": false,
     "inputs": [{
         "indexed": false,
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "balanceLeft",
+        "type": "uint256"
+      }
+    ],
+    "name": "Withdrawal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
         "name": "optionId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "owner",
+        "type": "address"
       },
       {
         "indexed": false,

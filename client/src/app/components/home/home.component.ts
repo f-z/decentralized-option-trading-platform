@@ -13,13 +13,14 @@ export class HomeComponent implements OnInit {
   cryptoZombies: any;
   userAccount: any;
   web3: any;
-
-  public balance: number;
+  private currentAccount: string;
+  private balance: number;
 
   constructor(
     public authService: AuthService,
-    cs: ContractsService
+    contractService: ContractsService
   ) {
+    contractService.getAccount().then(value => this.currentAccount = value);
     // cs.getUserBalance().then(balance => {
     // this.balance = balance;
       // console.log(balance);
