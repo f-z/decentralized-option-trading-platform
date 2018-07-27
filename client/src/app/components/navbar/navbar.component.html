@@ -8,7 +8,7 @@
         <span class="fill-remaining-space"></span>
         <button mat-button [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Home</button>
         <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
-          routerLink="/dashboard">Dashboard</button>
+          routerLink="/rates">Market Rates</button>
         <button mat-button *ngIf="authService.loggedIn()" routerLink="/profile">Profile</button>
         <button mat-button *ngIf="authService.loggedIn()" routerLink="/listing">Listings</button>
         <button mat-button *ngIf="!authService.loggedIn()" routerLink="/login">Login</button>

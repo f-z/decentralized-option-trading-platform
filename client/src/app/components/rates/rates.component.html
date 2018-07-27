@@ -1,0 +1,38 @@
+<br>
+<h2 class="page-header" align="center">Market Rates</h2>
+
+<div *ngIf="loading">
+  <h3 align="center">Loading - please wait...</h3>
+  <mat-progress-bar mode="buffer"></mat-progress-bar>
+  <br>
+</div>
+
+<mat-grid-list cols="4" rowHeight="100px">
+  <mat-grid-tile [colspan]="3" [rowspan]="3" [style.background]="white">
+    <canvas id="canvas" width="900" height="280">{{ chart }}</canvas>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="3" [style.background]="white">
+    <table matSort (matSortChange)="sortData($event)">
+      <tr>
+        <th mat-sort-header="symbol">Ticker Symbol</th>
+        <th mat-sort-header="divider">&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th mat-sort-header="price">Price</th>
+      </tr>
+
+      <tr *ngFor="let token of sortedPrices">
+        <td>{{ token.symbol }}</td>
+        <td></td>
+        <td>{{ token.price }}</td>
+      </tr>
+    </table>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<br>
+<br>
+<br>
+
+<div align="center">
+<!-- Search button -->
+<button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="getChartData('ETH');" *ngIf="!newPost">New listing</button>
+</div>

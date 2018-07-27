@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { ContractsService } from '../../services/contract.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,13 +8,17 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  private currentAccount: string;
 
   username = '';
   email = '';
 
   constructor(
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    contractService: ContractsService
+  ) {
+    contractService.getAccount().then(value => this.currentAccount = value);
+  }
 
   ngOnInit() {
     // Once component loads, get user's data to display on profile

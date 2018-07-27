@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RatesComponent } from './components/rates/rates.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
 import { ListingService } from './services/listing.service';
@@ -42,7 +42,7 @@ import { ContractsService } from './services/contract.service';
     AppComponent,
     NavbarComponent,
     HomeComponent,
-    DashboardComponent,
+    RatesComponent,
     RegisterComponent,
     LoginComponent,
     ProfileComponent,

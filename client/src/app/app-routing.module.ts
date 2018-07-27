@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RatesComponent } from './components/rates/rates.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -19,8 +19,8 @@ const appRoutes: Routes = [
     component: HomeComponent // Default route
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent, // Dashboard route,
+    path: 'rates',
+    component: RatesComponent, // Market rates route,
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {

@@ -13,14 +13,12 @@ export class HomeComponent implements OnInit {
   cryptoZombies: any;
   userAccount: any;
   web3: any;
-  private currentAccount: string;
   private balance: number;
 
   constructor(
     public authService: AuthService,
     contractService: ContractsService
   ) {
-    contractService.getAccount().then(value => this.currentAccount = value);
     contractService.deployContract().then(value => {
       // 1 ether = 1000000000000000000 wei
       // contractService.deposit(10000000000000000);
