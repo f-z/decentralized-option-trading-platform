@@ -33,13 +33,13 @@
 <br>
 
 <div align="center">
-    <mat-form-field class="input-field">
-        <input matInput type="text" [(ngModel)]="symbol" name="symbol" placeholder="enter symbol" class="symbol" maxlength="50" (keyup.enter)="getChartData(symbol)"
-        />
-      </mat-form-field>
-    
-      <p>
+  <mat-form-field class="input-field">
+    <input matInput type="text" [(ngModel)]="symbol" name="symbol" placeholder="enter symbol" class="symbol" maxlength="50" (keyup.enter)="getChartData(symbol)"
+    />
+  </mat-form-field>
 
-<!-- Search button -->
-<button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="getChartData('ETH');" *ngIf="!newPost">Get rates</button>
+  <p>
+
+    <!-- Search button -->
+    <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="getChartData('ETH');" *ngIf="!newPost">Get rates</button>
 </div>

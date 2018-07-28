@@ -14,15 +14,14 @@ export class TransactionsComponent implements OnInit {
   userAccount: any;
   web3: any;
   private balance: number;
+  private depositAmount: number;
   private count: number;
 
   constructor(
     public authService: AuthService,
-    contractService: ContractsService
+    public contractService: ContractsService
   ) {
     contractService.checkDeployment().then(result => {
-      // 1 ether = 1000000000000000000 wei
-      // contractService.deposit(10000000000000000);
       contractService.getContractBalance().then(balance => this.balance = balance);
       contractService.getOptionCount().then(count => this.count = count);
     });
@@ -166,5 +165,10 @@ export class TransactionsComponent implements OnInit {
   }
 
   */
+  }
+
+  deposit(amount) {
+      // 1 ether = 1000000000000000000 wei
+      this.contractService.deposit(amount);
   }
 }

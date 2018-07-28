@@ -3,6 +3,22 @@
 <br>
 <div align="center">
   Account balance: {{ balance }} ether
+
   <br>
-  Number of options owned: {{ count }} option contracts
+  <br>
+
+  <mat-form-field class="input-field">
+    <input matInput [(ngModel)]="depositAmount" type="number" name="deposit" placeholder="enter deposit amount in wei" class="deposit"
+      maxlength="50" (keyup.enter)="deposit(depositAmount);" />
+  </mat-form-field>
+
+  <br>
+  <br>
+
+  <!-- Search button -->
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="deposit(depositAmount);">Deposit</button>
+
+  <br>
+  <br>
+  <br> Number of options owned: {{ count }} option contracts
 </div>
