@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { HomeComponent } from './components/home/home.component';
+import { TransactionsComponent } from './components/transactions/transactions.component';
 import { RatesComponent } from './components/rates/rates.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
@@ -16,7 +16,7 @@ import { NotAuthGuard } from './guards/notAuth.guard';
 const appRoutes: Routes = [
   {
     path: '',
-    component: HomeComponent // Default route
+    component: TransactionsComponent // Default route
   },
   {
     path: 'rates',
@@ -58,7 +58,7 @@ const appRoutes: Routes = [
     component: PublicProfileComponent, // Public profile route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
-  { path: '**', component: HomeComponent } // "Catch-All" Route
+  { path: '**', component: TransactionsComponent } // "Catch-All" Route
 ];
 
 @NgModule({

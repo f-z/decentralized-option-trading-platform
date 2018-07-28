@@ -41,7 +41,6 @@ export class RatesComponent implements OnInit {
     this.tokens.push({ symbol: 'BTC', price: 5000, type: 'crypto' });
     this.tokens.push({ symbol: 'ETH', price: 5000, type: 'crypto' });
     this.tokens.push({ symbol: 'GOOGL', price: 5000, type: 'stock' });
-    this.tokens.push({ symbol: 'AAPL', price: 5000, type: 'stock' });
     this.sortedPrices = this.tokens.slice();
   }
 
@@ -71,32 +70,34 @@ export class RatesComponent implements OnInit {
   }
 
   getChartData(symbol: string): void {
-       // retrieving historical prices for chart
-       this.priceService.getCurrentPrice('DIGITAL_CURRENCY_DAILY', this.symbol).then(res => {
-        this.labels = Object.keys(res['Time Series (Digital Currency Daily)']);
-        this.labels = this.labels.reverse();
-        this.results = res['Time Series (Digital Currency Daily)'];
-        let key;
-        for (key in this.results) {
-          if (this.results.hasOwnProperty(key)) {
-            // console.log(data['Time Series (Digital Currency Daily)'][date]['4a. close (GBP)']);
-            this.data.push(this.results[key]['4a. close (GBP)']);
-          }
+    // retrieving historical prices for chart
+    this.priceService.getCurrentPrice('DIGITAL_CURRENCY_DAILY', this.symbol).then(res => {
+      this.labels = Object.keys(res['Time Series (Digital Currency Daily)']);
+      this.labels = this.labels.reverse();
+      this.results = res['Time Series (Digital Currency Daily)'];
+      let key;
+      for (key in this.results) {
+        if (this.results.hasOwnProperty(key)) {
+          // console.log(data['Time Series (Digital Currency Daily)'][date]['4a. close (GBP)']);
+          this.data.push(this.results[key]['4a. close (GBP)']);
         }
-        this.data = this.data.reverse();
-        this.createChart(this.data);
-        this.loading = false;
-      });
+      }
+      this.data = this.data.reverse();
+      this.createChart(symbol, this.labels, this.data);
+      this.loading = false;
+    });
   }
 
-  createChart(data: any) {
-    this.chart = new Chart('canvas', {
+  createChart(symbol: string, labels: any, data: any) {
+    const ctx = document.getElementById('canvas');
+
+    this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.labels,
+        labels: labels,
         datasets: [
           {
-            label: this.symbol + ' closing price per day in GBP',
+            label: symbol + ' closing price per day in GBP',
             data: data,
             borderColor: '#3c5dba',
             pointRadius: 1,

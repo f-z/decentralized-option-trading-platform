@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { HomeComponent } from './components/home/home.component';
+import { TransactionsComponent } from './components/transactions/transactions.component';
 import { RatesComponent } from './components/rates/rates.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthService } from './services/auth.service';
@@ -41,7 +41,7 @@ import { ContractsService } from './services/contract.service';
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomeComponent,
+    TransactionsComponent,
     RatesComponent,
     RegisterComponent,
     LoginComponent,
