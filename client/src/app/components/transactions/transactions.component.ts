@@ -22,16 +22,40 @@ export class TransactionsComponent implements OnInit {
     public contractService: ContractsService
   ) {
     contractService.checkDeployment().then(result => {
-      contractService.getContractBalance().then(balance => this.balance = balance);
-      contractService.getOptionCount().then(count => this.count = count);
+      contractService
+        .getContractBalance()
+        .then(balance => (this.balance = balance));
+      contractService.getOptionCount().then(count => (this.count = count));
 
-      // this.createOption('BTC', 6000, 5, 100000000000000000);
+      // retrieving all options of the current user account
+      // contractService.getOptions();
+
+      // testing the creation of an option contract
+      // parameters: underlying asset, time to expiration, option premium (in wei)
+      // this.buyOption('BTC', 6000, 5, 100000000000000000);
+
+      const event = contractService.optionFactory.NewOption(function (
+        error,
+        option
+      ) {
+        if (error) {
+          return;
+        }
+        console.log('new option id: ' + option.args.optionId.c[0]);
+        console.log('option buyer: ' + option.args.buyer);
+        console.log('balance left: ' + contractService.web3.fromWei(option.args.balanceLeft) + ' ether');
+      });
     });
-    // cs.getUserBalance().then(balance => {
-    // this.balance = balance;
-    // console.log(balance);
-    // });
-    // console.log(web3);
+    // DOES NOT WORK!!!
+    // In Web3.js, you can subscribe to an event so your web3 provider triggers some logic
+    // in your code every time it fires:
+    /*
+    this.contractService.optionFactory.NewOption().on('data', function(event) {
+      const option = event.returnValues;
+      // We can access this event's 3 return values on the `event.returnValues` object:
+      console.log('A new option was created!', option.optionId, option.buyer, option.balanceLeft);
+    }).on('error', console.error);
+    */
   }
 
   ngOnInit() {
@@ -174,7 +198,17 @@ export class TransactionsComponent implements OnInit {
     this.contractService.deposit(amount);
   }
 
-  createOption(asset: string, exercisePrice, timeToExpiration: number, price: number) {
-    this.contractService.createOption(asset, exercisePrice, timeToExpiration, price);
+  buyOption(
+    asset: string,
+    exercisePrice,
+    timeToExpiration: number,
+    premium: number
+  ) {
+    this.contractService.buyOption(
+      asset,
+      exercisePrice,
+      timeToExpiration,
+      premium
+    );
   }
 }
