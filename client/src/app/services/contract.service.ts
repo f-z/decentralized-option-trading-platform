@@ -190,7 +190,7 @@ export class ContractsService {
           value: amount
         },
         function (error, transactionHash) {
-          // getting the transaction key as callback from the function
+          // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
             return;
@@ -220,12 +220,43 @@ export class ContractsService {
           value: 0
         },
         function (error, transactionHash) {
-          // getting the transaction key as callback from the function
+          // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
             return;
           } else {
             console.log('Set successfully!');
+            console.log('Transaction hash: ' + transactionHash);
+          }
+        }
+      );
+    });
+  }
+
+  async createOption(asset: string, exercisePrice: number, timeToExpiration: number, premium: number) {
+    const account = await this.getAccount();
+    const contract = this.web3.eth.contract(this.optionFactoryABI);
+    const contractInstance = contract.at(this.optionFactoryAddress);
+
+    // letting the user know that the transaction has been sent
+    console.log('Creating the option contract; this may take a while...');
+    // sending the transaction to our contract
+    return new Promise((resolve, reject) => {
+      const web3 = this.web3;
+      contractInstance.createOption.sendTransaction(
+        asset, exercisePrice, timeToExpiration,
+        {
+          from: web3.eth.accounts[0],
+          gas: 4000000,
+          value: premium
+        },
+        function (error, transactionHash) {
+          // getting the transaction hash as callback from the function
+          if (error) {
+            alert(error);
+            return;
+          } else {
+            console.log('Option contract created successfully!');
             console.log('Transaction hash: ' + transactionHash);
           }
         }

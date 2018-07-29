@@ -24,6 +24,8 @@ export class TransactionsComponent implements OnInit {
     contractService.checkDeployment().then(result => {
       contractService.getContractBalance().then(balance => this.balance = balance);
       contractService.getOptionCount().then(count => this.count = count);
+
+      // this.createOption('BTC', 6000, 5, 100000000000000000);
     });
     // cs.getUserBalance().then(balance => {
     // this.balance = balance;
@@ -167,8 +169,12 @@ export class TransactionsComponent implements OnInit {
   */
   }
 
-  deposit(amount) {
-      // 1 ether = 1000000000000000000 wei
-      this.contractService.deposit(amount);
+  deposit(amount: number) {
+    // 1 ether = 1000000000000000000 wei
+    this.contractService.deposit(amount);
+  }
+
+  createOption(asset: string, exercisePrice, timeToExpiration: number, price: number) {
+    this.contractService.createOption(asset, exercisePrice, timeToExpiration, price);
   }
 }
