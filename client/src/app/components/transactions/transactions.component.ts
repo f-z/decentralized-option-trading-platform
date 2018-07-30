@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ContractsService } from '../../services/contract.service';
-import { ABI } from '../../services/abi';
-import { BigNumber } from 'bignumber.js';
 
 @Component({
   selector: 'app-transactions',
@@ -12,7 +10,6 @@ import { BigNumber } from 'bignumber.js';
 export class TransactionsComponent implements OnInit {
   cryptoZombies: any;
   userAccount: any;
-  web3: any;
   private balance: number;
   private depositAmount: number;
   private count: number;
@@ -28,7 +25,18 @@ export class TransactionsComponent implements OnInit {
       contractService.getOptionCount().then(count => (this.count = count));
 
       // retrieving all options of the current user account
-      contractService.getOption(0);
+      // contractService.getOption(0);
+      contractService.optionFactory.getOptionsByBuyer(
+        contractService.account,
+        function(error, res) {
+          if (error) {
+            alert(error);
+            return;
+          } else {
+            console.log(res);
+          }
+        }
+      );
 
       // testing the creation of an option contract
       // parameters: underlying asset, time to expiration, option premium (in wei)
@@ -39,7 +47,7 @@ export class TransactionsComponent implements OnInit {
       // Listening for the NewOption event and printing the result to the console
       // Web3.js allows subscribing to an event, so the web3 provider triggers some logic
       // in the code every time it fires:
-      const event = contractService.optionFactory.NewOption(function (
+      const event = contractService.optionFactory.NewOption(function(
         error,
         option
       ) {
@@ -48,7 +56,11 @@ export class TransactionsComponent implements OnInit {
         }
         console.log('new option id: ' + option.args.optionId.c[0]);
         console.log('option buyer: ' + option.args.buyer);
-        console.log('balance left: ' + contractService.web3.fromWei(option.args.balanceLeft) + ' ether');
+        console.log(
+          'balance left: ' +
+            contractService.web3.fromWei(option.args.balanceLeft) +
+            ' ether'
+        );
       });
     });
   }
@@ -57,46 +69,6 @@ export class TransactionsComponent implements OnInit {
     /*
     // this.web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/lbsGNvd6Dz5L6qcjpLT3'));
     console.log(this.web3); // {eth: .., shh: ...} // it's here!
-
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    if (typeof this.web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      console.log('defined');
-      // web3js = new Web3(web3.currentProvider);
-    } else {
-      console.log('undefined');
-      // Handle the case where the user doesn't have Metamask installed
-      // Probably show them a message prompting them to install Metamask
-    }
-
-    // Now you can start your app & access web3 freely:
-    this.startApp();
-  }
-
-  startApp() {
-    // require('dotenv').config();
-    //var BigNumber = require('bignumber.js');
-    // var Web3 = require('web3')
-
-
-//var balance = web3.eth.getBalance(process.env.ACCOUNT, function (error, result) {
-  //if (!error) {
-	 // console.log(web3.utils.fromWei(result.toString(), 'ether'));
-  //} else {
-  //  console.error(error);
-  //}
-    const cryptoZombiesAddress = '0x70b149d1123516bd816e1d02b35657292513a42cS';
-    this.cryptoZombies = new web3js.eth.Contract(ABI, cryptoZombiesAddress);
-
-    var accountInterval = setInterval(function() {
-      // Check if account has changed
-      if (web3.eth.accounts[0] !== userAccount) {
-        userAccount = web3.eth.accounts[0];
-        // Call a function to update the UI with the new account
-        getZombiesByOwner(userAccount)
-        .then(displayZombies);
-      }
-    }, 100);
 
     // Use `filter` to only fire this code when `_to` equals `userAccount`
     cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
@@ -180,17 +152,14 @@ export class TransactionsComponent implements OnInit {
   function zombieToOwner(id) {
     return cryptoZombies.methods.zombieToOwner(id).call()
   }
-
-  function getZombiesByOwner(owner) {
-    return cryptoZombies.methods.getZombiesByOwner(owner).call()
-  }
-
   */
   }
 
   deposit(amount: number) {
     // 1 ether = 1000000000000000000 wei
-    this.contractService.deposit(amount);
+    this.contractService.deposit(this.contractService.web3.toWei(amount, 'ether')).then(hash => {
+      // could display button to check if transaction has been mined
+    });
   }
 
   buyOption(

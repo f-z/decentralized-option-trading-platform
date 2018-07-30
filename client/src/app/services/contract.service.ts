@@ -6,9 +6,9 @@ declare let window: any;
 
 @Injectable()
 export class ContractsService {
-  private account: any;
+  public account: any;
   public web3: any;
-  private optionFactoryABI = require('./tokenContract.json');
+  private optionFactoryABI = require('../../assets/contractABI.json');
 
   private optionFactoryContract: any;
   public optionFactory: any;
@@ -114,7 +114,7 @@ export class ContractsService {
   }
 
   async getAccount(): Promise<string> {
-    if (this.account == null) {
+    if (this.account == null || this.account !== this.web3.eth.accounts[0]) {
       this.account = (await new Promise((resolve, reject) => {
         this.web3.eth.getAccounts((err, accs) => {
           if (err != null) {
@@ -165,12 +165,12 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  async deposit(amount: number) {
+  async deposit(amount: number): Promise<string> {
     // letting the user know that the transaction has been sent
     console.log('Sending your deposit; this may take a while...');
     // sending the transaction to our contract
     return new Promise((resolve, reject) => {
-      this.optionFactory.deposit.sendTransaction(
+      this.optionFactory.deposit(
         {
           from: this.web3.eth.accounts[0],
           gas: 4000000,
@@ -182,12 +182,13 @@ export class ContractsService {
             alert(error);
             return;
           } else {
-            console.log('Successful deposit');
+            console.log('Deposit sent');
             console.log('Transaction hash: ' + transactionHash);
+            resolve(transactionHash);
           }
         }
       );
-    });
+    }) as Promise<string>;
   }
 
   async setMinimumDepositAmount(minimumAmount: number) {
@@ -243,13 +244,30 @@ export class ContractsService {
 
   async getOption(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.options.call(id, function (error, result) {
+      this.optionFactory.options(id, function (error, result) {
         if (error) {
           alert(error);
           return;
         } else {
           console.log(result);
           resolve(result);
+        }
+      });
+    }) as Promise<any>;
+  }
+
+  /*
+   * If block hash is not 0x000... and blockNumber is not null,
+   * then the transaction has been mined.
+   */
+  async getTransaction(hash: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.web3.eth.getTransaction(hash, function (error, transactionInfo) {
+        if (error) {
+          alert(error);
+          return;
+        } else {
+          resolve(transactionInfo);
         }
       });
     }) as Promise<any>;
