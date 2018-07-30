@@ -28,12 +28,17 @@ export class TransactionsComponent implements OnInit {
       contractService.getOptionCount().then(count => (this.count = count));
 
       // retrieving all options of the current user account
-      // contractService.getOptions();
+      contractService.getOption(0);
 
       // testing the creation of an option contract
       // parameters: underlying asset, time to expiration, option premium (in wei)
-      // this.buyOption('BTC', 6000, 5, 100000000000000000);
+      // 5 minutes = 300 seconds
+      // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
+      // this.buyOption('BTC', 6000, 300, 100000000000000000);
 
+      // Listening for the NewOption event and printing the result to the console
+      // Web3.js allows subscribing to an event, so the web3 provider triggers some logic
+      // in the code every time it fires:
       const event = contractService.optionFactory.NewOption(function (
         error,
         option
@@ -46,16 +51,6 @@ export class TransactionsComponent implements OnInit {
         console.log('balance left: ' + contractService.web3.fromWei(option.args.balanceLeft) + ' ether');
       });
     });
-    // DOES NOT WORK!!!
-    // In Web3.js, you can subscribe to an event so your web3 provider triggers some logic
-    // in your code every time it fires:
-    /*
-    this.contractService.optionFactory.NewOption().on('data', function(event) {
-      const option = event.returnValues;
-      // We can access this event's 3 return values on the `event.returnValues` object:
-      console.log('A new option was created!', option.optionId, option.buyer, option.balanceLeft);
-    }).on('error', console.error);
-    */
   }
 
   ngOnInit() {

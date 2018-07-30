@@ -241,10 +241,9 @@ export class ContractsService {
     });
   }
 
-  async getOptions(): Promise<any> {
+  async getOption(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.getUser(0);
-      this.optionFactory.getOptionsByBuyer.call(this.account, function (error, result) {
+      this.optionFactory.options.call(id, function (error, result) {
         if (error) {
           alert(error);
           return;
