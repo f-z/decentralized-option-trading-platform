@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ContractsService } from '../../services/contract.service';
+import { Option } from '../../services/option.service';
+import { MatTableDataSource, MatTable } from '@angular/material';
 
 @Component({
   selector: 'app-transactions',
@@ -8,11 +10,16 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  cryptoZombies: any;
-  userAccount: any;
+  @ViewChild(MatTable) table: MatTable<any>;
+
   private balance: number;
   private depositAmount: number;
   private count: number;
+
+  // material table elements
+  displayedColumns: string[] = ['optionID', 'asset', 'exercisePrice', 'timeToExpiration'];
+  options: Option[] = [];
+  dataSource: any;
 
   constructor(
     public authService: AuthService,
@@ -24,19 +31,26 @@ export class TransactionsComponent implements OnInit {
         .then(balance => (this.balance = balance));
       contractService.getOptionCount().then(count => (this.count = count));
 
-      // retrieving all options of the current user account
-      // contractService.getOption(0);
-      contractService.optionFactory.getOptionsByBuyer(
-        contractService.account,
-        function(error, res) {
-          if (error) {
-            alert(error);
-            return;
-          } else {
-            console.log(res);
-          }
+      contractService.getOptionsByBuyer(contractService.account).then(optionIDs => {
+        for (let i = 0; i < optionIDs.length; i++) {
+          // retrieving a specific option via its ID
+          contractService.getOption(i).then(optionInfo => {
+            // tslint:disable-next-line:prefer-const
+            let option: Option = {
+              optionID: i,
+              asset: optionInfo[0],
+              exercisePrice: optionInfo[1].c[0],
+              timeToExpiration: optionInfo[2].c[0]
+            };
+
+            this.options.push(option);
+          });
         }
-      );
+
+        console.log(this.options);
+        this.dataSource = new MatTableDataSource(this.options);
+        this.table.renderRows();
+      });
 
       // testing the creation of an option contract
       // parameters: underlying asset, time to expiration, option premium (in wei)
@@ -49,16 +63,16 @@ export class TransactionsComponent implements OnInit {
       // in the code every time it fires:
       const event = contractService.optionFactory.NewOption(function(
         error,
-        option
+        newOption
       ) {
         if (error) {
           return;
         }
-        console.log('new option id: ' + option.args.optionId.c[0]);
-        console.log('option buyer: ' + option.args.buyer);
+        console.log('new option id: ' + newOption.args.optionId.c[0]);
+        console.log('option buyer: ' + newOption.args.buyer);
         console.log(
           'balance left: ' +
-            contractService.web3.fromWei(option.args.balanceLeft) +
+            contractService.web3.fromWei(newOption.args.balanceLeft) +
             ' ether'
         );
       });

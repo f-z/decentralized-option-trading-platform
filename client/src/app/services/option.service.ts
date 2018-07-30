@@ -40,5 +40,4 @@ export interface Option {
   asset: string;
   exercisePrice: number;
   timeToExpiration: number; // in seconds
-  premium: number;
 }

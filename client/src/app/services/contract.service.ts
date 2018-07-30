@@ -26,9 +26,9 @@ export class ContractsService {
       this.optionFactoryContract = this.web3.eth.contract(this.optionFactoryABI);
       this.optionFactory = this.optionFactoryContract.at(this.optionFactoryAddress);
 
-      this.web3.version.getNetwork((err, netId) => {
+      this.web3.version.getNetwork((err, netID) => {
         // synchronous way
-        switch (netId) {
+        switch (netID) {
           case '1':
             console.log('Connected to the Main network');
             break;
@@ -242,15 +242,34 @@ export class ContractsService {
     });
   }
 
-  async getOption(id: number): Promise<any> {
+  // retrieving all options of the current user account
+  async getOptionsByBuyer(account: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.options(id, function (error, result) {
+      this.optionFactory.getOptionsByBuyer(
+        account,
+        function (error, array) {
+          if (error) {
+            alert(error);
+            return;
+          } else {
+            const optionIDs = [];
+            for (let i = 0; i < array.length; i++) {
+              optionIDs.push(array[i].c[0]);
+            }
+            resolve(optionIDs);
+          }
+        });
+    }) as Promise<Array<number>>;
+  }
+
+  async getOption(ID: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.optionFactory.options(ID, function (error, option) {
         if (error) {
           alert(error);
           return;
         } else {
-          console.log(result);
-          resolve(result);
+          resolve(option);
         }
       });
     }) as Promise<any>;

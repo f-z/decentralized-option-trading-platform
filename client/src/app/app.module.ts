@@ -33,7 +33,8 @@ import {
   MatInputModule,
   MatToolbarModule,
   MatGridListModule,
-  MatSortModule
+  MatSortModule,
+  MatTableModule
 } from '@angular/material';
 import { ContractsService } from './services/contract.service';
 
@@ -65,7 +66,8 @@ import { ContractsService } from './services/contract.service';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatGridListModule,
-    MatSortModule
+    MatSortModule,
+    MatTableModule
   ],
   providers: [
     AuthService,
