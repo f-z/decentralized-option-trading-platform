@@ -3,14 +3,14 @@
     <mat-toolbar color="primary">
       <mat-toolbar-row>
         <span routerLink="/">
-          SMART DERIVATIVES SYSTEM
+          SMART OPTIONS SYSTEM
         </span>
         <span class="fill-remaining-space"></span>
         <button mat-button [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Transactions</button>
+        <button mat-button *ngIf="authService.loggedIn()" routerLink="/institutions">Institutions</button>
         <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
           routerLink="/rates">Market Rates</button>
         <button mat-button *ngIf="authService.loggedIn()" routerLink="/profile">Profile</button>
-        <button mat-button *ngIf="authService.loggedIn()" routerLink="/listing">Listings</button>
         <button mat-button *ngIf="!authService.loggedIn()" routerLink="/login">Login</button>
         <button mat-button *ngIf="authService.loggedIn()" (click)="onLogoutClick()">Logout</button>
         <button mat-button *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"

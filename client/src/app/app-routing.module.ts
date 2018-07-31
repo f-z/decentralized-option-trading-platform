@@ -6,9 +6,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
-import { ListingComponent } from './components/listing/listing.component';
-import { EditListingComponent } from './components/listing/edit-listing/edit-listing.component';
-import { DeleteListingComponent } from './components/listing/delete-listing/delete-listing.component';
+import { InstitutionsComponent } from './components/institutions/institutions.component';
+import { EditInstitutionComponent } from './components/institutions/edit-institution/edit-institution.component';
+import { DeleteInstitutionComponent } from './components/institutions/delete-institution/delete-institution.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 
@@ -39,18 +39,18 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
-    path: 'listing',
-    component: ListingComponent, // Listing route
+    path: 'institutions',
+    component: InstitutionsComponent, // Institutions route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
-    path: 'edit-listing/:id',
-    component: EditListingComponent, // Edit listing route
+    path: 'edit-institution/:id',
+    component: EditInstitutionComponent, // Edit institution route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {
-    path: 'delete-listing/:id',
-    component: DeleteListingComponent, // Delete listing route
+    path: 'delete-institution/:id',
+    component: DeleteInstitutionComponent, // Delete institution route
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {

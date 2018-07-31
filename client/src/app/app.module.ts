@@ -22,9 +22,9 @@ import {
 } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
-import { ListingComponent } from './components/listing/listing.component';
-import { EditListingComponent } from './components/listing/edit-listing/edit-listing.component';
-import { DeleteListingComponent } from './components/listing/delete-listing/delete-listing.component';
+import { InstitutionsComponent } from './components/institutions/institutions.component';
+import { EditInstitutionComponent } from './components/institutions/edit-institution/edit-institution.component';
+import { DeleteInstitutionComponent } from './components/institutions/delete-institution/delete-institution.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 import {
@@ -47,9 +47,9 @@ import { ContractsService } from './services/contract.service';
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    ListingComponent,
-    EditListingComponent,
-    DeleteListingComponent,
+    InstitutionsComponent,
+    EditInstitutionComponent,
+    DeleteInstitutionComponent,
     PublicProfileComponent
   ],
   imports: [

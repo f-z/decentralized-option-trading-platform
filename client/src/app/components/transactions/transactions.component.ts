@@ -49,7 +49,7 @@ export class TransactionsComponent implements OnInit {
 
         console.log(this.options);
         this.dataSource = new MatTableDataSource(this.options);
-        this.table.renderRows();
+        // this.table.renderRows();
       });
 
       // testing the creation of an option contract

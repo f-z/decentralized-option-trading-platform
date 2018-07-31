@@ -5,3 +5,7 @@ h3 {
 table {
   width: 100%;
 }
+
+.transactions-header {
+  text-decoration: underline;
+}
