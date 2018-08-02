@@ -256,13 +256,13 @@
 		"inputs": [
 			{
 				"indexed": false,
-				"name": "_id",
-				"type": "uint256"
+				"name": "_buyer",
+				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "_buyer",
-				"type": "address"
+				"name": "_id",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -271,6 +271,28 @@
 			}
 		],
 		"name": "NewOption",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "settlementAmount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "_balanceLeft",
+				"type": "uint256"
+			}
+		],
+		"name": "OptionExercise",
 		"type": "event"
 	},
 	{

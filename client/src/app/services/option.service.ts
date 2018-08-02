@@ -40,4 +40,5 @@ export interface Option {
   asset: string;
   exercisePrice: number;
   expirationDate: Date; // converted from unix timestamp that is in seconds
+  exercised: boolean;
 }

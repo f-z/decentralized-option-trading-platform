@@ -50,7 +50,7 @@
   -->
   <ul>
     <li *ngFor="let option of options">
-      Option #: {{ option.id }} | Underlying asset: {{ option.asset }} | Exercise price: {{ option.exercisePrice }} GBP | Expiration date: {{ option.expirationDate.getDate() }}/{{ option.expirationDate.getMonth() + 1 }}/{{ option.expirationDate.getFullYear() }}
+      Option #: {{ option.id }} | Underlying asset: {{ option.asset }} | Exercise price: {{ option.exercisePrice }} GBP | Expiration date: {{ option.expirationDate.getDate() }}/{{ option.expirationDate.getMonth() + 1 }}/{{ option.expirationDate.getFullYear() }} | Exercised: {{ option.exercised }}
       <br>
       <br>
     </li>

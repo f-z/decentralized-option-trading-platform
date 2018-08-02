@@ -17,7 +17,12 @@ export class TransactionsComponent implements OnInit {
   private count: number;
 
   // material table elements
-  displayedColumns: string[] = ['optionID', 'asset', 'exercisePrice', 'timeToExpiration'];
+  displayedColumns: string[] = [
+    'optionID',
+    'asset',
+    'exercisePrice',
+    'timeToExpiration'
+  ];
   options: Option[] = [];
   dataSource: any;
 
@@ -31,27 +36,51 @@ export class TransactionsComponent implements OnInit {
         .then(balance => (this.balance = balance));
       contractService.getOptionCount().then(count => (this.count = count));
 
-      contractService.getOptionsByBuyer(contractService.account).then(optionIDs => {
-        for (let i = 0; i < optionIDs.length; i++) {
-          // retrieving a specific option via its id
-          contractService.getOption(i).then(optionInfo => {
-            const option: Option = {
-              id: i,
-              asset: optionInfo[0],
-              exercisePrice: optionInfo[1].c[0],
-              expirationDate: new Date(optionInfo[2].c[0] * 1000)
-            };
+      contractService
+        .getOptionsByBuyer(contractService.account)
+        .then(optionIDs => {
+          for (let i = 0; i < optionIDs.length; i++) {
+            // retrieving a specific option via its id
+            contractService.getOption(i).then(optionInfo => {
+              const option: Option = {
+                id: i,
+                asset: optionInfo[0],
+                exercisePrice: optionInfo[1].c[0],
+                expirationDate: new Date(optionInfo[2].c[0] * 1000),
+                exercised: optionInfo[3]
+              };
 
-            this.options.push(option);
-            this.options.sort();
-          });
-        }
+              this.options.push(option);
+              this.options.sort();
+            });
+          }
 
-        this.dataSource = new MatTableDataSource(this.options);
-        // this.table.renderRows();
+          this.dataSource = new MatTableDataSource(this.options);
+          // this.table.renderRows();
+        });
 
-        contractService.getOptionPremium(2).then(premium => (console.log(premium.c[0])));
+      // this works
+      // contractService.getOptionPremium(2).then(premium => (console.log(premium.c[0])));
+
+      /*
+      contractService.exerciseOption(0).then(transactionHash => {
+        const exerciseEvent = contractService.optionFactory.OptionExercise(function (
+          error,
+          exercise
+        ) {
+          if (error) {
+            return;
+          }
+          console.log('Option buyer: ' + exercise.args._buyer);
+          console.log('Profit/Loss: ' + exercise.args._id.c[0]);
+          console.log(
+            'Balance left: ' +
+            contractService.web3.fromWei(exercise.args._balanceLeft) +
+            ' ether'
+          );
+        });
       });
+        */
 
       // Listening for the NewOption event and printing the result to the console
       // Web3.js allows subscribing to an event, so the web3 provider triggers some logic
@@ -63,8 +92,8 @@ export class TransactionsComponent implements OnInit {
         if (error) {
           return;
         }
-        console.log('New option id: ' + newOption.args._id.c[0]);
         console.log('Option buyer: ' + newOption.args._buyer);
+        console.log('New option id: ' + newOption.args._id.c[0]);
         console.log(
           'Balance left: ' +
             contractService.web3.fromWei(newOption.args._balanceLeft) +
@@ -78,8 +107,7 @@ export class TransactionsComponent implements OnInit {
     // testing the creation of an option contract
     // parameters: underlying asset, exercise price, expiration date
     // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
-    // this.buyOption('BTC', 5600, 1533168809, this.contractService.web3.toWei('0.1', 'ether'));
-
+    // this.buyOption('BTC', 5600, 1533238281, this.contractService.web3.toWei('0.1', 'ether'));
     /*
     // this.web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/lbsGNvd6Dz5L6qcjpLT3'));
     console.log(this.web3); // {eth: .., shh: ...} // it's here!
@@ -171,9 +199,11 @@ export class TransactionsComponent implements OnInit {
 
   deposit(amount: number) {
     // 1 ether = 1000000000000000000 wei
-    this.contractService.deposit(this.contractService.web3.toWei(amount, 'ether')).then(hash => {
-      // could display button to check if transaction has been mined
-    });
+    this.contractService
+      .deposit(this.contractService.web3.toWei(amount, 'ether'))
+      .then(hash => {
+        // could display button to check if transaction has been mined
+      });
   }
 
   buyOption(
