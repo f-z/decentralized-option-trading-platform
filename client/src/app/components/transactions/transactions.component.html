@@ -23,7 +23,7 @@
 
   <br>
   <br>
-  <span class="transactions-header">Option Transactions</span>
+  <span class="transactions-header">Option Portfolio</span>
   <br>
   <br>
   <!--
@@ -50,13 +50,12 @@
   -->
   <ul>
     <li *ngFor="let option of options">
-      Option ID: {{ option.optionID }} | Underlying asset: {{ option.asset }} | Exercise price: {{ option.exercisePrice }} | Time to
-      expiration: {{ option.timeToExpiration }}
+      Option #: {{ option.id }} | Underlying asset: {{ option.asset }} | Exercise price: {{ option.exercisePrice }} GBP | Expiration date: {{ option.expirationDate.getDate() }}/{{ option.expirationDate.getMonth() + 1 }}/{{ option.expirationDate.getFullYear() }}
       <br>
       <br>
     </li>
   </ul>
 
-  <br> Number of options owned: {{ count }} option contracts
+  <br> Number of option contracts owned: {{ count }}
 
 </div>

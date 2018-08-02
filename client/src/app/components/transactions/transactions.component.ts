@@ -33,30 +33,25 @@ export class TransactionsComponent implements OnInit {
 
       contractService.getOptionsByBuyer(contractService.account).then(optionIDs => {
         for (let i = 0; i < optionIDs.length; i++) {
-          // retrieving a specific option via its ID
+          // retrieving a specific option via its id
           contractService.getOption(i).then(optionInfo => {
-            // tslint:disable-next-line:prefer-const
-            let option: Option = {
-              optionID: i,
+            const option: Option = {
+              id: i,
               asset: optionInfo[0],
               exercisePrice: optionInfo[1].c[0],
-              timeToExpiration: optionInfo[2].c[0]
+              expirationDate: new Date(optionInfo[2].c[0] * 1000)
             };
 
             this.options.push(option);
+            this.options.sort();
           });
         }
 
-        console.log(this.options);
         this.dataSource = new MatTableDataSource(this.options);
         // this.table.renderRows();
-      });
 
-      // testing the creation of an option contract
-      // parameters: underlying asset, time to expiration, option premium (in wei)
-      // 5 minutes = 300 seconds
-      // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
-      // this.buyOption('BTC', 6000, 300, 100000000000000000);
+        contractService.getOptionPremium(2).then(premium => (console.log(premium.c[0])));
+      });
 
       // Listening for the NewOption event and printing the result to the console
       // Web3.js allows subscribing to an event, so the web3 provider triggers some logic
@@ -68,11 +63,11 @@ export class TransactionsComponent implements OnInit {
         if (error) {
           return;
         }
-        console.log('new option id: ' + newOption.args.optionId.c[0]);
-        console.log('option buyer: ' + newOption.args.buyer);
+        console.log('New option id: ' + newOption.args._id.c[0]);
+        console.log('Option buyer: ' + newOption.args._buyer);
         console.log(
-          'balance left: ' +
-            contractService.web3.fromWei(newOption.args.balanceLeft) +
+          'Balance left: ' +
+            contractService.web3.fromWei(newOption.args._balanceLeft) +
             ' ether'
         );
       });
@@ -80,6 +75,11 @@ export class TransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // testing the creation of an option contract
+    // parameters: underlying asset, exercise price, expiration date
+    // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
+    // this.buyOption('BTC', 5600, 1533168809, this.contractService.web3.toWei('0.1', 'ether'));
+
     /*
     // this.web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/lbsGNvd6Dz5L6qcjpLT3'));
     console.log(this.web3); // {eth: .., shh: ...} // it's here!
@@ -179,13 +179,13 @@ export class TransactionsComponent implements OnInit {
   buyOption(
     asset: string,
     exercisePrice,
-    timeToExpiration: number,
+    expirationDate: number,
     premium: number
   ) {
     this.contractService.buyOption(
       asset,
       exercisePrice,
-      timeToExpiration,
+      expirationDate,
       premium
     );
   }

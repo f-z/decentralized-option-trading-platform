@@ -55,20 +55,6 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "setMinimumDepositValue",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
 				"name": "_amount",
 				"type": "uint256"
 			}
@@ -98,12 +84,38 @@
 				"type": "uint256"
 			},
 			{
-				"name": "timeToExpiration",
+				"name": "expirationDate",
 				"type": "uint256"
+			},
+			{
+				"name": "exercised",
+				"type": "bool"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_asset",
+				"type": "string"
+			},
+			{
+				"name": "_exercisePrice",
+				"type": "uint256"
+			},
+			{
+				"name": "_expirationDate",
+				"type": "uint256"
+			}
+		],
+		"name": "buyOptionWithBalance",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -121,6 +133,39 @@
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "calculateOptionPremium",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "setMinimumDepositAmount",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [],
 		"name": "deposit",
@@ -133,15 +178,15 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "asset",
+				"name": "_asset",
 				"type": "string"
 			},
 			{
-				"name": "exercisePrice",
+				"name": "_exercisePrice",
 				"type": "uint256"
 			},
 			{
-				"name": "timeToExpiration",
+				"name": "_expirationDate",
 				"type": "uint256"
 			}
 		],
@@ -155,23 +200,11 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "asset",
-				"type": "string"
-			},
-			{
-				"name": "exercisePrice",
-				"type": "uint256"
-			},
-			{
-				"name": "timeToExpiration",
-				"type": "uint256"
-			},
-			{
-				"name": "premium",
-				"type": "uint256"
+				"name": "newOwner",
+				"type": "address"
 			}
 		],
-		"name": "buyOptionWithBalance",
+		"name": "transferOwnership",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -181,12 +214,17 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "newOwner",
-				"type": "address"
+				"name": "_id",
+				"type": "uint256"
 			}
 		],
-		"name": "transferOwnership",
-		"outputs": [],
+		"name": "exerciseOption",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -218,17 +256,17 @@
 		"inputs": [
 			{
 				"indexed": false,
-				"name": "optionId",
+				"name": "_id",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
-				"name": "buyer",
+				"name": "_buyer",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "balanceLeft",
+				"name": "_balanceLeft",
 				"type": "uint256"
 			}
 		],

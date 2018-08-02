@@ -36,8 +36,8 @@ export class OptionService {
 }
 
 export interface Option {
-  optionID: number;
+  id: number;
   asset: string;
   exercisePrice: number;
-  timeToExpiration: number; // in seconds
+  expirationDate: Date; // converted from unix timestamp that is in seconds
 }
