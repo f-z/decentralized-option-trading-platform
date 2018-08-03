@@ -13,17 +13,13 @@ export class ContractsService {
 
   private optionFactoryContract: any;
   public optionFactory: any;
-  private optionFactoryAddress: string;
+  private optionFactoryAddress = '0x2d4ddbe20eba693e02511ebc387961102e72166f';
 
   constructor() {
-    this.optionFactoryAddress = '0x3882c585b2559e968853ecf00d9456fe99dbcbae';
-    // this.optionFactoryABI = JSON.parse(this.optionFactoryABI);
-
     if (typeof window.web3 !== 'undefined') {
       // using Mist/MetaMask's provider
       this.web3 = new Web3(window.web3.currentProvider);
 
-      this.account = this.getAccount();
       this.optionFactoryContract = this.web3.eth.contract(
         this.optionFactoryABI
       );
@@ -64,29 +60,29 @@ export class ContractsService {
   }
 
   async checkDeployment(): Promise<any> {
-    // checking and deploying contract
-    return new Promise((resolve, reject) => {
-      this.web3.eth.getCode(this.optionFactoryAddress, function(error, result) {
-        if (!error) {
-          // checking if provided address corresponds to a contract or just account
-          if (
-            JSON.stringify(result) === '0x' ||
-            JSON.stringify(result) === '0x0'
-          ) {
-            console.log('Option factory smart contract not deployed');
-            this.deployFactory().then(address => {
-              resolve(address);
-            });
+      // checking and deploying contract
+      return new Promise((resolve, reject) => {
+        this.web3.eth.getCode(this.optionFactoryAddress, function (error, result) {
+          if (!error) {
+            // checking if provided address corresponds to a contract or just account
+            if (
+              JSON.stringify(result) === '0x' ||
+              JSON.stringify(result) === '0x0'
+            ) {
+              console.log('Option factory smart contract not deployed');
+              this.deployFactory().then(address => {
+                resolve(address);
+              });
+            } else {
+              console.log('Option factory smart contract already deployed');
+              resolve(this.optionFactoryAddress);
+            }
           } else {
-            console.log('Option factory smart contract already deployed');
-            resolve(this.optionFactoryAddress);
+            alert(error);
+            return;
           }
-        } else {
-          alert(error);
-          return;
-        }
+        });
       });
-    });
   }
 
   async deployFactory(): Promise<string> {
@@ -98,7 +94,7 @@ export class ContractsService {
           data: this.optionFactoryData[0].data,
           gas: '4700000'
         },
-        function(e, contract) {
+        function (e, contract) {
           if (typeof contract.address !== 'undefined') {
             console.log('Factory smart contract mined');
             console.log('Address: ' + contract.address);
@@ -140,7 +136,7 @@ export class ContractsService {
 
   async getOptionCount(): Promise<number> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.getOptionCount.call(this.account, function(
+      this.optionFactory.getOptionCount.call(this.account, function (
         error,
         result
       ) {
@@ -157,7 +153,7 @@ export class ContractsService {
   async getContractBalance(): Promise<number> {
     return new Promise((resolve, reject) => {
       const web3 = this.web3;
-      this.optionFactory.getBalance.call(function(error, result) {
+      this.optionFactory.getBalance.call(function (error, result) {
         if (error) {
           alert(error);
           return;
@@ -179,7 +175,7 @@ export class ContractsService {
           gas: 4000000,
           value: amount
         },
-        function(error, transactionHash) {
+        function (error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -198,15 +194,16 @@ export class ContractsService {
     // letting the user know that the transaction has been sent
     console.log('Setting minimum deposit amount...');
     // sending the transaction to our contract
+    // value in Gwei, standard current value from https://www.ethgasstation.info/
     return new Promise((resolve, reject) => {
       this.optionFactory.setMinimumDepositValue.sendTransaction(
         minimumAmount,
         {
           from: this.web3.eth.accounts[0],
           gas: 4000000,
-          value: 0
+          value: 1700000000
         },
-        function(error, transactionHash) {
+        function (error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -239,7 +236,7 @@ export class ContractsService {
           gas: 4000000,
           value: premium
         },
-        function(error, transactionHash) {
+        function (error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -256,7 +253,7 @@ export class ContractsService {
   // exercising the option, if it is past its maturity date
   async exerciseOption(id: number): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.exerciseOption(id, function(error, hash) {
+      this.optionFactory.exerciseOption(id, function (error, hash) {
         if (error) {
           alert(error);
           return;
@@ -270,7 +267,7 @@ export class ContractsService {
   // retrieving all options of the current user account
   async getOptionsByBuyer(account: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.getOptionsByBuyer(account, function(error, array) {
+      this.optionFactory.getOptionsByBuyer(account, function (error, array) {
         if (error) {
           alert(error);
           return;
@@ -287,7 +284,7 @@ export class ContractsService {
 
   async getOption(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.options(id, function(error, option) {
+      this.optionFactory.options(id, function (error, option) {
         if (error) {
           alert(error);
           return;
@@ -301,7 +298,7 @@ export class ContractsService {
   // retrieving the calculated premium for a specific option
   async getOptionPremium(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.calculateOptionPremium(id, function(error, premium) {
+      this.optionFactory.calculateOptionPremium(id, function (error, premium) {
         if (error) {
           alert(error);
           return;
@@ -318,7 +315,7 @@ export class ContractsService {
    */
   async getTransaction(hash: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.web3.eth.getTransaction(hash, function(error, transactionInfo) {
+      this.web3.eth.getTransaction(hash, function (error, transactionInfo) {
         if (error) {
           alert(error);
           return;
