@@ -62,7 +62,6 @@ export class TransactionsComponent implements OnInit {
       // this works
       // contractService.getOptionPremium(2).then(premium => (console.log(premium.c[0])));
 
-      /*
       contractService.exerciseOption(0).then(transactionHash => {
         const exerciseEvent = contractService.optionFactory.OptionExercise(function (
           error,
@@ -72,26 +71,27 @@ export class TransactionsComponent implements OnInit {
             return;
           }
           console.log('Option buyer: ' + exercise.args._buyer);
-          console.log('Profit/Loss: ' + exercise.args._id.c[0]);
+          console.log('Profit/Loss: ' + exercise.args._settlementAmount.c[0]);
           console.log(
             'Balance left: ' +
-            contractService.web3.fromWei(exercise.args._balanceLeft) +
+            contractService.web3.fromWei(exercise.args._balanceLeft.c[0]) +
             ' ether'
           );
         });
       });
-        */
 
       // Listening for the NewOption event and printing the result to the console
       // Web3.js allows subscribing to an event, so the web3 provider triggers some logic
-      // in the code every time it fires:
-      const event = contractService.optionFactory.NewOption(function(
+      // in the code every time it fires
+      // Using `filter` to only trigger this code, when _buyer equals the current user's account
+      const event = contractService.optionFactory.NewOption({ filter: { _buyer: contractService.account } }, function(
         error,
         newOption
       ) {
         if (error) {
           return;
         }
+        console.log('Option bought successfully!');
         console.log('Option buyer: ' + newOption.args._buyer);
         console.log('New option id: ' + newOption.args._id.c[0]);
         console.log(
@@ -104,23 +104,17 @@ export class TransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // deploying new factory version
+    // contractService.deployFactory();
+
     // testing the creation of an option contract
     // parameters: underlying asset, exercise price, expiration date
     // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
-    // this.buyOption('BTC', 5600, 1533238281, this.contractService.web3.toWei('0.1', 'ether'));
+    // this.buyOption('BTC', 5600, Math.floor(new Date().getTime() / 1000) + 300, this.contractService.web3.toWei('0.1', 'ether'));
+
     /*
     // this.web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/lbsGNvd6Dz5L6qcjpLT3'));
     console.log(this.web3); // {eth: .., shh: ...} // it's here!
-
-    // Use `filter` to only fire this code when `_to` equals `userAccount`
-    cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
-    .on("data", function(event) {
-      let data = event.returnValues;
-      // The current user just received a zombie!
-      // Do something here to update the UI to show it
-      getZombiesByOwner(userAccount).then(displayZombies);
-    }).on("error", console.error);
-  }
 
   function displayZombies(ids) {
     $("#zombies").empty();

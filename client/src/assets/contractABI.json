@@ -233,7 +233,7 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
 				"name": "buyer",
 				"type": "address"
 			},
@@ -255,12 +255,12 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
 				"name": "_buyer",
 				"type": "address"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"name": "_id",
 				"type": "uint256"
 			},
@@ -277,13 +277,13 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
 				"name": "_buyer",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "settlementAmount",
+				"name": "_settlementAmount",
 				"type": "uint256"
 			},
 			{

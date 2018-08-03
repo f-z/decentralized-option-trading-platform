@@ -16,7 +16,7 @@ export class ContractsService {
   private optionFactoryAddress: string;
 
   constructor() {
-    this.optionFactoryAddress = '0x498dd311a15e3d6bd45a29ee1785ee06802afd67';
+    this.optionFactoryAddress = '0x3882c585b2559e968853ecf00d9456fe99dbcbae';
     // this.optionFactoryABI = JSON.parse(this.optionFactoryABI);
 
     if (typeof window.web3 !== 'undefined') {
@@ -101,12 +101,8 @@ export class ContractsService {
         function(e, contract) {
           if (typeof contract.address !== 'undefined') {
             console.log('Factory smart contract mined');
-            console.log(
-              'address: ' +
-                contract.address +
-                ' transactionHash: ' +
-                contract.transactionHash
-            );
+            console.log('Address: ' + contract.address);
+            console.log('TransactionHash: ' + contract.transactionHash);
             resolve(contract);
           }
         }
