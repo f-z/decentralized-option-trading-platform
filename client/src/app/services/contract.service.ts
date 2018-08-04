@@ -8,12 +8,21 @@ declare let window: any;
 export class ContractsService {
   public account: any;
   public web3: any;
-  private optionFactoryData = require('../../assets/contractData.json');
-  private optionFactoryABI = require('../../assets/contractABI.json');
+
+  private optionFactoryData = require('../../assets/factoryData.json');
+  private optionFactoryABI = require('../../assets/factoryABI.json');
+
+  private oracleData = require('../../assets/oracleData.json');
+  private oracleABI = require('../../assets/oracleABI.json');
 
   private optionFactoryContract: any;
-  public optionFactory: any;
-  private optionFactoryAddress = '0xd440f60634ef8751f9b0cdf0b1156cc64b897a43';
+  optionFactory: any;
+  private optionFactoryAddress = '0xf013699f325a837343646619759b6ff4e77b8b3c';
+
+  private oracleContract: any;
+  oracle: any;
+  private oracleAddresses = ['0xde42bbf67a6afc53e7da5060f8090779f3632711', '0x08e2491fcdb2f301e794391d60abbdf5f5a123a3'];
+  // Coinbase , CoinMarketCap oracles
 
   constructor() {
     if (typeof window.web3 !== 'undefined') {
@@ -25,6 +34,13 @@ export class ContractsService {
       );
       this.optionFactory = this.optionFactoryContract.at(
         this.optionFactoryAddress
+      );
+
+      this.oracleContract = this.web3.eth.contract(
+        this.oracleABI
+      );
+      this.oracle = this.oracleContract.at(
+        this.oracleAddresses[1]
       );
 
       this.web3.version.getNetwork((err, netID) => {
@@ -59,7 +75,7 @@ export class ContractsService {
     }
   }
 
-  async checkDeployment(): Promise<any> {
+  async checkFactoryDeployment(): Promise<any> {
       // checking and deploying contract
       return new Promise((resolve, reject) => {
         this.web3.eth.getCode(this.optionFactoryAddress, function (error, result) {
@@ -108,6 +124,56 @@ export class ContractsService {
     this.optionFactoryAddress = this.optionFactory.address;
     return Promise.resolve(this.optionFactoryAddress);
   }
+
+  async checkOracleDeployment(oracleAddress: string): Promise<any> {
+    // checking and deploying oracle
+    return new Promise((resolve, reject) => {
+      this.web3.eth.getCode(oracleAddress, function (error, result) {
+        if (!error) {
+          // checking if provided address corresponds to a contract or just account
+          if (
+            JSON.stringify(result) === '0x' ||
+            JSON.stringify(result) === '0x0'
+          ) {
+            console.log('Oracle smart contract not deployed');
+            this.deployOracle().then(address => {
+              resolve(address);
+            });
+          } else {
+            console.log('Oracle smart contract already deployed');
+            resolve(oracleAddress);
+          }
+        } else {
+          alert(error);
+          return;
+        }
+      });
+    });
+}
+
+async deployOracle(name: string, url: string): Promise<string> {
+  console.log('Deploying ' + name + ' oracle...');
+  this.oracle = (await new Promise((resolve, reject) => {
+    this.oracleContract.new(name, url,
+      {
+        from: this.web3.eth.accounts[0],
+        data: this.oracleData[0].data,
+        gas: '4700000'
+      },
+      function (e, contract) {
+        if (typeof contract.address !== 'undefined') {
+          console.log(name + ' oracle smart contract mined');
+          console.log(name + ' address: ' + contract.address);
+          console.log('TransactionHash: ' + contract.transactionHash);
+          resolve(contract);
+        }
+      }
+    );
+  })) as any;
+
+  this.oracleAddresses.push(this.oracle.address);
+  return Promise.resolve(this.oracle.address);
+}
 
   async getAccount(): Promise<string> {
     if (this.account == null || this.account !== this.web3.eth.accounts[0]) {

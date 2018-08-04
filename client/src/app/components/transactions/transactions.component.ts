@@ -31,7 +31,7 @@ export class TransactionsComponent implements OnInit {
     public contractService: ContractsService
   ) {
     contractService.getAccount().then(account => {
-      contractService.checkDeployment().then(result => {
+      contractService.checkFactoryDeployment().then(result => {
         contractService
           .getContractBalance()
           .then(balance => (this.balance = balance));
@@ -63,16 +63,27 @@ export class TransactionsComponent implements OnInit {
         // this works
         // contractService.getOptionPremium(2).then(premium => (console.log(premium.c[0])));
 
-        // calling the oracle function to update the price
-        // value in Gwei, standard current value from https://www.ethgasstation.info/
+        this.listeningForFactoryEvents();
+
+        // deploying new factory version
+        // this.contractService.deployFactory();
+
+      }); // deployment check closing brace
+
+      // checking for oracle deployment
+      contractService.checkOracleDeployment('0xde42bbf67a6afc53e7da5060f8090779f3632711').then(result => {
+        // deploying new oracle version
+        // this.contractService.deployOracle('Coinbase', 'https://api.gdax.com/products/ETH-USD/ticker).price');
+        // this.contractService.deployOracle('CoinMarketCap', 'https://api.coinmarketcap.com/v2/ticker/1027).data.quotes.USD.price');
 
         // calling the oracle function to update the price
-        // value in Gwei, standard current value from https://www.ethgasstation.info/
-        this.contractService.optionFactory.update(
+        // gas value in Gwei, standard current value from https://www.ethgasstation.info/
+
+        contractService.oracle.updatePrice(
           {
             from: account,
             gas: 4000000,
-            value: 0
+            value: contractService.web3.toWei(0.01, 'ether')
           },
           function (error, transactionHash) {
             // getting the transaction hash as callback from the function
@@ -86,12 +97,9 @@ export class TransactionsComponent implements OnInit {
           }
         );
 
-        this.listeningForEvents();
 
-        // deploying new factory version
-        // this.contractService.deployFactory();
-
-      }); // deployment check closing brace
+        this.listeningForOracleEvents();
+      });
     }); // get account closing brace
   }
 
@@ -148,7 +156,7 @@ export class TransactionsComponent implements OnInit {
   /*
    * Web3.js allows subscribing to an event, so the web3 provider triggers some logic in the code every time it fires
    */
-  listeningForEvents(): void {
+  listeningForFactoryEvents(): void {
     // Listening for the NewOption event and printing the result to the console
     // Using `filter` to only trigger this code, when _buyer equals the current user's account
     const event = this.contractService.optionFactory.NewOption(
@@ -167,9 +175,22 @@ export class TransactionsComponent implements OnInit {
         );
       }
     );
+  }
+
+  listeningForOracleEvents(): void {
+    // Event that signifies start of price retrieval process
+    const oracleConstructedEvent = this.contractService.oracle.ConstructorInitiated(
+      function (error, information) {
+        if (error) {
+          return;
+        }
+        console.log('Oracle constructed');
+        console.log(information.args.nextStep);
+      }
+    );
 
     // Event that signifies start of price retrieval process
-    const oraclizeWaiting = this.contractService.optionFactory.newOraclizeQuery(
+    const oracleQueryingEvent = this.contractService.oracle.NewOraclizeQuery(
       function (error, information) {
         if (error) {
           return;
@@ -180,13 +201,14 @@ export class TransactionsComponent implements OnInit {
     );
 
     // Event that signifies end of price retrieval and update process
-    const oraclePriceEvent = this.contractService.optionFactory.newAssetPrice(
+    const oraclePriceEvent = this.contractService.oracle.PriceUpdated(
       function (error, price) {
         if (error) {
           return;
         }
+        console.log(price);
         console.log('Price retrieved and updated successfully!');
-        console.log('New price: ' + price.args);
+        console.log('New price: ' + price.args.price);
       }
     );
   }
