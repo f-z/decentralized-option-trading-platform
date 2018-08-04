@@ -70,20 +70,6 @@
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "DieselPriceUSD",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -229,12 +215,17 @@
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [],
-		"name": "DieselPrice",
-		"outputs": [],
+		"name": "AssetPriceUSD",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -322,7 +313,7 @@
 				"type": "string"
 			}
 		],
-		"name": "newDieselPrice",
+		"name": "newAssetPrice",
 		"type": "event"
 	},
 	{

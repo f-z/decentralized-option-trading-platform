@@ -65,11 +65,14 @@ export class TransactionsComponent implements OnInit {
 
         // calling the oracle function to update the price
         // value in Gwei, standard current value from https://www.ethgasstation.info/
-        this.contractService.optionFactory.update.sendTransaction(
+
+        // calling the oracle function to update the price
+        // value in Gwei, standard current value from https://www.ethgasstation.info/
+        this.contractService.optionFactory.update(
           {
-            from: this.contractService.web3.eth.accounts[0],
+            from: account,
             gas: 4000000,
-            value: 1700000000
+            value: 0
           },
           function (error, transactionHash) {
             // getting the transaction hash as callback from the function
@@ -84,14 +87,15 @@ export class TransactionsComponent implements OnInit {
         );
 
         this.listeningForEvents();
+
+        // deploying new factory version
+        // this.contractService.deployFactory();
+
       }); // deployment check closing brace
     }); // get account closing brace
   }
 
   ngOnInit() {
-    // deploying new factory version
-    // this.contractService.deployFactory();
-
     // testing the creation of an option contract
     // parameters: underlying asset, exercise price, expiration date
     // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
@@ -176,13 +180,13 @@ export class TransactionsComponent implements OnInit {
     );
 
     // Event that signifies end of price retrieval and update process
-    const oraclePriceEvent = this.contractService.optionFactory.newDieselPrice(
+    const oraclePriceEvent = this.contractService.optionFactory.newAssetPrice(
       function (error, price) {
         if (error) {
           return;
         }
         console.log('Price retrieved and updated successfully!');
-        console.log('New price: ' + price.args.price);
+        console.log('New price: ' + price.args);
       }
     );
   }

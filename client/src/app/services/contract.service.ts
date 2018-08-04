@@ -13,7 +13,7 @@ export class ContractsService {
 
   private optionFactoryContract: any;
   public optionFactory: any;
-  private optionFactoryAddress = '0x2d4ddbe20eba693e02511ebc387961102e72166f';
+  private optionFactoryAddress = '0xd440f60634ef8751f9b0cdf0b1156cc64b897a43';
 
   constructor() {
     if (typeof window.web3 !== 'undefined') {
