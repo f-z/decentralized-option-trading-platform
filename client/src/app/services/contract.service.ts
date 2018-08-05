@@ -13,7 +13,7 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  private registryAddress = '0x923732967bdcc1e699e179dbcf3375e7cd93092c';
+  private registryAddress = '0x93a20102adeaefc8f40961184a3cfa8377459ec1';
 
   optionFactory: any;
   private optionFactoryData = require('../../assets/factoryData.json');
@@ -21,14 +21,14 @@ export class ContractsService {
   private optionFactoryContract: any;
   private optionFactoryAddress = '0xf013699f325a837343646619759b6ff4e77b8b3c';
 
-  oracle: any;
+  oracles = [];
   private oracleData = require('../../assets/oracleData.json');
   private oracleABI = require('../../assets/oracleABI.json');
   private oracleContract: any;
   // Coinbase , CoinMarketCap, CryptoCompare oracle addresses
-  oracleAddresses = ['0xde42bbf67a6afc53e7da5060f8090779f3632711',
-  '0x08e2491fcdb2f301e794391d60abbdf5f5a123a3',
-  '0xd286d9c2547d92d3b69127c1894bd8fbe8acc4a4'];
+  oracleAddresses = ['0x747f28e207f73aacc8eddc597d84cc6028f6b0e5',
+                     '0xb8fddce43f4a3ce7450595220230491c3594ccde',
+                     '0x127c4f72637e18772641c362c5ca10c02ed52556'];
 
   constructor() {
     if (typeof window.web3 !== 'undefined') {
@@ -52,9 +52,12 @@ export class ContractsService {
       this.oracleContract = this.web3.eth.contract(
         this.oracleABI
       );
-      this.oracle = this.oracleContract.at(
-        this.oracleAddresses[2]
-      );
+
+      for (let i = 0; i < this.oracleAddresses.length; i++) {
+        this.oracles.push(this.oracleContract.at(
+          this.oracleAddresses[i])
+        );
+      }
 
       this.web3.version.getNetwork((err, netID) => {
         // synchronous way
@@ -214,10 +217,10 @@ async deployRegistry(): Promise<string> {
     });
 }
 
-async deployOracle(name: string, url: string): Promise<string> {
+async deployOracle(name: string, urlPart1: string, symbol: string, urlPart2: string): Promise<string> {
   console.log('Deploying ' + name + ' oracle...');
-  this.oracle = (await new Promise((resolve, reject) => {
-    this.oracleContract.new(name, url,
+  const oracle = (await new Promise((resolve, reject) => {
+    this.oracleContract.new(name, urlPart1, symbol, urlPart2,
       {
         from: this.web3.eth.accounts[0],
         data: this.oracleData[0].data,
@@ -234,8 +237,9 @@ async deployOracle(name: string, url: string): Promise<string> {
     );
   })) as any;
 
-  this.oracleAddresses.push(this.oracle.address);
-  return Promise.resolve(this.oracle.address);
+  this.oracles.push(oracle);
+  this.oracleAddresses.push(oracle.address);
+  return Promise.resolve(oracle.address);
 }
 
   async getAccount(): Promise<string> {

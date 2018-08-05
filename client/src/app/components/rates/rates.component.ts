@@ -83,71 +83,76 @@ export class RatesComponent implements OnInit {
         .checkOracleDeployment(this.contractService.oracleAddresses[0])
         .then(result => {
           // deploying new oracle version
-          // this.contractService.deployOracle('Coinbase', 'https://api.gdax.com/products/ETH-USD/ticker).price');
-          // this.contractService.deployOracle('CoinMarketCap', 'https://api.coinmarketcap.com/v2/ticker/1027).data.quotes.USD.price');
-          // this.contractService.deployOracle('CryptoCompare', 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD).USD');
+          // this.contractService.deployOracle('Coinbase',
+          //                                   'https://api.gdax.com/products/', 'ETH', '-USD/ticker).price');
+          // this.contractService.deployOracle('CoinMarketCap',
+          //                                   'https://api.coinmarketcap.com/v2/ticker/', '1027', ').data.quotes.USD.price');
+          // this.contractService.deployOracle('CryptoCompare',
+          //                                   'https://min-api.cryptocompare.com/data/price?fsym=', 'ETH', '&tsyms=USD).USD');
 
-          // calling the oracle function to update the price
+          // calling each oracle's function to update the price stored
           // gas value in Gwei, standard current value from https://www.ethgasstation.info/
-
-          /*
-          this.contractService.oracle.updatePrice(
-            {
-              from: account,
-              gas: 4000000,
-              value: this.contractService.web3.toWei(0.01, 'ether')
-            },
-            function(error, transactionHash) {
-              // getting the transaction hash as callback from the function
-              if (error) {
-                alert(error);
-                return;
-              } else {
-                console.log('Price update request sent...');
-                console.log('Transaction hash: ' + transactionHash);
-              }
-            }
-          );
-          */
-
-          this.listeningForOracleEvents();
+          for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
+            this.updateSingleOraclePrice(i);
+            this.listeningForOracleEvents(i);
+          }
         });
     });
   }
 
-  listeningForOracleEvents(): void {
+  updateSingleOraclePrice(id: number): void {
+    this.contractService.oracles[id].updatePrice(
+      {
+        from: this.contractService.account,
+        gas: 4000000,
+        value: this.contractService.web3.toWei(0.01, 'ether')
+      },
+      function(error, transactionHash) {
+        // getting the transaction hash as callback from the function
+        if (error) {
+          alert(error);
+          return;
+        } else {
+          console.log('Price update request sent...');
+          console.log('Transaction hash: ' + transactionHash);
+        }
+      }
+    );
+  }
+
+  listeningForOracleEvents(id: number): void {
     // Event that signifies start of price retrieval process
-    const oracleConstructedEvent = this.contractService.oracle.ConstructorInitiated(
-      function(error, information) {
+    const oracleConstructedEvent = this.contractService.oracles[id].ConstructorInitiated(
+      function(error, constructorInfo) {
         if (error) {
           return;
         }
         console.log('Oracle constructed');
-        console.log(information.args.nextStep);
+        console.log(constructorInfo.args.nextStep);
       }
     );
 
     // Event that signifies start of price retrieval process
-    const oracleQueryingEvent = this.contractService.oracle.NewOraclizeQuery(
-      function(error, information) {
+    const oracleQueryingEvent = this.contractService.oracles[id].NewOracleQuery(
+      function(error, queryInfo) {
         if (error) {
           return;
         }
         console.log('Price retrieval request received...');
-        console.log(information.args.description);
+        console.log(queryInfo.args.description);
       }
     );
 
     // Event that signifies end of price retrieval and update process
-    const oraclePriceEvent = this.contractService.oracle.PriceUpdated(function(
+    const oraclePriceEvent = this.contractService.oracles[id].PriceUpdated(function(
       error,
-      price
+      priceInfo
     ) {
       if (error) {
         return;
       }
       console.log('Price retrieved and updated successfully!');
-      console.log('New price: ' + price.args.price);
+      console.log('New price: ' + priceInfo.args.price);
     });
   }
 

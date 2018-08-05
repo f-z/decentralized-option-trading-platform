@@ -19,6 +19,7 @@ export class AppComponent {
           // deploying new registry version
           // this.contractService.deployRegistry();
 
+          /*
           this.contractService.registry.getAveragePrice('0xde42bbf67a6afc53e7da5060f8090779f3632711',
           '0x08e2491fcdb2f301e794391d60abbdf5f5a123a3', '0xd286d9c2547d92d3b69127c1894bd8fbe8acc4a4',
             {
@@ -35,7 +36,7 @@ export class AppComponent {
                 console.log('Price is being requested from the three oracles...');
                 console.log('Transaction hash: ' + transactionHash);
               }
-            });
+            });*/
         });
     });
   }
