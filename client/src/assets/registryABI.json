@@ -1,0 +1,268 @@
+[
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "s",
+				"type": "string"
+			}
+		],
+		"name": "stringToUint",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"name": "_factory",
+				"type": "address"
+			}
+		],
+		"name": "register",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "myid",
+				"type": "bytes32"
+			},
+			{
+				"name": "result",
+				"type": "string"
+			}
+		],
+		"name": "__callback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "myid",
+				"type": "bytes32"
+			},
+			{
+				"name": "result",
+				"type": "string"
+			},
+			{
+				"name": "proof",
+				"type": "bytes"
+			}
+		],
+		"name": "__callback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_oracleAddress",
+				"type": "address"
+			}
+		],
+		"name": "getPrice",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "averagePrice",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "price",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_oracleAddress1",
+				"type": "address"
+			},
+			{
+				"name": "_oracleAddress2",
+				"type": "address"
+			},
+			{
+				"name": "_oracleAddress3",
+				"type": "address"
+			}
+		],
+		"name": "getAveragePrice",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "v",
+				"type": "uint256"
+			}
+		],
+		"name": "uintToString",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "factory",
+				"type": "address"
+			}
+		],
+		"name": "Registered",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "price",
+				"type": "string"
+			}
+		],
+		"name": "OraclePrice",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "price",
+				"type": "string"
+			}
+		],
+		"name": "AverageOraclePrice",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	}
+]

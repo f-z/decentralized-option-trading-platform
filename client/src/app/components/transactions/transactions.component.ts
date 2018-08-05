@@ -67,39 +67,7 @@ export class TransactionsComponent implements OnInit {
 
         // deploying new factory version
         // this.contractService.deployFactory();
-
       }); // deployment check closing brace
-
-      // checking for oracle deployment
-      contractService.checkOracleDeployment('0xde42bbf67a6afc53e7da5060f8090779f3632711').then(result => {
-        // deploying new oracle version
-        // this.contractService.deployOracle('Coinbase', 'https://api.gdax.com/products/ETH-USD/ticker).price');
-        // this.contractService.deployOracle('CoinMarketCap', 'https://api.coinmarketcap.com/v2/ticker/1027).data.quotes.USD.price');
-
-        // calling the oracle function to update the price
-        // gas value in Gwei, standard current value from https://www.ethgasstation.info/
-
-        contractService.oracle.updatePrice(
-          {
-            from: account,
-            gas: 4000000,
-            value: contractService.web3.toWei(0.01, 'ether')
-          },
-          function (error, transactionHash) {
-            // getting the transaction hash as callback from the function
-            if (error) {
-              alert(error);
-              return;
-            } else {
-              console.log('Price update request sent...');
-              console.log('Transaction hash: ' + transactionHash);
-            }
-          }
-        );
-
-
-        this.listeningForOracleEvents();
-      });
     }); // get account closing brace
   }
 
@@ -161,7 +129,7 @@ export class TransactionsComponent implements OnInit {
     // Using `filter` to only trigger this code, when _buyer equals the current user's account
     const event = this.contractService.optionFactory.NewOption(
       { filter: { _buyer: this.contractService.account } },
-      function (error, newOption) {
+      function(error, newOption) {
         if (error) {
           return;
         }
@@ -170,45 +138,9 @@ export class TransactionsComponent implements OnInit {
         console.log('New option id: ' + newOption.args._id.c[0]);
         console.log(
           'Balance left: ' +
-          this.contractService.web3.fromWei(newOption.args._balanceLeft) +
-          ' ether'
+            this.contractService.web3.fromWei(newOption.args._balanceLeft) +
+            ' ether'
         );
-      }
-    );
-  }
-
-  listeningForOracleEvents(): void {
-    // Event that signifies start of price retrieval process
-    const oracleConstructedEvent = this.contractService.oracle.ConstructorInitiated(
-      function (error, information) {
-        if (error) {
-          return;
-        }
-        console.log('Oracle constructed');
-        console.log(information.args.nextStep);
-      }
-    );
-
-    // Event that signifies start of price retrieval process
-    const oracleQueryingEvent = this.contractService.oracle.NewOraclizeQuery(
-      function (error, information) {
-        if (error) {
-          return;
-        }
-        console.log('Price retrieval request received...');
-        console.log(information.args.description);
-      }
-    );
-
-    // Event that signifies end of price retrieval and update process
-    const oraclePriceEvent = this.contractService.oracle.PriceUpdated(
-      function (error, price) {
-        if (error) {
-          return;
-        }
-        console.log(price);
-        console.log('Price retrieved and updated successfully!');
-        console.log('New price: ' + price.args.price);
       }
     );
   }

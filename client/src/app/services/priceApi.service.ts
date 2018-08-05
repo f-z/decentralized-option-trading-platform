@@ -6,8 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PriceApiService {
   apiString = 'https://www.alphavantage.co/query?';
-  // params = 'function=TIME_SERIES_INTRADAY&interval=1min&apikey=demo&symbol=';
-  market = '&market=GBP';
+  market = '&market=USD';
   apiKey = '&apikey=G1EXLX22YPP5TVD1';
 
   constructor(private http: HttpClient) {}

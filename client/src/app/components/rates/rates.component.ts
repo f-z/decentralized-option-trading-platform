@@ -1,6 +1,9 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
+
 import { PriceApiService } from '../../services/priceApi.service';
+import { ContractsService } from '../../services/contract.service';
+
 import { Chart } from 'chart.js';
 import { Sort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material';
@@ -35,9 +38,12 @@ export class RatesComponent implements OnInit {
 
   sortedPrices;
 
-  constructor(private priceService: PriceApiService) {
+  constructor(
+    private priceService: PriceApiService,
+    public contractService: ContractsService
+  ) {
     this.loading = true;
-    this.symbol = 'BTC';
+    this.symbol = 'ETH';
     this.tokens.push({ symbol: 'BTC', price: 5000, type: 'crypto' });
     this.tokens.push({ symbol: 'ETH', price: 5000, type: 'crypto' });
     this.tokens.push({ symbol: 'GOOGL', price: 5000, type: 'stock' });
@@ -53,39 +59,117 @@ export class RatesComponent implements OnInit {
       if (this.tokens[i].type === 'crypto') {
         func = 'DIGITAL_CURRENCY_DAILY';
         title = 'Time Series (Digital Currency Daily)';
-        subtitle = '4a. close (GBP)';
+        subtitle = '4a. close (USD)';
       } else {
         func = 'TIME_SERIES_DAILY_ADJUSTED';
         title = 'Time Series (Daily)';
         subtitle = '5. adjusted close';
       }
 
-      this.priceService.getCurrentPrice(func, this.tokens[i].symbol).then(res => {
-        // console.log(res[Object.keys(res)[Object.keys(res).length - 1]]);
-        // this.mostRecentPrices[0].price = res['Time Series (Digital Currency Daily)']['2018-06-22']['4a. close (GBP)'];
-        // tslint:disable-next-line:max-line-length
-        this.tokens[i].price = Math.round(res[title][Object.keys(res[title])[0]][subtitle] * 100) / 100;
-      });
+      this.priceService
+        .getCurrentPrice(func, this.tokens[i].symbol)
+        .then(res => {
+          // console.log(res[Object.keys(res)[Object.keys(res).length - 1]]);
+          // this.mostRecentPrices[0].price = res['Time Series (Digital Currency Daily)']['2018-06-22']['4a. close (USD)'];
+          this.tokens[i].price =
+            Math.round(res[title][Object.keys(res[title])[0]][subtitle] * 100) /
+            100;
+        });
     }
+
+    this.contractService.getAccount().then(account => {
+      // checking for oracle deployment
+      this.contractService
+        .checkOracleDeployment(this.contractService.oracleAddresses[0])
+        .then(result => {
+          // deploying new oracle version
+          // this.contractService.deployOracle('Coinbase', 'https://api.gdax.com/products/ETH-USD/ticker).price');
+          // this.contractService.deployOracle('CoinMarketCap', 'https://api.coinmarketcap.com/v2/ticker/1027).data.quotes.USD.price');
+          // this.contractService.deployOracle('CryptoCompare', 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD).USD');
+
+          // calling the oracle function to update the price
+          // gas value in Gwei, standard current value from https://www.ethgasstation.info/
+
+          /*
+          this.contractService.oracle.updatePrice(
+            {
+              from: account,
+              gas: 4000000,
+              value: this.contractService.web3.toWei(0.01, 'ether')
+            },
+            function(error, transactionHash) {
+              // getting the transaction hash as callback from the function
+              if (error) {
+                alert(error);
+                return;
+              } else {
+                console.log('Price update request sent...');
+                console.log('Transaction hash: ' + transactionHash);
+              }
+            }
+          );
+          */
+
+          this.listeningForOracleEvents();
+        });
+    });
+  }
+
+  listeningForOracleEvents(): void {
+    // Event that signifies start of price retrieval process
+    const oracleConstructedEvent = this.contractService.oracle.ConstructorInitiated(
+      function(error, information) {
+        if (error) {
+          return;
+        }
+        console.log('Oracle constructed');
+        console.log(information.args.nextStep);
+      }
+    );
+
+    // Event that signifies start of price retrieval process
+    const oracleQueryingEvent = this.contractService.oracle.NewOraclizeQuery(
+      function(error, information) {
+        if (error) {
+          return;
+        }
+        console.log('Price retrieval request received...');
+        console.log(information.args.description);
+      }
+    );
+
+    // Event that signifies end of price retrieval and update process
+    const oraclePriceEvent = this.contractService.oracle.PriceUpdated(function(
+      error,
+      price
+    ) {
+      if (error) {
+        return;
+      }
+      console.log('Price retrieved and updated successfully!');
+      console.log('New price: ' + price.args.price);
+    });
   }
 
   getChartData(symbol: string): void {
     // retrieving historical prices for chart
-    this.priceService.getCurrentPrice('DIGITAL_CURRENCY_DAILY', this.symbol).then(res => {
-      this.labels = Object.keys(res['Time Series (Digital Currency Daily)']);
-      this.labels = this.labels.reverse();
-      this.results = res['Time Series (Digital Currency Daily)'];
-      let key;
-      for (key in this.results) {
-        if (this.results.hasOwnProperty(key)) {
-          // console.log(data['Time Series (Digital Currency Daily)'][date]['4a. close (GBP)']);
-          this.data.push(this.results[key]['4a. close (GBP)']);
+    this.priceService
+      .getCurrentPrice('DIGITAL_CURRENCY_DAILY', this.symbol)
+      .then(res => {
+        this.labels = Object.keys(res['Time Series (Digital Currency Daily)']);
+        this.labels = this.labels.reverse();
+        this.results = res['Time Series (Digital Currency Daily)'];
+        let key;
+        for (key in this.results) {
+          if (this.results.hasOwnProperty(key)) {
+            // console.log(data['Time Series (Digital Currency Daily)'][date]['4a. close (USD)']);
+            this.data.push(this.results[key]['4a. close (USD)']);
+          }
         }
-      }
-      this.data = this.data.reverse();
-      this.createChart(symbol, this.labels, this.data);
-      this.loading = false;
-    });
+        this.data = this.data.reverse();
+        this.createChart(symbol, this.labels, this.data);
+        this.loading = false;
+      });
   }
 
   createChart(symbol: string, labels: any, data: any) {
@@ -97,7 +181,7 @@ export class RatesComponent implements OnInit {
         labels: labels,
         datasets: [
           {
-            label: symbol + ' closing price per day in GBP',
+            label: symbol + ' closing price per day in USD',
             data: data,
             borderColor: '#3c5dba',
             pointRadius: 1,
@@ -136,7 +220,7 @@ export class RatesComponent implements OnInit {
           yLabel: String,
           callbacks: {
             // tslint:disable-next-line:no-shadowed-variable
-            label: function (tooltipItem, data) {
+            label: function(tooltipItem, data) {
               let label = data.datasets[tooltipItem.datasetIndex].label || '';
               if (label) {
                 label += ': ';
