@@ -38,16 +38,21 @@ export class RatesComponent implements OnInit {
 
   sortedPrices;
 
+  verifiedRates = [];
+
   constructor(
     private priceService: PriceApiService,
     public contractService: ContractsService
   ) {
+    // default values
     this.loading = true;
     this.symbol = 'ETH';
     this.tokens.push({ symbol: 'BTC', price: 5000, type: 'crypto' });
     this.tokens.push({ symbol: 'ETH', price: 5000, type: 'crypto' });
     this.tokens.push({ symbol: 'GOOGL', price: 5000, type: 'stock' });
     this.sortedPrices = this.tokens.slice();
+
+    this.verifiedRates.push('...', '...', '...');
   }
 
   ngOnInit() {
@@ -94,10 +99,17 @@ export class RatesComponent implements OnInit {
           // gas value in Gwei, standard current value from https://www.ethgasstation.info/
           for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
             this.updateSingleOraclePrice(i);
-            this.listeningForOracleEvents(i);
+            this.listeningForOracleEvents(i, this.verifiedRates);
           }
         });
     });
+  }
+
+  getOracleData(): void {
+    for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
+      this.updateSingleOraclePrice(i);
+      this.listeningForOracleEvents(i, this.verifiedRates);
+    }
   }
 
   updateSingleOraclePrice(id: number): void {
@@ -120,7 +132,7 @@ export class RatesComponent implements OnInit {
     );
   }
 
-  listeningForOracleEvents(id: number): void {
+  listeningForOracleEvents(id: number, verifiedRates: any): void {
     // Event that signifies start of price retrieval process
     const oracleConstructedEvent = this.contractService.oracles[id].ConstructorInitiated(
       function(error, constructorInfo) {
@@ -153,6 +165,8 @@ export class RatesComponent implements OnInit {
       }
       console.log('Price retrieved and updated successfully!');
       console.log('New price: ' + priceInfo.args.price);
+      // setting the verified rate that was retrieved from the oracle
+      verifiedRates[id] = priceInfo.args.price;
     });
   }
 
