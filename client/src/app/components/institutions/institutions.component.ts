@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+
 import { AuthService } from '../../services/auth.service';
 import { ListingService } from '../../services/listing.service';
+import { ContractsService } from '../../services/contract.service';
 
 @Component({
   selector: 'app-institutions',
@@ -27,10 +26,40 @@ export class InstitutionsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private listingService: ListingService
+    private listingService: ListingService,
+    public contractService: ContractsService
   ) {
     this.createNewListingForm(); // Create new Listing form on start up
     this.createCommentForm(); // Create form for posting comments on a user's Listing post
+
+    this.contractService.getAccount().then(account => {
+      // checking for registry deployment
+      this.contractService.checkRegistryDeployment().then(result => {
+        // deploying new registry version
+        // this.contractService.deployRegistry();
+
+        this.contractService.registry.getAveragePrice(
+          this.contractService.oracleAddresses[0],
+          this.contractService.oracleAddresses[1],
+          this.contractService.oracleAddresses[2],
+          {
+            from: account,
+            gas: 4000000,
+            value: this.contractService.web3.toWei(0.01, 'ether')
+          },
+          function(error, transactionHash) {
+            // getting the transaction hash as callback from the function
+            if (error) {
+              alert(error);
+              return;
+            } else {
+              console.log('Price is being requested from the three oracles...');
+              console.log('Transaction hash: ' + transactionHash);
+            }
+          }
+        );
+      });
+    });
   }
 
   // Function to create new Listing form
@@ -222,7 +251,7 @@ export class InstitutionsComponent implements OnInit {
 
   // Expand the list of comments
   expand(id) {
-    this.enabledComments.push(id); // Add the current Listing post id to array
+    this.enabledComments.push(id); // Add the current listing post id to array
   }
 
   // Collapse the list of comments
@@ -234,9 +263,22 @@ export class InstitutionsComponent implements OnInit {
   ngOnInit() {
     // Get profile username on page load
     this.authService.getProfile().subscribe(profile => {
-      this.username = profile.user.username; // Used when creating new Listing posts and comments
+      this.username = profile.user.username; // Used when creating new listing posts and comments
     });
 
-    this.getAllListings(); // Get all Listings on component load
+    this.getAllListings(); // Get all listings on component load
+
+    // Event that signifies that the registry has received the price from the oracle
+    const registryPriceEvent = this.contractService.registry.AverageOraclePrice(
+      function(error, price) {
+        if (error) {
+          return;
+        }
+        console.log(
+          'The registry has successfully received the prices from the oracles and calculated the weighted average'
+        );
+        console.log('Latest price average: ' + price.args.price);
+      }
+    );
   }
 }

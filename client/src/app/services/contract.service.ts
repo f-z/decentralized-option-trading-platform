@@ -19,7 +19,7 @@ export class ContractsService {
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
   private optionFactoryContract: any;
-  private optionFactoryAddress = '0xf013699f325a837343646619759b6ff4e77b8b3c';
+  private optionFactoryAddress = '0x0de46eb8e2f33181a1fb6c83b9b5d21f44df84a3';
 
   oracles = [];
   private oracleData = require('../../assets/oracleData.json');
@@ -342,7 +342,7 @@ async deployOracle(name: string, urlPart1: string, symbol: string, urlPart2: str
             alert(error);
             return;
           } else {
-            console.log('Set successfully!');
+            console.log('Set successfully');
             console.log('Transaction hash: ' + transactionHash);
           }
         }
@@ -375,7 +375,7 @@ async deployOracle(name: string, urlPart1: string, symbol: string, urlPart2: str
             alert(error);
             return;
           } else {
-            console.log('Transaction sent successfully!');
+            console.log('Option purchasing transaction sent successfully');
             console.log('Transaction hash: ' + transactionHash);
           }
         }
@@ -429,17 +429,27 @@ async deployOracle(name: string, urlPart1: string, symbol: string, urlPart2: str
   }
 
   // retrieving the calculated premium for a specific option
-  async getOptionPremium(id: number): Promise<any> {
+  async getOptionPremium(exercisePrice: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.calculateOptionPremium(id, function (error, premium) {
-        if (error) {
-          alert(error);
-          return;
-        } else {
-          resolve(premium);
-        }
+      this.optionFactory.calculateOptionPremium.sendTransaction(
+        exercisePrice,
+          {
+            from: this.web3.eth.accounts[0],
+            gas: 4000000,
+            value: this.web3.toWei(0.01, 'ether')
+          },
+          function (error, transactionHash) {
+            // getting the transaction hash as callback from the function
+            if (error) {
+              alert(error);
+              return;
+            } else {
+              console.log('Option premium calculation transaction sent successfully');
+              console.log('Transaction hash: ' + transactionHash);
+            }
+          }
+        );
       });
-    }) as Promise<number>;
   }
 
   /*

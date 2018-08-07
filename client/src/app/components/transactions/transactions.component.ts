@@ -61,12 +61,9 @@ export class TransactionsComponent implements OnInit {
           });
 
         // this works
-        // contractService.getOptionPremium(2).then(premium => (console.log(premium.c[0])));
+        contractService.getOptionPremium(410).then(premium => (console.log(premium.c[0])));
 
         this.listeningForFactoryEvents();
-
-        // deploying new factory version
-        // this.contractService.deployFactory();
       }); // deployment check closing brace
     }); // get account closing brace
   }
@@ -109,7 +106,7 @@ export class TransactionsComponent implements OnInit {
 
   buyOption(
     asset: string,
-    exercisePrice,
+    exercisePrice: number,
     expirationDate: number,
     premium: number
   ): void {
@@ -121,27 +118,37 @@ export class TransactionsComponent implements OnInit {
     );
   }
 
+  getOptionPremium(id: number): void {
+    this.contractService.getOptionPremium(id);
+  }
+
   /*
    * Web3.js allows subscribing to an event, so the web3 provider triggers some logic in the code every time it fires
    */
   listeningForFactoryEvents(): void {
-    // Listening for the NewOption event and printing the result to the console
-    // Using `filter` to only trigger this code, when _buyer equals the current user's account
-    const event = this.contractService.optionFactory.NewOption(
-      { filter: { _buyer: this.contractService.account } },
-      function(error, newOption) {
+    // Listening for the OptionPremium event and printing the result to the console
+    // Using `filter` to only trigger this code, when _id equals the current option id
+    const optionPremiumEvent = this.contractService.optionFactory.OptionPremium(
+      function (error, optionPremiumInfo) {
         if (error) {
           return;
         }
-        console.log('Option bought successfully!');
+        console.log('Option premium: ' + optionPremiumInfo.args.premium);
+      });
+
+    // Listening for the NewOption event and printing the result to the console
+    // Using `filter` to only trigger this code, when _buyer equals the current user's account
+    const newOptionEvent = this.contractService.optionFactory.NewOption(
+      { filter: { _buyer: this.contractService.account } },
+      function (error, newOption) {
+        if (error) {
+          return;
+        }
+        console.log('Option bought successfully');
         console.log('Option buyer: ' + newOption.args._buyer);
         console.log('New option id: ' + newOption.args._id.c[0]);
-        console.log(
-          'Balance left: ' +
-            this.contractService.web3.fromWei(newOption.args._balanceLeft) +
-            ' ether'
-        );
-      }
-    );
+        // converting wei to ether
+        console.log('Balance left: ' + (newOption.args._balanceLeft / 1000000000000000000) + ' ether');
+      });
   }
 }

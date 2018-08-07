@@ -97,6 +97,25 @@
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "x",
+				"type": "uint256"
+			}
+		],
+		"name": "sqrt",
+		"outputs": [
+			{
+				"name": "y",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "urlPart2",
 		"outputs": [

@@ -52,6 +52,25 @@
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "s",
+				"type": "string"
+			}
+		],
+		"name": "stringToUint",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -98,6 +117,15 @@
 	},
 	{
 		"constant": false,
+		"inputs": [],
+		"name": "kill",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
 		"inputs": [
 			{
 				"name": "_asset",
@@ -120,6 +148,25 @@
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "x",
+				"type": "uint256"
+			}
+		],
+		"name": "sqrt",
+		"outputs": [
+			{
+				"name": "y",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
@@ -133,10 +180,10 @@
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
-				"name": "_id",
+				"name": "_exercisePrice",
 				"type": "uint256"
 			}
 		],
@@ -147,8 +194,8 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
-		"stateMutability": "pure",
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -163,6 +210,20 @@
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "setRegistryAddress",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -194,6 +255,25 @@
 		"outputs": [],
 		"payable": true,
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "v",
+				"type": "uint256"
+			}
+		],
+		"name": "uintToString",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -271,6 +351,23 @@
 			}
 		],
 		"name": "NewOption",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "premium",
+				"type": "uint256"
+			}
+		],
+		"name": "OptionPremium",
 		"type": "event"
 	},
 	{

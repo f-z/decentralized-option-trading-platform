@@ -97,19 +97,16 @@ export class RatesComponent implements OnInit {
 
           // calling each oracle's function to update the price stored
           // gas value in Gwei, standard current value from https://www.ethgasstation.info/
-          for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
-            this.updateSingleOraclePrice(i);
-            this.listeningForOracleEvents(i, this.verifiedRates);
-          }
+          // this.getOracleData();
         });
     });
   }
 
   getOracleData(): void {
-    for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
+  for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
       this.updateSingleOraclePrice(i);
       this.listeningForOracleEvents(i, this.verifiedRates);
-    }
+  }
   }
 
   updateSingleOraclePrice(id: number): void {
@@ -117,7 +114,7 @@ export class RatesComponent implements OnInit {
       {
         from: this.contractService.account,
         gas: 4000000,
-        value: this.contractService.web3.toWei(0.01, 'ether')
+        value: this.contractService.web3.toWei(0.1, 'ether')
       },
       function(error, transactionHash) {
         // getting the transaction hash as callback from the function
@@ -163,7 +160,7 @@ export class RatesComponent implements OnInit {
       if (error) {
         return;
       }
-      console.log('Price retrieved and updated successfully!');
+      console.log('Price retrieved and updated successfully');
       console.log('New price: ' + priceInfo.args.price);
       // setting the verified rate that was retrieved from the oracle
       verifiedRates[id] = priceInfo.args.price;

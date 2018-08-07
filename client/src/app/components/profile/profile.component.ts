@@ -18,6 +18,9 @@ export class ProfileComponent implements OnInit {
     contractService: ContractsService
   ) {
     contractService.getAccount().then(value => this.currentAccount = value);
+
+    // deploying new factory version
+    // this.contractService.deployFactory();
   }
 
   ngOnInit() {
