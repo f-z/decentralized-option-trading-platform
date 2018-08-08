@@ -12,11 +12,53 @@
 
   <br />
 
-  <!-- New post button -->
+  <span>Average Price ($) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Option Premium ($)</span>
+
+  <br>
+  <br> {{ averagePrice }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ optionPremium }}
+  <br>
+  <br>
+
+  <!-- Get average price button -->
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="getAveragePrice();" *ngIf="account && !newPost">Get average price</button>
+  <!-- Get option premium button -->
+  <div class="divider"></div>
+  <button mat-raised-button class="button" name="button" color="primary" *ngIf="account && !newPost" (click)="getOptionPremium();">Get option premium</button>
+
+
+  <br>
+  <br>
+  <br>
+
+  <mat-form-field class="input-field">
+    <input matInput type="text" [(ngModel)]="symbol" name="symbol" placeholder="enter symbol" />
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field class="input-field">
+    <input matInput type="number" [(ngModel)]="exercisePrice" name="exercisePrice" placeholder="enter exercise price" />
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field class="input-date">
+    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="expiration date" [formControl]="expirationDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <br>
+  <!-- Buy option button -->
+  <button mat-raised-button class="button" name="button" color="primary" *ngIf="account && !newPost" (click)="buyOption();">Buy option</button>
+
+  <!-- New post button 
   <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="newListingForm()" *ngIf="!newPost">New search</button>
-  <!-- Reload button -->
+  <!-- Reload button
   <div class="divider"></div>
   <button mat-raised-button [disabled]="loadingListings" class="button" name="button" color="primary" *ngIf="!newPost" (click)="reloadListings()">Reload</button>
+-->
 
   <br />
   <br />

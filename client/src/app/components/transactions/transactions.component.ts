@@ -59,21 +59,11 @@ export class TransactionsComponent implements OnInit {
             this.dataSource = new MatTableDataSource(this.options);
             // this.table.renderRows();
           });
-
-        // this works
-        contractService.getOptionPremium(410).then(premium => (console.log(premium.c[0])));
-
-        this.listeningForFactoryEvents();
       }); // deployment check closing brace
     }); // get account closing brace
   }
 
   ngOnInit() {
-    // testing the creation of an option contract
-    // parameters: underlying asset, exercise price, expiration date
-    // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
-    // this.buyOption('BTC', 5600, Math.floor(new Date().getTime() / 1000) + 300, this.contractService.web3.toWei('0.1', 'ether'));
-
     /*
       contractService.exerciseOption(0).then(transactionHash => {
         const exerciseEvent = contractService.optionFactory.OptionExercise(function (
@@ -101,54 +91,6 @@ export class TransactionsComponent implements OnInit {
       .deposit(this.contractService.web3.toWei(amount, 'ether'))
       .then(hash => {
         // could display button to check if transaction has been mined
-      });
-  }
-
-  buyOption(
-    asset: string,
-    exercisePrice: number,
-    expirationDate: number,
-    premium: number
-  ): void {
-    this.contractService.buyOption(
-      asset,
-      exercisePrice,
-      expirationDate,
-      premium
-    );
-  }
-
-  getOptionPremium(id: number): void {
-    this.contractService.getOptionPremium(id);
-  }
-
-  /*
-   * Web3.js allows subscribing to an event, so the web3 provider triggers some logic in the code every time it fires
-   */
-  listeningForFactoryEvents(): void {
-    // Listening for the OptionPremium event and printing the result to the console
-    // Using `filter` to only trigger this code, when _id equals the current option id
-    const optionPremiumEvent = this.contractService.optionFactory.OptionPremium(
-      function (error, optionPremiumInfo) {
-        if (error) {
-          return;
-        }
-        console.log('Option premium: ' + optionPremiumInfo.args.premium);
-      });
-
-    // Listening for the NewOption event and printing the result to the console
-    // Using `filter` to only trigger this code, when _buyer equals the current user's account
-    const newOptionEvent = this.contractService.optionFactory.NewOption(
-      { filter: { _buyer: this.contractService.account } },
-      function (error, newOption) {
-        if (error) {
-          return;
-        }
-        console.log('Option bought successfully');
-        console.log('Option buyer: ' + newOption.args._buyer);
-        console.log('New option id: ' + newOption.args._id.c[0]);
-        // converting wei to ether
-        console.log('Balance left: ' + (newOption.args._balanceLeft / 1000000000000000000) + ' ether');
       });
   }
 }

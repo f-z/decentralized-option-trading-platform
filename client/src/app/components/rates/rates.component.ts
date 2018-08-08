@@ -94,14 +94,13 @@ export class RatesComponent implements OnInit {
           //                                   'https://api.coinmarketcap.com/v2/ticker/', '1027', ').data.quotes.USD.price');
           // this.contractService.deployOracle('CryptoCompare',
           //                                   'https://min-api.cryptocompare.com/data/price?fsym=', 'ETH', '&tsyms=USD).USD');
-
-          // calling each oracle's function to update the price stored
-          // gas value in Gwei, standard current value from https://www.ethgasstation.info/
-          // this.getOracleData();
         });
     });
   }
 
+  /*
+   * calling each oracle's function to update the price stored
+   */
   getOracleData(): void {
   for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
       this.updateSingleOraclePrice(i);
@@ -113,8 +112,9 @@ export class RatesComponent implements OnInit {
     this.contractService.oracles[id].updatePrice(
       {
         from: this.contractService.account,
+        // besides gas amount, can also specify gas value in Gwei, standard current value from https://www.ethgasstation.info/
         gas: 4000000,
-        value: this.contractService.web3.toWei(0.1, 'ether')
+        value: this.contractService.web3.toWei(0.0001, 'ether')
       },
       function(error, transactionHash) {
         // getting the transaction hash as callback from the function

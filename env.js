@@ -11,5 +11,5 @@
 // } else {
 process.env.NODE_ENV = 'development';
 process.env.databaseUri = 'mongodb://localhost:27018/'; // Production database URI
-process.env.databaseName = 'development database: okergo'; // Production database name
+process.env.databaseName = 'development database: smart options system'; // Production database name
 // }

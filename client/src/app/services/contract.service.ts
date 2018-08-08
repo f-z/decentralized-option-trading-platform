@@ -19,7 +19,7 @@ export class ContractsService {
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
   private optionFactoryContract: any;
-  private optionFactoryAddress = '0x0de46eb8e2f33181a1fb6c83b9b5d21f44df84a3';
+  private optionFactoryAddress = '0x6cc5ceb1c4dcd33cf95385479bbfd6bf72170054';
 
   oracles = [];
   private oracleData = require('../../assets/oracleData.json');

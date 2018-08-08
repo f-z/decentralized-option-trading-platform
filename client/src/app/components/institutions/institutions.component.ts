@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { AuthService } from '../../services/auth.service';
 import { ListingService } from '../../services/listing.service';
@@ -11,6 +12,17 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./institutions.component.css']
 })
 export class InstitutionsComponent implements OnInit {
+  account: any;
+  averagePrice: any;
+  optionPremium: any;
+
+  symbol: string;
+  exercisePrice: number;
+  expirationDate: FormControl;
+
+  minDate = new Date(Date.now());
+  maxDate = new Date(2021, 0, 1);
+
   messageClass;
   message;
   newPost = false;
@@ -29,37 +41,144 @@ export class InstitutionsComponent implements OnInit {
     private listingService: ListingService,
     public contractService: ContractsService
   ) {
-    this.createNewListingForm(); // Create new Listing form on start up
-    this.createCommentForm(); // Create form for posting comments on a user's Listing post
+    this.averagePrice = '...';
+    this.optionPremium = '...';
+
+    // setting default symbol to ETH
+    this.symbol = 'ETH';
+
+    // setting default exercise price to 450
+    this.exercisePrice = 450;
+
+    // setting default date as today
+    this.expirationDate = new FormControl(new Date());
+
+    this.createNewListingForm(); // creating new listing form on start up
+    this.createCommentForm(); // creating form for posting comments on a listing post
 
     this.contractService.getAccount().then(account => {
+      this.account = account;
+
       // checking for registry deployment
       this.contractService.checkRegistryDeployment().then(result => {
-        // deploying new registry version
+        // deploying new registry version by force
         // this.contractService.deployRegistry();
-
-        this.contractService.registry.getAveragePrice(
-          this.contractService.oracleAddresses[0],
-          this.contractService.oracleAddresses[1],
-          this.contractService.oracleAddresses[2],
-          {
-            from: account,
-            gas: 4000000,
-            value: this.contractService.web3.toWei(0.01, 'ether')
-          },
-          function(error, transactionHash) {
-            // getting the transaction hash as callback from the function
-            if (error) {
-              alert(error);
-              return;
-            } else {
-              console.log('Price is being requested from the three oracles...');
-              console.log('Transaction hash: ' + transactionHash);
-            }
-          }
-        );
       });
     });
+  }
+
+  ngOnInit() {
+    // getting profile username on page load
+    this.authService.getProfile().subscribe(profile => {
+      this.username = profile.user.username; // used when creating new listing posts and comments
+    });
+
+    this.getAllListings(); // getting all listings on component load
+
+    // testing the creation of an option contract
+    // parameters: underlying asset, exercise price, expiration date
+    // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
+    // this.buyOption('BTC', 5600, Math.floor(new Date().getTime() / 1000) + 300, this.contractService.web3.toWei('0.1', 'ether'));
+  }
+
+  getAveragePrice(): void {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+
+    this.contractService.registry.getAveragePrice(
+      this.contractService.oracleAddresses[0],
+      this.contractService.oracleAddresses[1],
+      this.contractService.oracleAddresses[2],
+      {
+        from: this.account,
+        gas: 4000000,
+        value: this.contractService.web3.toWei(0.01, 'ether')
+      },
+      function (error, transactionHash) {
+        // getting the transaction hash as callback from the function
+        if (error) {
+          alert(error);
+          return;
+        } else {
+          console.log('Price is being requested from the three oracles...');
+          console.log('Transaction hash: ' + transactionHash);
+        }
+      }
+    );
+
+    /*
+     * Web3.js allows subscribing to an event, so the web3 provider triggers some logic in the code every time it fires
+     */
+    // Event that signifies that the registry has received the price from the oracle
+    // tslint:disable-next-line:prefer-const
+    const registryPriceEvent = this.contractService.registry.AverageOraclePrice(
+      function (error, priceInfo) {
+        if (error) {
+          return;
+        }
+        console.log('The registry has successfully received the prices from the oracles and calculated the weighted average');
+        __this.setAveragePrice(priceInfo.args.price);
+        console.log('Latest price average: ' + __this.averagePrice);
+      }
+    );
+  }
+
+  setAveragePrice(price: number) {
+    this.averagePrice = price;
+  }
+
+  getOptionPremium(): void {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+
+    this.contractService.getOptionPremium(this.exercisePrice);
+
+    // Listening for the OptionPremium event and printing the result to the console
+    // Using `filter` to only trigger this code, when _id equals the current option id
+    // tslint:disable-next-line:prefer-const
+    const optionPremiumEvent = this.contractService.optionFactory.OptionPremium(
+      function (error, optionPremiumInfo) {
+        if (error) {
+          return;
+        }
+        __this.setOptionPremium(optionPremiumInfo.args.premium);
+        console.log('Option premium: ' + __this.optionPremium);
+      }
+    );
+  }
+
+  setOptionPremium(premium: number) {
+    this.optionPremium = premium;
+  }
+
+  buyOption(): void {
+    // converting time to unix timestamp
+    this.contractService.buyOption(
+      this.symbol,
+      this.exercisePrice,
+      (this.expirationDate.value.getTime() / 1000),
+      this.contractService.web3.toWei((this.exercisePrice - Math.floor(this.averagePrice)) / Math.floor(this.averagePrice)));
+
+    // Listening for the NewOption event and printing the result to the console
+    // Using `filter` to only trigger this code, when _buyer equals the current user's account
+    // tslint:disable-next-line:prefer-const
+    let newOptionEvent = this.contractService.optionFactory.NewOption(
+      { filter: { _buyer: this.contractService.account } },
+      function (error, newOption) {
+        if (error) {
+          return;
+        }
+        console.log('Option bought successfully');
+        console.log('Option buyer: ' + newOption.args._buyer);
+        console.log('New option id: ' + newOption.args._id.c[0]);
+        // converting wei to ether
+        console.log(
+          'Balance left: ' +
+          newOption.args._balanceLeft / 1000000000000000000 +
+          ' ether'
+        );
+      }
+    );
   }
 
   // Function to create new Listing form
@@ -258,27 +377,5 @@ export class InstitutionsComponent implements OnInit {
   collapse(id) {
     const index = this.enabledComments.indexOf(id); // Get position of id in array
     this.enabledComments.splice(index, 1); // Remove id from array
-  }
-
-  ngOnInit() {
-    // Get profile username on page load
-    this.authService.getProfile().subscribe(profile => {
-      this.username = profile.user.username; // Used when creating new listing posts and comments
-    });
-
-    this.getAllListings(); // Get all listings on component load
-
-    // Event that signifies that the registry has received the price from the oracle
-    const registryPriceEvent = this.contractService.registry.AverageOraclePrice(
-      function(error, price) {
-        if (error) {
-          return;
-        }
-        console.log(
-          'The registry has successfully received the prices from the oracles and calculated the weighted average'
-        );
-        console.log('Latest price average: ' + price.args.price);
-      }
-    );
   }
 }
