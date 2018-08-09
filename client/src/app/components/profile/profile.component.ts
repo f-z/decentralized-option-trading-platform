@@ -8,19 +8,24 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  private currentAccount: string;
-
   username = '';
   email = '';
 
+  accountAddress = '';
+  factoryAddress = '';
+
   constructor(
     private authService: AuthService,
-    contractService: ContractsService
+    public contractService: ContractsService
   ) {
-    contractService.getAccount().then(value => this.currentAccount = value);
+    contractService.getAccount().then(account => {
+      this.accountAddress = account;
 
-    // deploying new factory version
-    // this.contractService.deployFactory();
+      // checking for factory deployment
+      contractService.checkFactoryDeployment().then(address => {
+        this.factoryAddress = address;
+      });
+    });
   }
 
   ngOnInit() {
@@ -31,4 +36,10 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * deploying new factory version
+   */
+  createFactory() {
+    this.contractService.deployFactory(20);
+  }
 }

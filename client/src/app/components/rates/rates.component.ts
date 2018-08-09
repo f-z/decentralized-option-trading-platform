@@ -102,10 +102,10 @@ export class RatesComponent implements OnInit {
    * calling each oracle's function to update the price stored
    */
   getOracleData(): void {
-  for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
+    for (let i = 0; i < this.contractService.oracleAddresses.length; i++) {
       this.updateSingleOraclePrice(i);
       this.listeningForOracleEvents(i, this.verifiedRates);
-  }
+    }
   }
 
   updateSingleOraclePrice(id: number): void {
@@ -116,7 +116,7 @@ export class RatesComponent implements OnInit {
         gas: 4000000,
         value: this.contractService.web3.toWei(0.0001, 'ether')
       },
-      function(error, transactionHash) {
+      function (error, transactionHash) {
         // getting the transaction hash as callback from the function
         if (error) {
           alert(error);
@@ -132,7 +132,7 @@ export class RatesComponent implements OnInit {
   listeningForOracleEvents(id: number, verifiedRates: any): void {
     // Event that signifies start of price retrieval process
     const oracleConstructedEvent = this.contractService.oracles[id].ConstructorInitiated(
-      function(error, constructorInfo) {
+      function (error, constructorInfo) {
         if (error) {
           return;
         }
@@ -143,7 +143,7 @@ export class RatesComponent implements OnInit {
 
     // Event that signifies start of price retrieval process
     const oracleQueryingEvent = this.contractService.oracles[id].NewOracleQuery(
-      function(error, queryInfo) {
+      function (error, queryInfo) {
         if (error) {
           return;
         }
@@ -153,7 +153,7 @@ export class RatesComponent implements OnInit {
     );
 
     // Event that signifies end of price retrieval and update process
-    const oraclePriceEvent = this.contractService.oracles[id].PriceUpdated(function(
+    const oraclePriceEvent = this.contractService.oracles[id].PriceUpdated(function (
       error,
       priceInfo
     ) {
@@ -236,7 +236,7 @@ export class RatesComponent implements OnInit {
           yLabel: String,
           callbacks: {
             // tslint:disable-next-line:no-shadowed-variable
-            label: function(tooltipItem, data) {
+            label: function (tooltipItem, data) {
               let label = data.datasets[tooltipItem.datasetIndex].label || '';
               if (label) {
                 label += ': ';

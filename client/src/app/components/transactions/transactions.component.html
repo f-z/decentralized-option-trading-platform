@@ -9,7 +9,7 @@
 
   <mat-form-field class="input-field">
     <input matInput [(ngModel)]="depositAmount" type="number" name="deposit" placeholder="enter deposit amount" class="deposit"
-      maxlength="50" (keyup.enter)="deposit(depositAmount);" />
+      (keyup.enter)="deposit(depositAmount);" />
   </mat-form-field>
 
   <br>
@@ -26,36 +26,32 @@
   <span class="transactions-header">Option Portfolio</span>
   <br>
   <br>
-  <!--
-  <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="optionID">
-      <th mat-header-cell *matHeaderCellDef> # </th>
-      <td mat-cell *matCellDef="let row"> {{ row.optionID }} </td>
-    </ng-container>
-    <ng-container matColumnDef="asset">
-      <th mat-header-cell *matHeaderCellDef> Underlying asset </th>
-      <td mat-cell *matCellDef="let row"> {{ row.asset }} </td>
-    </ng-container>
-    <ng-container matColumnDef="exercisePrice">
-      <th mat-header-cell *matHeaderCellDef> Exercise price </th>
-      <td mat-cell *matCellDef="let row"> {{ row.exercisePrice }} </td>
-    </ng-container>
-    <ng-container matColumnDef="timeToExpiration">
-      <th mat-header-cell *matHeaderCellDef> Time to expiration</th>
-      <td mat-cell *matCellDef="let row"> {{ row.timeToExpiration }} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  -->
+
   <ul>
     <li *ngFor="let option of options">
-      Option #: {{ option.id }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; Underlying asset: {{ option.asset }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; Exercise price: {{ option.exercisePrice }} GBP &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; Expiration date: {{ option.expirationDate.getDate() }}/{{ option.expirationDate.getMonth() + 1 }}/{{ option.expirationDate.getFullYear() }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; Exercised: {{ option.exercised }}
+      Option #: {{ option.id }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; Underlying asset: {{ option.asset }} &nbsp;&nbsp;&nbsp;&nbsp;
+      | &nbsp;&nbsp;&nbsp;&nbsp; Exercise price: {{ option.exercisePrice }} GBP &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+      Expiration date: {{ option.expirationDate.getDate() }}/{{ option.expirationDate.getMonth() + 1 }}/{{ option.expirationDate.getFullYear()
+      }} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; Exercised: {{ option.exercised }}
       <br>
       <br>
     </li>
   </ul>
 
   <br> Number of option contracts owned: {{ count }}
+
+  <br>
+  <br>
+
+  <mat-form-field class="input-field">
+    <input matInput [(ngModel)]="optionToExercise" type="number" name="optionToExercise" placeholder="enter option # to exercise"
+      class="optionToExercise" (keyup.enter)="exerciseOption();" />
+  </mat-form-field>
+
+  <br>
+  <br>
+
+  <!-- Exercise button -->
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="exerciseOption();">Exercise</button>
 
 </div>

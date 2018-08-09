@@ -29,6 +29,7 @@
   <br>
   <br>
   <br>
+  <br>
 
   <mat-form-field class="input-field">
     <input matInput type="text" [(ngModel)]="symbol" name="symbol" placeholder="enter symbol" />
@@ -50,6 +51,8 @@
   </mat-form-field>
 
   <br>
+  <br>
+
   <!-- Buy option button -->
   <button mat-raised-button class="button" name="button" color="primary" *ngIf="account && !newPost" (click)="buyOption();">Buy option</button>
 

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ContractsService } from '../../services/contract.service';
 import { Option } from '../../services/option.service';
-import { MatTableDataSource, MatTable } from '@angular/material';
 
 @Component({
   selector: 'app-transactions',
@@ -10,10 +9,10 @@ import { MatTableDataSource, MatTable } from '@angular/material';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  @ViewChild(MatTable) table: MatTable<any>;
 
   private balance: number;
   private depositAmount: number;
+
   private count: number;
 
   // material table elements
@@ -25,6 +24,8 @@ export class TransactionsComponent implements OnInit {
   ];
   options: Option[] = [];
   dataSource: any;
+
+  private optionToExercise: number;
 
   constructor(
     public authService: AuthService,
@@ -52,21 +53,42 @@ export class TransactionsComponent implements OnInit {
                 };
 
                 this.options.push(option);
-                this.options.sort();
               });
             }
-
-            this.dataSource = new MatTableDataSource(this.options);
-            // this.table.renderRows();
           });
       }); // deployment check closing brace
     }); // get account closing brace
   }
 
   ngOnInit() {
-    /*
-      contractService.exerciseOption(0).then(transactionHash => {
-        const exerciseEvent = contractService.optionFactory.OptionExercise(function (
+  }
+
+  deposit(amount: number): void {
+    // 1 ether = 1000000000000000000 wei
+    this.contractService
+      .deposit(this.contractService.web3.toWei(amount, 'ether'))
+      .then(hash => {
+        // could display button to check if transaction has been mined
+      });
+  }
+
+  exerciseOption(): void {
+    if (this.optionToExercise === undefined) {
+      alert('Please enter the id of the option to be exercised!');
+      return;
+    } else if (!this.checkIfOptionIdExists(this.optionToExercise)) {
+      alert('Please enter the id of an option you own!');
+      return;
+    } else if (this.options[this.optionToExercise].exercised === true) {
+      alert('Option already exercised!');
+      return;
+    } else {
+      // tslint:disable-next-line:prefer-const
+      let __this = this;
+
+      this.contractService.exerciseOption(this.optionToExercise).then(transactionHash => {
+        // tslint:disable-next-line:prefer-const
+        let exerciseEvent = this.contractService.optionFactory.OptionExercise(function (
           error,
           exercise
         ) {
@@ -77,20 +99,22 @@ export class TransactionsComponent implements OnInit {
           console.log('Profit/Loss: ' + exercise.args._settlementAmount.c[0]);
           console.log(
             'Balance left: ' +
-            contractService.web3.fromWei(exercise.args._balanceLeft.c[0]) +
+            __this.contractService.web3.fromWei(exercise.args._balanceLeft.c[0]) +
             ' ether'
           );
         });
       });
-    */
+    }
   }
 
-  deposit(amount: number): void {
-    // 1 ether = 1000000000000000000 wei
-    this.contractService
-      .deposit(this.contractService.web3.toWei(amount, 'ether'))
-      .then(hash => {
-        // could display button to check if transaction has been mined
-      });
+  checkIfOptionIdExists(id: number): boolean {
+    for (let i = 0; i < this.options.length; i++) {
+      if (this.options[i].id === id) {
+        return true;
+      }
+    }
+
+    // if exited the loop and not found id
+    return false;
   }
 }

@@ -5,6 +5,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AuthService } from '../../services/auth.service';
 import { ListingService } from '../../services/listing.service';
 import { ContractsService } from '../../services/contract.service';
+import { isNumber } from 'util';
 
 @Component({
   selector: 'app-institutions',
@@ -41,9 +42,6 @@ export class InstitutionsComponent implements OnInit {
     private listingService: ListingService,
     public contractService: ContractsService
   ) {
-    this.averagePrice = '...';
-    this.optionPremium = '...';
-
     // setting default symbol to ETH
     this.symbol = 'ETH';
 
@@ -79,6 +77,8 @@ export class InstitutionsComponent implements OnInit {
     // parameters: underlying asset, exercise price, expiration date
     // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
     // this.buyOption('BTC', 5600, Math.floor(new Date().getTime() / 1000) + 300, this.contractService.web3.toWei('0.1', 'ether'));
+    this.averagePrice = this.loadAveragePrice();
+    this.optionPremium = this.loadOptionPremium();
   }
 
   getAveragePrice(): void {
@@ -111,7 +111,7 @@ export class InstitutionsComponent implements OnInit {
      */
     // Event that signifies that the registry has received the price from the oracle
     // tslint:disable-next-line:prefer-const
-    const registryPriceEvent = this.contractService.registry.AverageOraclePrice(
+    let registryPriceEvent = this.contractService.registry.AverageOraclePrice(
       function (error, priceInfo) {
         if (error) {
           return;
@@ -125,6 +125,7 @@ export class InstitutionsComponent implements OnInit {
 
   setAveragePrice(price: number) {
     this.averagePrice = price;
+    this.saveAveragePrice();
   }
 
   getOptionPremium(): void {
@@ -149,6 +150,7 @@ export class InstitutionsComponent implements OnInit {
 
   setOptionPremium(premium: number) {
     this.optionPremium = premium;
+    this.saveOptionPremium();
   }
 
   buyOption(): void {
@@ -157,7 +159,8 @@ export class InstitutionsComponent implements OnInit {
       this.symbol,
       this.exercisePrice,
       (this.expirationDate.value.getTime() / 1000),
-      this.contractService.web3.toWei((this.exercisePrice - Math.floor(this.averagePrice)) / Math.floor(this.averagePrice)));
+      // sending a little over the actual price to ensure it goes through
+      this.contractService.web3.toWei(this.optionPremium * 1.05 / Math.floor(this.averagePrice)));
 
     // Listening for the NewOption event and printing the result to the console
     // Using `filter` to only trigger this code, when _buyer equals the current user's account
@@ -179,6 +182,33 @@ export class InstitutionsComponent implements OnInit {
         );
       }
     );
+  }
+
+  private saveAveragePrice(): void {
+    localStorage.setItem('averagePrice', JSON.stringify(this.averagePrice));
+  }
+
+  private loadAveragePrice(): any {
+    let price = JSON.parse(localStorage.getItem('averagePrice'));
+    if (price === undefined || price === null) {
+      price = '...';
+    }
+
+    return price;
+  }
+
+  private saveOptionPremium(): void {
+    localStorage.setItem('optionPremium', JSON.stringify(this.optionPremium));
+  }
+
+
+  private loadOptionPremium(): any {
+    let premium = JSON.parse(localStorage.getItem('optionPremium'));
+    if (premium === undefined || premium === null) {
+      premium = '...';
+    }
+
+    return premium;
   }
 
   // Function to create new Listing form

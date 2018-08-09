@@ -314,26 +314,15 @@
 		"type": "function"
 	},
 	{
-		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "balanceLeft",
+				"name": "_percentage",
 				"type": "uint256"
 			}
 		],
-		"name": "Withdrawal",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"anonymous": false,
@@ -394,6 +383,28 @@
 			}
 		],
 		"name": "OptionExercise",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "balanceLeft",
+				"type": "uint256"
+			}
+		],
+		"name": "Withdrawal",
 		"type": "event"
 	},
 	{
