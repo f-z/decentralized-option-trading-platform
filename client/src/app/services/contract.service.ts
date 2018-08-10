@@ -13,7 +13,7 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0x93a20102adeaefc8f40961184a3cfa8377459ec1';
+  public registryAddress = '0x9d547477fa577e97a184b09b3285358ae56d9ab8';
 
   optionFactory: any;
   private optionFactoryData = require('../../assets/factoryData.json');
@@ -89,6 +89,31 @@ export class ContractsService {
         'Please use a DApp browser like Mist or the MetaMask plugin for Chrome!'
       );
     }
+  }
+
+  async register(name: string): Promise<any> {
+    // letting the user know that the registration request has been sent
+    console.log('Registering; this may take a while...');
+    // sending the transaction to the registry contract
+    return new Promise((resolve, reject) => {
+      this.registry.register.sendTransaction(
+        name,
+        {
+          from: this.web3.eth.accounts[0],
+          gas: 4000000
+        },
+        function (error, transactionHash) {
+          // getting the transaction hash as callback from the function
+          if (error) {
+            alert(error);
+            return;
+          } else {
+            console.log('Registering transaction sent successfully');
+            console.log('Transaction hash: ' + transactionHash);
+          }
+        }
+      );
+    });
   }
 
   async checkRegistryDeployment(): Promise<any> {

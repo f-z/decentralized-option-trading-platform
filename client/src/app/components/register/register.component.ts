@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+
+import { AuthService } from '../../services/auth.service';
+import { ContractsService } from '../../services/contract.service';
 
 @Component({
   selector: 'app-register',
@@ -20,11 +22,34 @@ export class RegisterComponent implements OnInit {
   usernameMessage;
 
   constructor(
+    public contractService: ContractsService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
-    this.createForm(); // Creating Angular 2 form when component loads
+    this.createForm(); // creating registration form when component loads
+  }
+
+  registerWithRegistrySmartContract(): void {
+    this.contractService.register(
+      'Barclays PLC');
+
+    this.listeningForRegistrationEvents();
+  }
+
+  listeningForRegistrationEvents(): void {
+    // Event that signifies success of registration process
+    const registeredEvent = this.contractService.registry.Registered(
+      { filter: { account: this.contractService.account } },
+      function (error, registrationInfo) {
+        if (error) {
+          return;
+        }
+        console.log('Institution registered with registry smart contract');
+        console.log('Name: ' + registrationInfo.args.name);
+        console.log('Account address: ' + registrationInfo.args.account);
+      }
+    );
   }
 
   // Function to create registration form
