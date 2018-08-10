@@ -11,7 +11,7 @@
   <div class="form-group">
     <div [ngClass]="{'has-error': (form.controls.username.errors && form.controls.username.dirty) || (!usernameValid && form.controls.username.dirty), 'has-success': !form.controls.username.errors && usernameValid}">
       <mat-form-field class="input-field">
-        <input matInput type="text" name="username" class="form-control" autocomplete="off" placeholder="enter username" formControlName="username"
+        <input matInput type="text" name="username" class="form-control" autocomplete="off" placeholder="enter name" formControlName="username"
           (blur)="checkUsername()" />
       </mat-form-field>
       <!-- Validation -->
@@ -82,6 +82,13 @@
     </div>
   </div>
 
+  <br>
+  <br>
+
+  <mat-slide-toggle formControlName="isInstitution" [color]="primary">Institution</mat-slide-toggle>
+
+  <br>
+  <br>
   <br>
 
   <!-- Submit input -->

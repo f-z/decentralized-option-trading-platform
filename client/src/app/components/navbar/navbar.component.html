@@ -6,7 +6,7 @@
           SMART OPTIONS SYSTEM
         </span>
         <span class="fill-remaining-space"></span>
-        <button mat-button [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Transactions</button>
+        <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/transactions">Transactions</button>
         <button mat-button *ngIf="authService.loggedIn()" routerLink="/institutions">Institutions</button>
         <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
           routerLink="/rates">Market Rates</button>

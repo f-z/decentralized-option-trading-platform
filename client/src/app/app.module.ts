@@ -36,7 +36,8 @@ import {
   MatSortModule,
   MatTableModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatSlideToggleModule
 } from '@angular/material';
 import { ContractsService } from './services/contract.service';
 
@@ -71,7 +72,8 @@ import { ContractsService } from './services/contract.service';
     MatSortModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSlideToggleModule
   ],
   providers: [
     AuthService,

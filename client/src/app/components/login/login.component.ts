@@ -72,9 +72,9 @@ export class LoginComponent implements OnInit {
         setTimeout(() => {
           // Check if user was redirected or logging in for first time
           if (this.previousUrl) {
-            this.router.navigate([this.previousUrl]); // Redirect to page they were trying to view before
+            this.router.navigate([this.previousUrl]); // Redirect to the page the user was trying to view before
           } else {
-            this.router.navigate(['/dashboard']); // Navigate to dashboard view
+            this.router.navigate(['/transactions']); // Navigate to the transactions page
           }
         }, 2000);
       }

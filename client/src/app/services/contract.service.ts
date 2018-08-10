@@ -13,7 +13,7 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0x9d547477fa577e97a184b09b3285358ae56d9ab8';
+  public registryAddress = '0x895899165602442d06ad9d5c2cc4157b542133b2';
 
   optionFactory: any;
   private optionFactoryData = require('../../assets/factoryData.json');
@@ -100,7 +100,8 @@ export class ContractsService {
         name,
         {
           from: this.web3.eth.accounts[0],
-          gas: 4000000
+          gas: 4000000,
+          value: this.web3.toWei(0.01, 'ether')
         },
         function (error, transactionHash) {
           // getting the transaction hash as callback from the function
@@ -108,7 +109,7 @@ export class ContractsService {
             alert(error);
             return;
           } else {
-            console.log('Registering transaction sent successfully');
+            console.log('Registration transaction sent successfully');
             console.log('Transaction hash: ' + transactionHash);
           }
         }

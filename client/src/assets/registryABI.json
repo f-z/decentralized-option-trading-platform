@@ -245,8 +245,8 @@
 				"type": "bool"
 			}
 		],
-		"payable": false,
-		"stateMutability": "nonpayable",
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -267,18 +267,13 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
+				"indexed": false,
 				"name": "name",
 				"type": "string"
 			},
 			{
 				"indexed": true,
 				"name": "account",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "factory",
 				"type": "address"
 			}
 		],

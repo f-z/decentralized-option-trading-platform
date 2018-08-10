@@ -12,53 +12,58 @@ import { DeleteInstitutionComponent } from './components/institutions/delete-ins
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 
-// Our Array of Angular 2 Routes
+// the array of routes
 const appRoutes: Routes = [
   {
     path: '',
-    component: TransactionsComponent // Default route
+    component: LoginComponent // default route
+  },
+  {
+    path: 'transactions',
+    component: TransactionsComponent, // transactions route,
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
     path: 'rates',
-    component: RatesComponent, // Market rates route,
-    canActivate: [AuthGuard] // User must be logged in to view this route
+    component: RatesComponent, // market rates route,
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
     path: 'register',
-    component: RegisterComponent, // Register route
-    canActivate: [NotAuthGuard] // User must NOT be logged in to view this route
+    component: RegisterComponent, // register route
+    canActivate: [NotAuthGuard] // user must NOT be logged in to view this route
   },
   {
     path: 'login',
-    component: LoginComponent, // Login route
-    canActivate: [NotAuthGuard] // User must NOT be logged in to view this route
+    component: LoginComponent, // login route
+    canActivate: [NotAuthGuard] // user must NOT be logged in to view this route
   },
   {
     path: 'profile',
-    component: ProfileComponent, // Profile route
-    canActivate: [AuthGuard] // User must be logged in to view this route
+    component: ProfileComponent, // profile route
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
     path: 'institutions',
-    component: InstitutionsComponent, // Institutions route
-    canActivate: [AuthGuard] // User must be logged in to view this route
+    component: InstitutionsComponent, // institutions route
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
     path: 'edit-institution/:id',
-    component: EditInstitutionComponent, // Edit institution route
-    canActivate: [AuthGuard] // User must be logged in to view this route
+    component: EditInstitutionComponent, // edit institution route
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
     path: 'delete-institution/:id',
-    component: DeleteInstitutionComponent, // Delete institution route
-    canActivate: [AuthGuard] // User must be logged in to view this route
+    component: DeleteInstitutionComponent, // delete institution route
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
     path: 'user/:username',
-    component: PublicProfileComponent, // Public profile route
-    canActivate: [AuthGuard] // User must be logged in to view this route
+    component: PublicProfileComponent, // public profile route
+    canActivate: [AuthGuard] // user must be logged in to view this route
   },
-  { path: '**', component: TransactionsComponent } // "Catch-All" Route
+  { path: '**', component: LoginComponent } // "catch-all" route
 ];
 
 @NgModule({

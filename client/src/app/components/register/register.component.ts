@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +11,6 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
   form;
   message;
   messageClass;
@@ -20,6 +19,8 @@ export class RegisterComponent implements OnInit {
   emailMessage;
   usernameValid;
   usernameMessage;
+
+  isInstitution: any;
 
   constructor(
     public contractService: ContractsService,
@@ -31,23 +32,28 @@ export class RegisterComponent implements OnInit {
   }
 
   registerWithRegistrySmartContract(): void {
-    this.contractService.register(
-      'Barclays PLC');
-
-    this.listeningForRegistrationEvents();
+    this.contractService.register(this.form.controls['username'].value);
   }
 
-  listeningForRegistrationEvents(): void {
+  listeningForRegistrationEvents(data: any): void {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+    // tslint:disable-next-line:prefer-const
+    let __data = data;
+
     // Event that signifies success of registration process
-    const registeredEvent = this.contractService.registry.Registered(
-      { filter: { account: this.contractService.account } },
+    const registeredEvent = __this.contractService.registry.Registered(
+      { filter: { account: __this.contractService.account } },
       function (error, registrationInfo) {
         if (error) {
           return;
         }
+
         console.log('Institution registered with registry smart contract');
         console.log('Name: ' + registrationInfo.args.name);
         console.log('Account address: ' + registrationInfo.args.account);
+
+        __this.goToLogin(__data);
       }
     );
   }
@@ -83,7 +89,8 @@ export class RegisterComponent implements OnInit {
         this.validatePassword // Custom validation
       ])],
       // Confirm password input
-      confirm: ['', Validators.required] // Field is required
+      confirm: ['', Validators.required], // Field is required
+      'isInstitution': new FormControl('')
     }, { validator: this.matchingPasswords('password', 'confirm') }); // Add custom validator to form for matching passwords
   }
 
@@ -154,39 +161,51 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  // Function to submit form
+  // function to submit form
   onRegisterSubmit() {
-    this.processing = true; // Used to notify HTML that form is in processing, so that it can be disabled
-    this.disableForm(); // Disabling the form
-    // Creating user object form user's inputs
+    this.processing = true; // used to notify HTML that form is in processing, so that it can be disabled
+    this.disableForm(); // disabling the form
+    // creating user object form user's inputs
     const user = {
-      email: this.form.get('email').value, // E-mail input field
+      email: this.form.get('email').value, // e-mail input field
       region: this.form.get('region').value,
-      username: this.form.get('username').value, // Username input field
-      password: this.form.get('password').value // Password input field
+      username: this.form.get('username').value, // username input field
+      password: this.form.get('password').value // password input field
     };
 
-    // Function from authentication service to register user
+    // function from authentication service to register user
     this.authService.registerUser(user).subscribe(data => {
-      // Response from registration attempt
+      // response from registration attempt
       if (!data.success) {
-        this.messageClass = 'alert alert-danger'; // Setting an error class
-        this.message = data.message; // Setting an error message
-        this.processing = false; // Re-enabling submit button
-        this.enableForm(); // Re-enabling form
+        this.messageClass = 'alert alert-danger'; // setting an error class
+        this.message = data.message; // setting an error message
+        this.processing = false; // re-enabling submit button
+        this.enableForm(); // re-enabling form
       } else {
-        this.messageClass = 'alert alert-success'; // Setting a success class
-        this.message = data.message; // Setting a success message
-        // After 2 second timeout, navigate to the login page
-        setTimeout(() => {
-          this.router.navigate(['/login']); // Redirecting to login view
-        }, 2000);
+        if (!this.form.controls['isInstitution'].value) { // if not an institution, then go straight to login page
+          this.goToLogin(data);
+        } else { // if institution, then register with registry smart contract
+          this.registerWithRegistrySmartContract();
+          // and wait for event confirmation
+          this.listeningForRegistrationEvents(data);
+        }
       }
     });
-
   }
 
-  // Function to check if e-mail is taken
+  goToLogin(data: any) {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+
+    this.messageClass = 'alert alert-success'; // setting a success class
+    this.message = data.message; // setting a success message
+    // after 2 second timeout, navigate to the login page
+    setTimeout(() => {
+      __this.router.navigate(['/login']); // redirecting to login view
+    }, 2000);
+  }
+
+  // function to check if e-mail is taken
   checkEmail() {
     // Function from authentication file to check if e-mail is taken
     this.authService.checkEmail(this.form.get('email').value).subscribe(data => {
