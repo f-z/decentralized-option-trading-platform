@@ -13,13 +13,13 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0x895899165602442d06ad9d5c2cc4157b542133b2';
+  public registryAddress = '0x2aec3cce44b3b2544ab3b229077b8699e1d077fd';
 
   optionFactory: any;
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
   private optionFactoryContract: any;
-  public optionFactoryAddress = '0x12c3c4004dcff0e08ed2e7ab65c1153e2d9592c3';
+  public optionFactoryAddress = '0xf90de4e0ca7b40ba235bf56b5a6da272a8d6c9fc';
 
   oracles = [];
   private oracleData = require('../../assets/oracleData.json');
@@ -165,6 +165,20 @@ export class ContractsService {
 
     this.registryAddress = this.registry.address;
     return Promise.resolve(this.registryAddress);
+  }
+
+  // retrieving the factory of the current user account
+  async getFactoryByAddress(account: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.registry.institutions(account, function (error, institution) {
+        if (error) {
+          alert(error);
+          return;
+        } else {
+          resolve(institution);
+        }
+      });
+    }) as Promise<any>;
   }
 
   async checkFactoryDeployment(): Promise<any> {

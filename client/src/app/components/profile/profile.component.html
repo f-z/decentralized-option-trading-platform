@@ -13,7 +13,7 @@
   <br>
   <br>
 
-  <mat-form-field *ngIf="factoryAddress === ''" class="input-field">
+  <mat-form-field *ngIf="factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000'" class="input-field">
     <input matInput [(ngModel)]="markupPercentage" type="number" name="markupPercentage" placeholder="enter markup % to charge"
       class="markupPercentage" (keyup.enter)="createFactory();" />
   </mat-form-field>
@@ -22,6 +22,6 @@
   <br>
 
   <!-- Create factory button -->
-  <button *ngIf="factoryAddress === ''" mat-raised-button class="button" name="button" color="primary" type="submit" (click)="createFactory();">Create</button>
+  <button *ngIf="factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000'" mat-raised-button class="button" name="button" color="primary" type="submit" (click)="createFactory();">Create</button>
 
 </div>

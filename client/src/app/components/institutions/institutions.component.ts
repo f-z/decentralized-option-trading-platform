@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { AuthService } from '../../services/auth.service';
 import { ListingService } from '../../services/listing.service';
 import { ContractsService } from '../../services/contract.service';
-import { isNumber } from 'util';
 
 @Component({
   selector: 'app-institutions',
@@ -61,6 +59,10 @@ export class InstitutionsComponent implements OnInit {
       this.contractService.checkRegistryDeployment().then(result => {
         // deploying new registry version by force
         // this.contractService.deployRegistry();
+
+        for (let i = 0; i < 1; i++) {
+          // console.log(this.contractService.registry.institutions(this.contractService.registry.addressLUT(i)));
+        }
       });
     });
   }
