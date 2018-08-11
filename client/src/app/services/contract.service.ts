@@ -19,7 +19,7 @@ export class ContractsService {
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
   private optionFactoryContract: any;
-  public optionFactoryAddresses = [];
+  public optionFactoryAddresses = ['0xe487736c15d520191652727cbbd8eb8475f36f0a'];
 
   oracles = [];
   private oracleData = require('../../assets/oracleData.json');
@@ -153,7 +153,7 @@ export class ContractsService {
         {
           from: this.web3.eth.accounts[0],
           data: this.registryData[0].data,
-          gas: '4700000'
+          gas: 4700000
         },
         function (e, contract) {
           if (typeof contract.address !== 'undefined') {
@@ -244,6 +244,32 @@ export class ContractsService {
     return Promise.resolve(optionFactory.address);
   }
 
+  async setFactoryAddress(factoryAddress: string) {
+    // letting the user know that the transaction has been sent
+    console.log('Registering factory address with master registry...');
+    // sending the transaction to our contract
+    // value in Gwei, standard current value from https://www.ethgasstation.info/
+    return new Promise((resolve, reject) => {
+      this.registry.setFactoryAddress.sendTransaction(
+        factoryAddress,
+        {
+          from: this.web3.eth.accounts[0],
+          gas: 4000000
+        },
+        function (error, transactionHash) {
+          // getting the transaction hash as callback from the function
+          if (error) {
+            alert(error);
+            return;
+          } else {
+            console.log('Factory address registration sent successfully');
+            console.log('Transaction hash: ' + transactionHash);
+          }
+        }
+      );
+    });
+  }
+
   async checkOracleDeployment(oracleAddress: string): Promise<any> {
     // checking and deploying oracle
     return new Promise((resolve, reject) => {
@@ -277,7 +303,7 @@ export class ContractsService {
         {
           from: this.web3.eth.accounts[0],
           data: this.oracleData[0].data,
-          gas: '4700000'
+          gas: 4700000
         },
         function (e, contract) {
           if (typeof contract.address !== 'undefined') {
@@ -387,7 +413,7 @@ export class ContractsService {
         {
           from: this.web3.eth.accounts[0],
           gas: 4000000,
-          value: 1700000000
+          value: this.web3.toWei(0.0001, 'ether')
         },
         function (error, transactionHash) {
           // getting the transaction hash as callback from the function
@@ -490,7 +516,7 @@ export class ContractsService {
         {
           from: this.web3.eth.accounts[0],
           gas: 4000000,
-          value: this.web3.toWei(0.01, 'ether')
+          value: this.web3.toWei(0.0001, 'ether')
         },
         function (error, transactionHash) {
           // getting the transaction hash as callback from the function

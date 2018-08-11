@@ -41,10 +41,10 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Once component loads, get user's data to display on profile
+    // once component loads, getting user's data to display on profile
     this.authService.getProfile().subscribe(profile => {
-      this.username = profile.user.username; // Set username
-      this.email = profile.user.email; // Set e-mail
+      this.username = profile.user.username; // setting username
+      this.email = profile.user.email; // setting e-mail
     });
   }
 
@@ -52,6 +52,8 @@ export class ProfileComponent implements OnInit {
    * deploying new factory version
    */
   createFactory() {
-    this.contractService.deployFactory(this.markupPercentage);
+    this.contractService.deployFactory(this.markupPercentage).then(factoryAddress => {
+      this.contractService.setFactoryAddress(factoryAddress);
+    });
   }
 }

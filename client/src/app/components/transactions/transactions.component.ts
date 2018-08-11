@@ -35,6 +35,7 @@ export class TransactionsComponent implements OnInit {
     this.optionFactoryId = 0;
 
     contractService.getAccount().then(account => {
+      if (this.contractService.optionFactoryAddresses[this.optionFactoryId]) { // does the selected option factory exist?
       contractService.checkFactoryDeployment(this.optionFactoryId).then(result => {
         contractService
           .getContractBalance(this.optionFactoryId)
@@ -60,6 +61,7 @@ export class TransactionsComponent implements OnInit {
             }
           });
       }); // deployment check closing brace
+    } // option factory existence check closing brace
     }); // get account closing brace
   }
 
