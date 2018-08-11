@@ -11,6 +11,8 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./institutions.component.css']
 })
 export class InstitutionsComponent implements OnInit {
+  private optionFactoryId: number;
+
   account: any;
   averagePrice: any;
   optionPremium: any;
@@ -40,6 +42,8 @@ export class InstitutionsComponent implements OnInit {
     private listingService: ListingService,
     public contractService: ContractsService
   ) {
+    this.optionFactoryId = 0;
+
     // setting default symbol to ETH
     this.symbol = 'ETH';
 
@@ -134,12 +138,12 @@ export class InstitutionsComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let __this = this;
 
-    this.contractService.getOptionPremium(this.exercisePrice);
+    this.contractService.getOptionPremium(this.optionFactoryId, this.exercisePrice);
 
     // Listening for the OptionPremium event and printing the result to the console
     // Using `filter` to only trigger this code, when _id equals the current option id
     // tslint:disable-next-line:prefer-const
-    const optionPremiumEvent = this.contractService.optionFactory.OptionPremium(
+    const optionPremiumEvent = this.contractService.optionFactories[this.optionFactoryId].OptionPremium(
       function (error, optionPremiumInfo) {
         if (error) {
           return;
@@ -158,6 +162,7 @@ export class InstitutionsComponent implements OnInit {
   buyOption(): void {
     // converting time to unix timestamp
     this.contractService.buyOption(
+      this.optionFactoryId,
       this.symbol,
       this.exercisePrice,
       (this.expirationDate.value.getTime() / 1000),
@@ -167,7 +172,7 @@ export class InstitutionsComponent implements OnInit {
     // Listening for the NewOption event and printing the result to the console
     // Using `filter` to only trigger this code, when _buyer equals the current user's account
     // tslint:disable-next-line:prefer-const
-    let newOptionEvent = this.contractService.optionFactory.NewOption(
+    let newOptionEvent = this.contractService.optionFactories[this.optionFactoryId].NewOption(
       { filter: { _buyer: this.contractService.account } },
       function (error, newOption) {
         if (error) {

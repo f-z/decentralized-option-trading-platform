@@ -8,21 +8,27 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  private optionFactoryId: number;
+
   username = '';
   email = '';
 
   accountAddress = '';
   factoryAddress = '';
 
+  markupPercentage: number;
+
   constructor(
     private authService: AuthService,
     public contractService: ContractsService
   ) {
+    this.optionFactoryId = 0;
+
     contractService.getAccount().then(account => {
       this.accountAddress = account;
 
       // checking for factory deployment
-      contractService.checkFactoryDeployment().then(address => {
+      contractService.checkFactoryDeployment(this.optionFactoryId).then(address => {
         this.factoryAddress = address;
       });
 
@@ -46,6 +52,6 @@ export class ProfileComponent implements OnInit {
    * deploying new factory version
    */
   createFactory() {
-    this.contractService.deployFactory(20);
+    this.contractService.deployFactory(this.markupPercentage);
   }
 }

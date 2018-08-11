@@ -13,13 +13,13 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0x2aec3cce44b3b2544ab3b229077b8699e1d077fd';
+  public registryAddress = '0x5c06402b14a7a1c0c3b5a68d35389f5b86c7955a';
 
-  optionFactory: any;
+  optionFactories = [];
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
   private optionFactoryContract: any;
-  public optionFactoryAddress = '0xf90de4e0ca7b40ba235bf56b5a6da272a8d6c9fc';
+  public optionFactoryAddresses = [];
 
   oracles = [];
   private oracleData = require('../../assets/oracleData.json');
@@ -45,9 +45,12 @@ export class ContractsService {
       this.optionFactoryContract = this.web3.eth.contract(
         this.optionFactoryABI
       );
-      this.optionFactory = this.optionFactoryContract.at(
-        this.optionFactoryAddress
-      );
+
+      for (let i = 0; i < this.optionFactoryAddresses.length; i++) {
+        this.optionFactories.push(this.optionFactoryContract.at(
+          this.optionFactoryAddresses[i])
+        );
+      }
 
       this.oracleContract = this.web3.eth.contract(
         this.oracleABI
@@ -181,14 +184,16 @@ export class ContractsService {
     }) as Promise<any>;
   }
 
-  async checkFactoryDeployment(): Promise<any> {
+  async checkFactoryDeployment(id: number): Promise<any> {
     // tslint:disable-next-line:prefer-const
     let __this = this;
 
     // checking and deploying contract
     return new Promise((resolve, reject) => {
-      if (__this.optionFactoryAddress !== '' && __this.optionFactoryAddress !== undefined && __this.optionFactoryAddress !== null) {
-        __this.web3.eth.getCode(__this.optionFactoryAddress, function (error, result) {
+      const optionFactory = __this.optionFactoryAddresses[id];
+
+      if (optionFactory !== '' && optionFactory !== undefined && optionFactory !== null) {
+        __this.web3.eth.getCode(__this.optionFactoryAddresses[id], function (error, result) {
           if (!error) {
             // checking if provided address corresponds to a contract or just account
             if (
@@ -201,7 +206,7 @@ export class ContractsService {
               });
             } else {
               console.log('Option factory smart contract already deployed');
-              resolve(__this.optionFactoryAddress);
+              resolve(__this.optionFactoryAddresses[id]);
             }
           } else {
             alert(error);
@@ -216,7 +221,7 @@ export class ContractsService {
 
   async deployFactory(markupPercentage: number): Promise<string> {
     console.log('Deploying factory smart contract...');
-    this.optionFactory = (await new Promise((resolve, reject) => {
+    const optionFactory = (await new Promise((resolve, reject) => {
       this.optionFactoryContract.new(markupPercentage,
         {
           from: this.web3.eth.accounts[0],
@@ -234,8 +239,9 @@ export class ContractsService {
       );
     })) as any;
 
-    this.optionFactoryAddress = this.optionFactory.address;
-    return Promise.resolve(this.optionFactoryAddress);
+    this.optionFactories.push(optionFactory);
+    this.optionFactoryAddresses.push(optionFactory.address);
+    return Promise.resolve(optionFactory.address);
   }
 
   async checkOracleDeployment(oracleAddress: string): Promise<any> {
@@ -314,9 +320,9 @@ export class ContractsService {
     return Promise.resolve(this.account);
   }
 
-  async getOptionCount(): Promise<number> {
+  async getOptionCount(id: number): Promise<number> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.getOptionCount.call(this.account, function (
+      this.optionFactories[id].getOptionCount.call(this.account, function (
         error,
         result
       ) {
@@ -330,10 +336,10 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  async getContractBalance(): Promise<number> {
+  async getContractBalance(id: number): Promise<number> {
     return new Promise((resolve, reject) => {
       const web3 = this.web3;
-      this.optionFactory.getBalance.call(function (error, result) {
+      this.optionFactories[id].getBalance.call(function (error, result) {
         if (error) {
           alert(error);
           return;
@@ -344,12 +350,12 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  async deposit(amount: number): Promise<string> {
+  async deposit(id: number, amount: number): Promise<string> {
     // letting the user know that the transaction has been sent
     console.log('Sending your deposit; this may take a while...');
     // sending the transaction to our contract
     return new Promise((resolve, reject) => {
-      this.optionFactory.deposit(
+      this.optionFactories[id].deposit(
         {
           from: this.web3.eth.accounts[0],
           gas: 4000000,
@@ -370,13 +376,13 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
-  async setMinimumDepositAmount(minimumAmount: number) {
+  async setMinimumDepositAmount(id: number, minimumAmount: number) {
     // letting the user know that the transaction has been sent
     console.log('Setting minimum deposit amount...');
     // sending the transaction to our contract
     // value in Gwei, standard current value from https://www.ethgasstation.info/
     return new Promise((resolve, reject) => {
-      this.optionFactory.setMinimumDepositValue.sendTransaction(
+      this.optionFactories[id].setMinimumDepositValue.sendTransaction(
         minimumAmount,
         {
           from: this.web3.eth.accounts[0],
@@ -398,6 +404,7 @@ export class ContractsService {
   }
 
   async buyOption(
+    id: number,
     asset: string,
     exercisePrice: number,
     expirationDate: number,
@@ -407,7 +414,7 @@ export class ContractsService {
     console.log('Buying the option contract; this may take a while...');
     // sending the transaction to our contract
     return new Promise((resolve, reject) => {
-      this.optionFactory.buyOption.sendTransaction(
+      this.optionFactories[id].buyOption.sendTransaction(
         asset,
         exercisePrice,
         expirationDate,
@@ -431,9 +438,9 @@ export class ContractsService {
   }
 
   // exercising the option, if it is past its maturity date
-  async exerciseOption(id: number): Promise<string> {
+  async exerciseOption(id: number, option: number): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.exerciseOption(id, function (error, hash) {
+      this.optionFactories[id].exerciseOption(option, function (error, hash) {
         if (error) {
           alert(error);
           return;
@@ -445,9 +452,9 @@ export class ContractsService {
   }
 
   // retrieving all options of the current user account
-  async getOptionsByBuyer(account: string): Promise<any> {
+  async getOptionsByBuyer(id: number, account: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.getOptionsByBuyer(account, function (error, array) {
+      this.optionFactories[id].getOptionsByBuyer(account, function (error, array) {
         if (error) {
           alert(error);
           return;
@@ -462,23 +469,23 @@ export class ContractsService {
     }) as Promise<Array<number>>;
   }
 
-  async getOption(id: number): Promise<any> {
+  async getOption(id: number, option: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.options(id, function (error, option) {
+      this.optionFactories[id].options(option, function (error, optionInfo) {
         if (error) {
           alert(error);
           return;
         } else {
-          resolve(option);
+          resolve(optionInfo);
         }
       });
     }) as Promise<any>;
   }
 
-  // retrieving the calculated premium for a specific option
-  async getOptionPremium(exercisePrice: number): Promise<any> {
+  // retrieving the calculated premium for a specific option from a specific factory
+  async getOptionPremium(id: number, exercisePrice: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactory.calculateOptionPremium.sendTransaction(
+      this.optionFactories[id].calculateOptionPremium.sendTransaction(
         exercisePrice,
         {
           from: this.web3.eth.accounts[0],

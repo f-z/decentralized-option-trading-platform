@@ -9,6 +9,7 @@ import { Option } from '../../services/option.service';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
+  private optionFactoryId: number;
 
   private balance: number;
   private depositAmount: number;
@@ -31,19 +32,21 @@ export class TransactionsComponent implements OnInit {
     public authService: AuthService,
     public contractService: ContractsService
   ) {
+    this.optionFactoryId = 0;
+
     contractService.getAccount().then(account => {
-      contractService.checkFactoryDeployment().then(result => {
+      contractService.checkFactoryDeployment(this.optionFactoryId).then(result => {
         contractService
-          .getContractBalance()
+          .getContractBalance(this.optionFactoryId)
           .then(balance => (this.balance = balance));
-        contractService.getOptionCount().then(count => (this.count = count));
+        contractService.getOptionCount(this.optionFactoryId).then(count => (this.count = count));
 
         contractService
-          .getOptionsByBuyer(contractService.account)
+          .getOptionsByBuyer(this.optionFactoryId, contractService.account)
           .then(optionIDs => {
             for (let i = 0; i < optionIDs.length; i++) {
               // retrieving a specific option via its id
-              contractService.getOption(i).then(optionInfo => {
+              contractService.getOption(0, i).then(optionInfo => {
                 const option: Option = {
                   id: i,
                   asset: optionInfo[0],
@@ -66,7 +69,7 @@ export class TransactionsComponent implements OnInit {
   deposit(amount: number): void {
     // 1 ether = 1000000000000000000 wei
     this.contractService
-      .deposit(this.contractService.web3.toWei(amount, 'ether'))
+      .deposit(0, this.contractService.web3.toWei(amount, 'ether'))
       .then(hash => {
         // could display button to check if transaction has been mined
       });
@@ -86,9 +89,9 @@ export class TransactionsComponent implements OnInit {
       // tslint:disable-next-line:prefer-const
       let __this = this;
 
-      this.contractService.exerciseOption(this.optionToExercise).then(transactionHash => {
+      this.contractService.exerciseOption(this.optionFactoryId, this.optionToExercise).then(transactionHash => {
         // tslint:disable-next-line:prefer-const
-        let exerciseEvent = this.contractService.optionFactory.OptionExercise(function (
+        let exerciseEvent = this.contractService.optionFactories[this.optionFactoryId].OptionExercise(function (
           error,
           exercise
         ) {
