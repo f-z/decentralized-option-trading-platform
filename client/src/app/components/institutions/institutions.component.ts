@@ -67,14 +67,16 @@ export class InstitutionsComponent implements OnInit {
         // deploying new registry version by force
         // __this.contractService.deployRegistry();
 
-        // getting all institution addresses
-        // need to fix the size... get it from contract
+        // getting the number of institutions registered and then all institution addresses
         __this.contractService.getCountOfInstitutions().then(count => {
           for (let i = 0; i < count; i++) {
-            __this.contractService.registry.addressLUT(i, function(
+            __this.contractService.registry.addressLUT(i, function (
               error,
               address
             ) {
+              if (error) {
+                return;
+              }
               __this.contractService
                 .getInstitutionByAddress(address)
                 .then(institution => {
@@ -124,7 +126,7 @@ export class InstitutionsComponent implements OnInit {
         gas: 4000000,
         value: this.contractService.web3.toWei(0.01, 'ether')
       },
-      function(error, transactionHash) {
+      function (error, transactionHash) {
         // getting the transaction hash as callback from the function
         if (error) {
           alert(error);
@@ -142,7 +144,7 @@ export class InstitutionsComponent implements OnInit {
     // Event that signifies that the registry has received the price from the oracle
     // tslint:disable-next-line:prefer-const
     let registryPriceEvent = this.contractService.registry.AverageOraclePrice(
-      function(error, priceInfo) {
+      function (error, priceInfo) {
         if (error) {
           return;
         }
@@ -174,7 +176,7 @@ export class InstitutionsComponent implements OnInit {
       // tslint:disable-next-line:prefer-const
       const optionPremiumEvent = __this.contractService.optionFactories[
         i
-      ].OptionPremium(function(error, optionPremiumInfo) {
+      ].OptionPremium(function (error, optionPremiumInfo) {
         if (error) {
           return;
         }
@@ -189,16 +191,26 @@ export class InstitutionsComponent implements OnInit {
   }
 
   buyOption(): void {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+
+    for (let i = 0; i < __this.institutions.length; i++) {
+      // comparing option premiums to find the minimum
+      if (__this.institutions[i][3] < __this.institutions[__this.optionFactoryId[3]]) {
+        __this.optionFactoryId = i;
+      }
+    }
+
     // converting time to unix timestamp
-    this.contractService.buyOption(
-      this.optionFactoryId,
-      this.symbol,
-      this.exercisePrice,
-      this.expirationDate.value.getTime() / 1000,
+    __this.contractService.buyOption(
+      __this.optionFactoryId,
+      __this.symbol,
+      __this.exercisePrice,
+      __this.expirationDate.value.getTime() / 1000,
       // sending a little over the actual price to ensure it goes through
-      this.contractService.web3.toWei(
-        (this.institutions[0].optionPremium * 1.05) /
-          Math.floor(this.averagePrice)
+      __this.contractService.web3.toWei(
+        (__this.institutions[__this.optionFactoryId].optionPremium * 1.05) /
+        Math.floor(__this.averagePrice)
       )
     );
 
@@ -207,7 +219,7 @@ export class InstitutionsComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let newOptionEvent = this.contractService.optionFactories[
       this.optionFactoryId
-    ].NewOption({ filter: { _buyer: this.contractService.account } }, function(
+    ].NewOption({ filter: { _buyer: this.contractService.account } }, function (
       error,
       newOption
     ) {
@@ -220,8 +232,8 @@ export class InstitutionsComponent implements OnInit {
       // converting wei to ether
       console.log(
         'Balance left: ' +
-          newOption.args._balanceLeft / 1000000000000000000 +
-          ' ether'
+        newOption.args._balanceLeft / 1000000000000000000 +
+        ' ether'
       );
     });
   }

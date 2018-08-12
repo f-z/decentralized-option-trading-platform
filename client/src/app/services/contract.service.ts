@@ -13,7 +13,7 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0x1b6fe1e976e8367dfe38a6c854137a9823a293da';
+  public registryAddress = '0xd7303fafe84917a550834ea01e43db473a5e71c9';
 
   public optionFactories = [];
   private optionFactoryData = require('../../assets/factoryData.json');

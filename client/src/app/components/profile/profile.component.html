@@ -8,20 +8,24 @@
   <br>
   <br> Network address: {{ accountAddress }}
   <br>
-  <br> Factory address: {{ factoryAddress }}
-
   <br>
-  <br>
+  <span *ngIf="isInstitution && (factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000')">Factory address: {{ factoryAddress }}</span>
 
-  <mat-form-field *ngIf="factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000'" class="input-field">
-    <input matInput [(ngModel)]="markupPercentage" type="number" name="markupPercentage" placeholder="enter markup % to charge"
-      class="markupPercentage" (keyup.enter)="createFactory();" />
-  </mat-form-field>
+  <div *ngIf="isInstitution && (factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000')">
 
-  <br>
-  <br>
+    <br>
+    <br>
 
-  <!-- Create factory button -->
-  <button *ngIf="factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000'" mat-raised-button class="button" name="button" color="primary" type="submit" (click)="createFactory();">Create</button>
+    <mat-form-field class="input-field">
+      <input matInput [(ngModel)]="markupPercentage" type="number" name="markupPercentage" placeholder="enter markup % to charge"
+        class="markupPercentage" (keyup.enter)="createFactory();" />
+    </mat-form-field>
+
+    <br>
+    <br>
+
+    <!-- Create factory button -->
+    <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="createFactory();">Create</button>
+  </div>
 
 </div>

@@ -13,6 +13,8 @@ export class ProfileComponent implements OnInit {
   username = '';
   email = '';
 
+  isInstitution: boolean;
+
   accountAddress = '';
   factoryAddress = '';
 
@@ -24,19 +26,30 @@ export class ProfileComponent implements OnInit {
   ) {
     this.optionFactoryId = 0;
 
+    this.isInstitution = true;
+
     contractService.getAccount().then(account => {
       this.accountAddress = account;
 
       // checking for factory deployment
-      contractService.checkFactoryDeployment(this.optionFactoryId).then(address => {
-        this.factoryAddress = address;
-      });
+      contractService
+        .checkFactoryDeployment(this.optionFactoryId)
+        .then(address => {
+          this.factoryAddress = address;
+        });
 
-      contractService.getInstitutionByAddress(this.accountAddress).then(institution => {
-        this.username = institution[0];
-        this.accountAddress = institution[1];
-        this.factoryAddress = institution[2];
-      });
+      contractService
+        .getInstitutionByAddress(this.accountAddress)
+        .then(institution => {
+          // if the account is not an institution
+          if (institution[0] === '') {
+            this.isInstitution = false;
+          } else {
+            this.username = institution[0];
+            this.accountAddress = institution[1];
+            this.factoryAddress = institution[2];
+          }
+        });
     });
   }
 
@@ -52,8 +65,10 @@ export class ProfileComponent implements OnInit {
    * deploying new factory version
    */
   createFactory() {
-    this.contractService.deployFactory(this.markupPercentage).then(factoryAddress => {
-      this.contractService.setFactoryAddress(factoryAddress);
-    });
+    this.contractService
+      .deployFactory(this.markupPercentage)
+      .then(factoryAddress => {
+        this.contractService.setFactoryAddress(factoryAddress);
+      });
   }
 }
