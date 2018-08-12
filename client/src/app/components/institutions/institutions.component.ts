@@ -15,7 +15,8 @@ export class InstitutionsComponent implements OnInit {
 
   account: any;
   averagePrice: any;
-  optionPremium: any;
+
+  institutions = [];
 
   symbol: string;
   exercisePrice: number;
@@ -42,31 +43,55 @@ export class InstitutionsComponent implements OnInit {
     private listingService: ListingService,
     public contractService: ContractsService
   ) {
-    this.optionFactoryId = 0;
+    const __this = this;
+
+    __this.optionFactoryId = 0;
 
     // setting default symbol to ETH
-    this.symbol = 'ETH';
+    __this.symbol = 'ETH';
 
     // setting default exercise price to 450
-    this.exercisePrice = 450;
+    __this.exercisePrice = 450;
 
     // setting default date as today
-    this.expirationDate = new FormControl(new Date());
+    __this.expirationDate = new FormControl(new Date());
 
-    this.createNewListingForm(); // creating new listing form on start up
-    this.createCommentForm(); // creating form for posting comments on a listing post
+    __this.createNewListingForm(); // creating new listing form on start up
+    __this.createCommentForm(); // creating form for posting comments on a listing post
 
-    this.contractService.getAccount().then(account => {
-      this.account = account;
+    __this.contractService.getAccount().then(account => {
+      __this.account = account;
 
       // checking for registry deployment
-      this.contractService.checkRegistryDeployment().then(result => {
+      __this.contractService.checkRegistryDeployment().then(result => {
         // deploying new registry version by force
-        // this.contractService.deployRegistry();
+        // __this.contractService.deployRegistry();
 
-        for (let i = 0; i < 1; i++) {
-          // console.log(this.contractService.registry.institutions(this.contractService.registry.addressLUT(i)));
-        }
+        // getting all institution addresses
+        // need to fix the size... get it from contract
+        __this.contractService.getCountOfInstitutions().then(count => {
+          for (let i = 0; i < count; i++) {
+            __this.contractService.registry.addressLUT(i, function(
+              error,
+              address
+            ) {
+              __this.contractService
+                .getInstitutionByAddress(address)
+                .then(institution => {
+                  institution.push('...'); // default value for premium, before it has been calculated
+                  __this.institutions.push(institution);
+                  __this.contractService.optionFactoryAddresses.push(
+                    institution[2]
+                  );
+                  __this.contractService.optionFactories.push(
+                    __this.contractService.optionFactoryContract.at(
+                      __this.contractService.optionFactoryAddresses[i]
+                    )
+                  );
+                });
+            });
+          }
+        });
       });
     });
   }
@@ -84,7 +109,6 @@ export class InstitutionsComponent implements OnInit {
     // (current block timestamp is counted in seconds from the beginning of the current epoch, like Unix time)
     // this.buyOption('BTC', 5600, Math.floor(new Date().getTime() / 1000) + 300, this.contractService.web3.toWei('0.1', 'ether'));
     this.averagePrice = this.loadAveragePrice();
-    this.optionPremium = this.loadOptionPremium();
   }
 
   getAveragePrice(): void {
@@ -100,7 +124,7 @@ export class InstitutionsComponent implements OnInit {
         gas: 4000000,
         value: this.contractService.web3.toWei(0.01, 'ether')
       },
-      function (error, transactionHash) {
+      function(error, transactionHash) {
         // getting the transaction hash as callback from the function
         if (error) {
           alert(error);
@@ -118,11 +142,13 @@ export class InstitutionsComponent implements OnInit {
     // Event that signifies that the registry has received the price from the oracle
     // tslint:disable-next-line:prefer-const
     let registryPriceEvent = this.contractService.registry.AverageOraclePrice(
-      function (error, priceInfo) {
+      function(error, priceInfo) {
         if (error) {
           return;
         }
-        console.log('The registry has successfully received the prices from the oracles and calculated the weighted average');
+        console.log(
+          'The registry has successfully received the prices from the oracles and calculated the weighted average'
+        );
         __this.setAveragePrice(priceInfo.args.price);
         console.log('Latest price average: ' + __this.averagePrice);
       }
@@ -134,29 +160,32 @@ export class InstitutionsComponent implements OnInit {
     this.saveAveragePrice();
   }
 
-  getOptionPremium(): void {
+  getOptionPremiums(): void {
     // tslint:disable-next-line:prefer-const
     let __this = this;
 
-    this.contractService.getOptionPremium(this.optionFactoryId, this.exercisePrice);
+    console.log('Number of institutions selling: ' + __this.institutions.length);
 
-    // Listening for the OptionPremium event and printing the result to the console
-    // Using `filter` to only trigger this code, when _id equals the current option id
-    // tslint:disable-next-line:prefer-const
-    const optionPremiumEvent = this.contractService.optionFactories[this.optionFactoryId].OptionPremium(
-      function (error, optionPremiumInfo) {
+    for (let i = 0; i < __this.institutions.length; i++) {
+      __this.contractService.getOptionPremium(i, __this.exercisePrice);
+
+      // Listening for the OptionPremium event and printing the result to the console
+      // Could also use `filter` to only trigger this code, when _id equals the current option id
+      // tslint:disable-next-line:prefer-const
+      const optionPremiumEvent = __this.contractService.optionFactories[
+        i
+      ].OptionPremium(function(error, optionPremiumInfo) {
         if (error) {
           return;
         }
-        __this.setOptionPremium(optionPremiumInfo.args.premium);
-        console.log('Option premium: ' + __this.optionPremium);
-      }
-    );
+        __this.setOptionPremium(i, optionPremiumInfo.args.premium);
+        console.log('Option premium: ' + __this.institutions[i][3]);
+      });
+    }
   }
 
-  setOptionPremium(premium: number) {
-    this.optionPremium = premium;
-    this.saveOptionPremium();
+  setOptionPremium(id: number, premium: number) {
+    this.institutions[id][3] = premium;
   }
 
   buyOption(): void {
@@ -165,30 +194,36 @@ export class InstitutionsComponent implements OnInit {
       this.optionFactoryId,
       this.symbol,
       this.exercisePrice,
-      (this.expirationDate.value.getTime() / 1000),
+      this.expirationDate.value.getTime() / 1000,
       // sending a little over the actual price to ensure it goes through
-      this.contractService.web3.toWei(this.optionPremium * 1.05 / Math.floor(this.averagePrice)));
+      this.contractService.web3.toWei(
+        (this.institutions[0].optionPremium * 1.05) /
+          Math.floor(this.averagePrice)
+      )
+    );
 
     // Listening for the NewOption event and printing the result to the console
     // Using `filter` to only trigger this code, when _buyer equals the current user's account
     // tslint:disable-next-line:prefer-const
-    let newOptionEvent = this.contractService.optionFactories[this.optionFactoryId].NewOption(
-      { filter: { _buyer: this.contractService.account } },
-      function (error, newOption) {
-        if (error) {
-          return;
-        }
-        console.log('Option bought successfully');
-        console.log('Option buyer: ' + newOption.args._buyer);
-        console.log('New option id: ' + newOption.args._id.c[0]);
-        // converting wei to ether
-        console.log(
-          'Balance left: ' +
+    let newOptionEvent = this.contractService.optionFactories[
+      this.optionFactoryId
+    ].NewOption({ filter: { _buyer: this.contractService.account } }, function(
+      error,
+      newOption
+    ) {
+      if (error) {
+        return;
+      }
+      console.log('Option bought successfully');
+      console.log('Option buyer: ' + newOption.args._buyer);
+      console.log('New option id: ' + newOption.args._id.c[0]);
+      // converting wei to ether
+      console.log(
+        'Balance left: ' +
           newOption.args._balanceLeft / 1000000000000000000 +
           ' ether'
-        );
-      }
-    );
+      );
+    });
   }
 
   private saveAveragePrice(): void {
@@ -205,9 +240,11 @@ export class InstitutionsComponent implements OnInit {
   }
 
   private saveOptionPremium(): void {
-    localStorage.setItem('optionPremium', JSON.stringify(this.optionPremium));
+    localStorage.setItem(
+      'optionPremium',
+      JSON.stringify(this.institutions[0].optionPremium)
+    );
   }
-
 
   private loadOptionPremium(): any {
     let premium = JSON.parse(localStorage.getItem('optionPremium'));

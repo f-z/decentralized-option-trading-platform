@@ -12,21 +12,35 @@
 
   <br />
 
-  <span>Average Price ($) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Option Premium ($)</span>
+  <span class="section-header">Average Price ($)</span>
 
   <br>
-  <br> {{ averagePrice }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ optionPremium }}
+  <br> {{ averagePrice }}
   <br>
   <br>
 
   <!-- Get average price button -->
   <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="getAveragePrice();" *ngIf="account && !newPost">Get average price</button>
-  <!-- Get option premium button -->
-  <div class="divider"></div>
-  <button mat-raised-button class="button" name="button" color="primary" *ngIf="account && !newPost" (click)="getOptionPremium();">Get option premium</button>
-
 
   <br>
+  <br>
+  <br>
+
+  <span class="section-header">Option Premium ($)</span>
+  <br>
+  <br>
+  <div *ngFor="let institution of institutions">
+    {{ institution[0] }}
+    <br>
+    <br> {{ institution[3] }}
+    <br>
+    <br>
+  </div>
+
+  <!-- Get option premium button -->
+  <div class="divider"></div>
+  <button mat-raised-button class="button" name="button" color="primary" *ngIf="account && !newPost" (click)="getOptionPremiums();">Get option premiums</button>
+
   <br>
   <br>
   <br>

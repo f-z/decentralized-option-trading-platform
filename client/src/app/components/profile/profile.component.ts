@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
         this.factoryAddress = address;
       });
 
-      contractService.getFactoryByAddress(this.accountAddress).then(institution => {
+      contractService.getInstitutionByAddress(this.accountAddress).then(institution => {
         this.username = institution[0];
         this.accountAddress = institution[1];
         this.factoryAddress = institution[2];

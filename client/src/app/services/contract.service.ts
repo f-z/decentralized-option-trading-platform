@@ -13,18 +13,18 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0x5c06402b14a7a1c0c3b5a68d35389f5b86c7955a';
+  public registryAddress = '0x1b6fe1e976e8367dfe38a6c854137a9823a293da';
 
-  optionFactories = [];
+  public optionFactories = [];
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
-  private optionFactoryContract: any;
-  public optionFactoryAddresses = ['0xe487736c15d520191652727cbbd8eb8475f36f0a'];
+  public optionFactoryContract: any;
+  public optionFactoryAddresses = [];
 
-  oracles = [];
+  public oracles = [];
   private oracleData = require('../../assets/oracleData.json');
   private oracleABI = require('../../assets/oracleABI.json');
-  private oracleContract: any;
+  public oracleContract: any;
   // Coinbase , CoinMarketCap, CryptoCompare oracle addresses
   public oracleAddresses = ['0x747f28e207f73aacc8eddc597d84cc6028f6b0e5',
     '0xb8fddce43f4a3ce7450595220230491c3594ccde',
@@ -170,8 +170,24 @@ export class ContractsService {
     return Promise.resolve(this.registryAddress);
   }
 
+  /**
+   * Retrieving the number of institutions registered with the master registry smart contract
+   */
+  async getCountOfInstitutions(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.registry.size(function (error, count) {
+        if (error) {
+          alert(error);
+          return;
+        } else {
+          resolve(count);
+        }
+      });
+    }) as Promise<number>;
+  }
+
   // retrieving the factory of the current user account
-  async getFactoryByAddress(account: string): Promise<any> {
+  async getInstitutionByAddress(account: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.registry.institutions(account, function (error, institution) {
         if (error) {
