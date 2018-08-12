@@ -1,5 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TransactionsComponent } from './components/transactions/transactions.component';
 import { RatesComponent } from './components/rates/rates.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -7,8 +7,6 @@ import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { InstitutionsComponent } from './components/institutions/institutions.component';
-import { EditInstitutionComponent } from './components/institutions/edit-institution/edit-institution.component';
-import { DeleteInstitutionComponent } from './components/institutions/delete-institution/delete-institution.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 
@@ -49,16 +47,6 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
-    path: 'edit-institution/:id',
-    component: EditInstitutionComponent, // edit institution route
-    canActivate: [AuthGuard] // user must be logged in to view this route
-  },
-  {
-    path: 'delete-institution/:id',
-    component: DeleteInstitutionComponent, // delete institution route
-    canActivate: [AuthGuard] // user must be logged in to view this route
-  },
-  {
     path: 'user/:username',
     component: PublicProfileComponent, // public profile route
     canActivate: [AuthGuard] // user must be logged in to view this route
@@ -71,6 +59,7 @@ const appRoutes: Routes = [
   imports: [RouterModule.forRoot(appRoutes)],
   providers: [],
   bootstrap: [],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppRoutingModule {}

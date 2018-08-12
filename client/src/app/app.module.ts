@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -23,8 +23,6 @@ import {
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 import { InstitutionsComponent } from './components/institutions/institutions.component';
-import { EditInstitutionComponent } from './components/institutions/edit-institution/edit-institution.component';
-import { DeleteInstitutionComponent } from './components/institutions/delete-institution/delete-institution.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 import {
@@ -39,7 +37,9 @@ import {
   MatNativeDateModule,
   MatSlideToggleModule
 } from '@angular/material';
+
 import { ContractsService } from './services/contract.service';
+import { APP_BASE_HREF } from '../../node_modules/@angular/common';
 
 @NgModule({
   declarations: [
@@ -51,8 +51,6 @@ import { ContractsService } from './services/contract.service';
     LoginComponent,
     ProfileComponent,
     InstitutionsComponent,
-    EditInstitutionComponent,
-    DeleteInstitutionComponent,
     PublicProfileComponent
   ],
   imports: [
@@ -82,8 +80,10 @@ import { ContractsService } from './services/contract.service';
     ListingService,
     PriceApiService,
     FlashMessagesService,
-    ContractsService
+    ContractsService,
+    Http,
+    { provide: APP_BASE_HREF, useValue : '/' }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
