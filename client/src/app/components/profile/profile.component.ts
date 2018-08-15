@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     public contractService: ContractsService
   ) {
-    this.optionFactoryId = 0;
+    this.optionFactoryId = 1;
 
     this.isInstitution = true;
 
@@ -41,6 +41,8 @@ export class ProfileComponent implements OnInit {
       contractService
         .getInstitutionByAddress(this.accountAddress)
         .then(institution => {
+          // logging for demonstration and debugging purposes
+          console.log(institution);
           // if the account is not an institution
           if (institution[0] === '') {
             this.isInstitution = false;

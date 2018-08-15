@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -81,7 +81,6 @@ import { APP_BASE_HREF } from '../../node_modules/@angular/common';
     PriceApiService,
     FlashMessagesService,
     ContractsService,
-    Http,
     { provide: APP_BASE_HREF, useValue : '/' }
   ],
   bootstrap: [AppComponent]

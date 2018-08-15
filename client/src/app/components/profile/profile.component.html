@@ -9,7 +9,7 @@
   <br> Network address: {{ accountAddress }}
   <br>
   <br>
-  <span *ngIf="isInstitution && (factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000')">Factory address: {{ factoryAddress }}</span>
+  <span *ngIf="isInstitution && factoryAddress !== '' && factoryAddress !== '0x0000000000000000000000000000000000000000'">Factory address: {{ factoryAddress }}</span>
 
   <div *ngIf="isInstitution && (factoryAddress === '' || factoryAddress === '0x0000000000000000000000000000000000000000')">
 

@@ -151,15 +151,11 @@ export class InstitutionsComponent implements OnInit {
         console.log(
           'The registry has successfully received the prices from the oracles and calculated the weighted average'
         );
-        __this.setAveragePrice(priceInfo.args.price);
+        __this.averagePrice = priceInfo.args.price;
+        __this.saveAveragePrice();
         console.log('Latest price average: ' + __this.averagePrice);
       }
     );
-  }
-
-  setAveragePrice(price: number) {
-    this.averagePrice = price;
-    this.saveAveragePrice();
   }
 
   getOptionPremiums(): void {
@@ -200,6 +196,8 @@ export class InstitutionsComponent implements OnInit {
         __this.optionFactoryId = i;
       }
     }
+
+    console.log('Cheapest option factory: ' + __this.optionFactoryId);
 
     // converting time to unix timestamp
     __this.contractService.buyOption(
