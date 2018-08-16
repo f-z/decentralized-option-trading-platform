@@ -66,6 +66,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('Option factory connected to: ' + this.optionFactoryId);
   }
 
   deposit(amount: number): void {

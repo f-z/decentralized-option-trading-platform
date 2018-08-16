@@ -192,12 +192,20 @@ export class InstitutionsComponent implements OnInit {
 
     for (let i = 0; i < __this.institutions.length; i++) {
       // comparing option premiums to find the minimum
-      if (__this.institutions[i][3] < __this.institutions[__this.optionFactoryId[3]]) {
+      if (__this.institutions[i][3] < __this.institutions[__this.optionFactoryId][3]) {
         __this.optionFactoryId = i;
       }
     }
 
     console.log('Cheapest option factory: ' + __this.optionFactoryId);
+
+    // calculating amount to send
+    // sending a little over the actual price to ensure it goes through
+    const amount = __this.contractService.web3.toWei(
+      (__this.institutions[__this.optionFactoryId].optionPremium * 1.05) /
+      Math.floor(__this.averagePrice));
+
+    console.log(amount);
 
     // converting time to unix timestamp
     __this.contractService.buyOption(
@@ -205,11 +213,7 @@ export class InstitutionsComponent implements OnInit {
       __this.symbol,
       __this.exercisePrice,
       __this.expirationDate.value.getTime() / 1000,
-      // sending a little over the actual price to ensure it goes through
-      __this.contractService.web3.toWei(
-        (__this.institutions[__this.optionFactoryId].optionPremium * 1.05) /
-        Math.floor(__this.averagePrice)
-      )
+      amount
     );
 
     // Listening for the NewOption event and printing the result to the console
