@@ -54,4 +54,25 @@
   <!-- Exercise button -->
   <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="exerciseOption();">Exercise</button>
 
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <mat-form-field>
+    <mat-select placeholder="Institution" [(value)]="this.contractService.selectedOptionFactoryId">
+      <mat-option *ngFor="let institution of institutions; let i = index" [value]="i">
+        {{ institution[0] }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <br>
+  <br>
+
+  <!-- Switch institution (option factory contract) button -->
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="switchInstitution();">Switch
+    institution
+  </button>
+
 </div>

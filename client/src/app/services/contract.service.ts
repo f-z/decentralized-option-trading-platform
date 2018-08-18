@@ -20,6 +20,7 @@ export class ContractsService {
   private optionFactoryABI = require('../../assets/factoryABI.json');
   public optionFactoryContract: any;
   public optionFactoryAddresses = [];
+  public institutions = [];
 
   public oracles = [];
   private oracleData = require('../../assets/oracleData.json');
@@ -32,31 +33,17 @@ export class ContractsService {
     '0x127c4f72637e18772641c362c5ca10c02ed52556'
   ];
 
+  public selectedOptionFactoryId = 0;
+
   constructor() {
+    // tslint:disable-next-line:prefer-const
+    let __this = this; // for scope reasons
+
     if (typeof window.web3 !== 'undefined') {
       // using Mist/MetaMask's provider
-      this.web3 = new Web3(window.web3.currentProvider);
+      __this.web3 = new Web3(window.web3.currentProvider);
 
-      this.registryContract = this.web3.eth.contract(this.registryABI);
-      this.registry = this.registryContract.at(this.registryAddress);
-
-      this.optionFactoryContract = this.web3.eth.contract(
-        this.optionFactoryABI
-      );
-
-      for (let i = 0; i < this.optionFactoryAddresses.length; i++) {
-        this.optionFactories.push(
-          this.optionFactoryContract.at(this.optionFactoryAddresses[i])
-        );
-      }
-
-      this.oracleContract = this.web3.eth.contract(this.oracleABI);
-
-      for (let i = 0; i < this.oracleAddresses.length; i++) {
-        this.oracles.push(this.oracleContract.at(this.oracleAddresses[i]));
-      }
-
-      this.web3.version.getNetwork((err, netID) => {
+      __this.web3.version.getNetwork((err, netID) => {
         // synchronous way
         switch (netID) {
           case '1':
@@ -77,7 +64,7 @@ export class ContractsService {
         }
       });
       // asynchronous way
-      // if (this.web3.version.network !== '4') {
+      // if (__this.web3.version.network !== '4') {
       // } else {
       //  this.deployFactory();
       // }
@@ -86,6 +73,56 @@ export class ContractsService {
         'Please use a DApp browser like Mist or the MetaMask plugin for Chrome!'
       );
     }
+
+    __this.registryContract = __this.web3.eth.contract(__this.registryABI);
+    __this.registry = __this.registryContract.at(__this.registryAddress);
+
+    __this.oracleContract = __this.web3.eth.contract(__this.oracleABI);
+
+    for (let i = 0; i < __this.oracleAddresses.length; i++) {
+      __this.oracles.push(__this.oracleContract.at(__this.oracleAddresses[i]));
+    }
+
+    __this.optionFactoryContract = __this.web3.eth.contract(
+      __this.optionFactoryABI
+    );
+
+    __this.getAccount().then(account => {
+      __this.account = account;
+
+      // checking for registry deployment
+      __this.checkRegistryDeployment().then(result => {
+        console.log('Registry address: ' + result);
+        // deploying new registry version by force
+        // __this.contractService.deployRegistry();
+
+        // getting the number of institutions registered
+        __this.getCountOfInstitutions().then(count => {
+          for (let i = 0; i < count; i++) {
+            // getting each registered institution's account address
+            __this.registry.addressLUT(i, function(error, address) {
+              if (error) {
+                return;
+              }
+
+              // getting each institution's information from its account address
+              __this.getInstitutionByAddress(address).then(institution => {
+                // saving the institution to the array of institutions
+                __this.institutions.push(institution);
+                // storing a default value for the premium, before it has actually been calculated
+                institution.push('...');
+                // saving the institution's factory address to the option factory addresses array
+                __this.optionFactoryAddresses.push(institution[2]);
+                // storing the factory contract object at the specified address to the array of option factories
+                __this.optionFactories.push(
+                  __this.optionFactoryContract.at(institution[2])
+                );
+              });
+            });
+          }
+        });
+      });
+    });
   }
 
   async register(name: string): Promise<any> {
@@ -115,9 +152,12 @@ export class ContractsService {
   }
 
   async checkRegistryDeployment(): Promise<any> {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+
     // checking and deploying registry contract
     return new Promise((resolve, reject) => {
-      this.web3.eth.getCode(this.registryAddress, function(error, result) {
+      __this.web3.eth.getCode(__this.registryAddress, function(error, result) {
         if (!error) {
           // checking if provided address corresponds to a contract or just account
           if (
@@ -125,12 +165,12 @@ export class ContractsService {
             JSON.stringify(result) === '0x0'
           ) {
             console.log('Registry smart contract not deployed');
-            this.deployRegistry().then(address => {
+            __this.deployRegistry().then(address => {
               resolve(address);
             });
           } else {
             console.log('Registry smart contract already deployed');
-            resolve(this.registryAddress);
+            resolve(__this.registryAddress);
           }
         } else {
           alert(error);
@@ -141,12 +181,15 @@ export class ContractsService {
   }
 
   async deployRegistry(): Promise<string> {
+    // tslint:disable-next-line:prefer-const
+    let __this = this;
+
     console.log('Deploying registry smart contract...');
-    this.registry = (await new Promise((resolve, reject) => {
-      this.registryContract.new(
+    __this.registry = (await new Promise((resolve, reject) => {
+      __this.registryContract.new(
         {
-          from: this.web3.eth.accounts[0],
-          data: this.registryData[0].data,
+          from: __this.web3.eth.accounts[0],
+          data: __this.registryData[0].data,
           gas: 4700000
         },
         function(e, contract) {
@@ -160,8 +203,8 @@ export class ContractsService {
       );
     })) as any;
 
-    this.registryAddress = this.registry.address;
-    return Promise.resolve(this.registryAddress);
+    __this.registryAddress = __this.registry.address;
+    return Promise.resolve(__this.registryAddress);
   }
 
   /**
@@ -222,7 +265,7 @@ export class ContractsService {
                 resolve(address);
               });
             } else {
-              console.log('Option factory smart contract already deployed');
+              console.log('Option factory smart contract at address ' + __this.optionFactoryAddresses[id] + ' already deployed');
               resolve(__this.optionFactoryAddresses[id]);
             }
           } else {
@@ -303,7 +346,7 @@ export class ContractsService {
               resolve(address);
             });
           } else {
-            console.log('Oracle smart contract already deployed');
+            console.log('Oracle smart contract at address ' + oracleAddress + ' already deployed');
             resolve(oracleAddress);
           }
         } else {

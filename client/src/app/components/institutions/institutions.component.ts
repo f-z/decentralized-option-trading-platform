@@ -11,8 +11,6 @@ import { ContractsService } from '../../services/contract.service';
   styleUrls: ['./institutions.component.css']
 })
 export class InstitutionsComponent implements OnInit {
-  private optionFactoryId: number;
-
   account: any;
   averagePrice: any;
 
@@ -43,66 +41,24 @@ export class InstitutionsComponent implements OnInit {
     private listingService: ListingService,
     public contractService: ContractsService
   ) {
-    const __this = this;
+    this.account = this.contractService.account;
 
-    __this.optionFactoryId = 0;
+    this.institutions = this.contractService.institutions;
+
+    // setting default option factory to be the first one
+    this.contractService.selectedOptionFactoryId = 0;
 
     // setting default symbol to ETH
-    __this.symbol = 'ETH';
+    this.symbol = 'ETH';
 
     // setting default exercise price to 450
-    __this.exercisePrice = 400;
+    this.exercisePrice = 400;
 
     // setting default date as today
-    __this.expirationDate = new FormControl(new Date());
+    this.expirationDate = new FormControl(new Date());
 
-    __this.createNewListingForm(); // creating new listing form on start up
-    __this.createCommentForm(); // creating form for posting comments on a listing post
-
-    __this.contractService.getAccount().then(account => {
-      __this.account = account;
-
-      // checking for registry deployment
-      __this.contractService.checkRegistryDeployment().then(result => {
-        // deploying new registry version by force
-        // __this.contractService.deployRegistry();
-
-        // getting the number of institutions registered
-        __this.contractService.getCountOfInstitutions().then(count => {
-          for (let i = 0; i < count; i++) {
-            // getting each registered institution's account address
-            __this.contractService.registry.addressLUT(i, function(
-              error,
-              address
-            ) {
-              if (error) {
-                return;
-              }
-
-              // getting each institution's information from its account address
-              __this.contractService
-                .getInstitutionByAddress(address)
-                .then(institution => {
-                  // saving the institution to the array of institutions
-                  __this.institutions.push(institution);
-                  // storing a default value for the premium, before it has actually been calculated
-                  institution.push('...');
-                  // saving the institution's factory address to the option factory addresses array
-                  __this.contractService.optionFactoryAddresses.push(
-                    institution[2]
-                  );
-                  // storing the factory contract object at the specified address to the array of option factories
-                  __this.contractService.optionFactories.push(
-                    __this.contractService.optionFactoryContract.at(
-                      institution[2]
-                    )
-                  );
-                });
-            });
-          }
-        });
-      });
-    });
+    this.createNewListingForm(); // creating new listing form on start up
+    this.createCommentForm(); // creating form for posting comments on a listing post
   }
 
   ngOnInit() {
@@ -191,7 +147,7 @@ export class InstitutionsComponent implements OnInit {
             return;
           }
           __this.setOptionPremium(i, optionPremiumInfo.args.premium);
-          console.log('Option premium: ' + __this.institutions[i][3]);
+          console.log('Option premium from factory ' + i + ': ' + __this.institutions[i][3]);
         })
       );
     }
@@ -209,26 +165,28 @@ export class InstitutionsComponent implements OnInit {
       // comparing option premiums to find the minimum
       if (
         __this.institutions[i][3] <
-        __this.institutions[__this.optionFactoryId][3]
+        __this.institutions[__this.contractService.selectedOptionFactoryId][3]
       ) {
-        __this.optionFactoryId = i;
+        // setting the cheapest option factory as the default one
+        __this.contractService.selectedOptionFactoryId = i;
       }
     }
 
-    console.log('Cheapest option factory: ' + __this.optionFactoryId);
+    console.log('Cheapest premium: ' + __this.institutions[__this.contractService.selectedOptionFactoryId][3]);
+    console.log('From option factory: ' + __this.contractService.selectedOptionFactoryId);
 
     // calculating amount to send
     // sending a little over the actual price to ensure it goes through
     const amount = __this.contractService.web3.toWei(
-      (__this.institutions[__this.optionFactoryId].optionPremium * 1.05) /
+      (__this.institutions[__this.contractService.selectedOptionFactoryId][3] * 1.05) /
         Math.floor(__this.averagePrice)
     );
 
-    console.log(amount);
+    console.log('Purchase amount converted from USD to wei: ' + amount);
 
     // converting time to unix timestamp
     __this.contractService.buyOption(
-      __this.optionFactoryId,
+      __this.contractService.selectedOptionFactoryId,
       __this.symbol,
       __this.exercisePrice,
       __this.expirationDate.value.getTime() / 1000,
@@ -238,9 +196,9 @@ export class InstitutionsComponent implements OnInit {
     // Listening for the NewOption event and printing the result to the console
     // Using `filter` to only trigger this code, when _buyer equals the current user's account
     // tslint:disable-next-line:prefer-const
-    let newOptionEvent = this.contractService.optionFactories[
-      this.optionFactoryId
-    ].NewOption({ filter: { _buyer: this.contractService.account } }, function(
+    let newOptionEvent = __this.contractService.optionFactories[
+      __this.contractService.selectedOptionFactoryId
+    ].NewOption({ filter: { _buyer: __this.contractService.account } }, function(
       error,
       newOption
     ) {

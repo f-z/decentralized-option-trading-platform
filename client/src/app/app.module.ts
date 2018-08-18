@@ -27,6 +27,7 @@ import { PublicProfileComponent } from './components/public-profile/public-profi
 
 import {
   MatButtonModule,
+  MatSelectModule,
   MatProgressBarModule,
   MatInputModule,
   MatToolbarModule,
@@ -62,6 +63,7 @@ import { APP_BASE_HREF } from '../../node_modules/@angular/common';
     AppRoutingModule,
     FlashMessagesModule,
     MatButtonModule,
+    MatSelectModule,
     MatProgressBarModule,
     MatInputModule,
     BrowserAnimationsModule,
