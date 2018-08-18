@@ -51,7 +51,7 @@ export class InstitutionsComponent implements OnInit {
     __this.symbol = 'ETH';
 
     // setting default exercise price to 450
-    __this.exercisePrice = 450;
+    __this.exercisePrice = 400;
 
     // setting default date as today
     __this.expirationDate = new FormControl(new Date());
@@ -67,27 +67,34 @@ export class InstitutionsComponent implements OnInit {
         // deploying new registry version by force
         // __this.contractService.deployRegistry();
 
-        // getting the number of institutions registered and then all institution addresses
+        // getting the number of institutions registered
         __this.contractService.getCountOfInstitutions().then(count => {
           for (let i = 0; i < count; i++) {
-            __this.contractService.registry.addressLUT(i, function (
+            // getting each registered institution's account address
+            __this.contractService.registry.addressLUT(i, function(
               error,
               address
             ) {
               if (error) {
                 return;
               }
+
+              // getting each institution's information from its account address
               __this.contractService
                 .getInstitutionByAddress(address)
                 .then(institution => {
-                  institution.push('...'); // default value for premium, before it has been calculated
+                  // saving the institution to the array of institutions
                   __this.institutions.push(institution);
+                  // storing a default value for the premium, before it has actually been calculated
+                  institution.push('...');
+                  // saving the institution's factory address to the option factory addresses array
                   __this.contractService.optionFactoryAddresses.push(
                     institution[2]
                   );
+                  // storing the factory contract object at the specified address to the array of option factories
                   __this.contractService.optionFactories.push(
                     __this.contractService.optionFactoryContract.at(
-                      __this.contractService.optionFactoryAddresses[i]
+                      institution[2]
                     )
                   );
                 });
@@ -126,7 +133,7 @@ export class InstitutionsComponent implements OnInit {
         gas: 4000000,
         value: this.contractService.web3.toWei(0.01, 'ether')
       },
-      function (error, transactionHash) {
+      function(error, transactionHash) {
         // getting the transaction hash as callback from the function
         if (error) {
           alert(error);
@@ -144,7 +151,7 @@ export class InstitutionsComponent implements OnInit {
     // Event that signifies that the registry has received the price from the oracle
     // tslint:disable-next-line:prefer-const
     let registryPriceEvent = this.contractService.registry.AverageOraclePrice(
-      function (error, priceInfo) {
+      function(error, priceInfo) {
         if (error) {
           return;
         }
@@ -162,7 +169,12 @@ export class InstitutionsComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let __this = this;
 
-    console.log('Number of institutions selling: ' + __this.institutions.length);
+    console.log(
+      'Number of institutions selling: ' + __this.institutions.length
+    );
+
+    // tslint:disable-next-line:prefer-const
+    let optionPremiumEvents = [];
 
     for (let i = 0; i < __this.institutions.length; i++) {
       __this.contractService.getOptionPremium(i, __this.exercisePrice);
@@ -170,15 +182,18 @@ export class InstitutionsComponent implements OnInit {
       // Listening for the OptionPremium event and printing the result to the console
       // Could also use `filter` to only trigger this code, when _id equals the current option id
       // tslint:disable-next-line:prefer-const
-      const optionPremiumEvent = __this.contractService.optionFactories[
-        i
-      ].OptionPremium(function (error, optionPremiumInfo) {
-        if (error) {
-          return;
-        }
-        __this.setOptionPremium(i, optionPremiumInfo.args.premium);
-        console.log('Option premium: ' + __this.institutions[i][3]);
-      });
+      optionPremiumEvents.push(
+        __this.contractService.optionFactories[i].OptionPremium(function(
+          error,
+          optionPremiumInfo
+        ) {
+          if (error) {
+            return;
+          }
+          __this.setOptionPremium(i, optionPremiumInfo.args.premium);
+          console.log('Option premium: ' + __this.institutions[i][3]);
+        })
+      );
     }
   }
 
@@ -192,7 +207,10 @@ export class InstitutionsComponent implements OnInit {
 
     for (let i = 0; i < __this.institutions.length; i++) {
       // comparing option premiums to find the minimum
-      if (__this.institutions[i][3] < __this.institutions[__this.optionFactoryId][3]) {
+      if (
+        __this.institutions[i][3] <
+        __this.institutions[__this.optionFactoryId][3]
+      ) {
         __this.optionFactoryId = i;
       }
     }
@@ -203,7 +221,8 @@ export class InstitutionsComponent implements OnInit {
     // sending a little over the actual price to ensure it goes through
     const amount = __this.contractService.web3.toWei(
       (__this.institutions[__this.optionFactoryId].optionPremium * 1.05) /
-      Math.floor(__this.averagePrice));
+        Math.floor(__this.averagePrice)
+    );
 
     console.log(amount);
 
@@ -221,7 +240,7 @@ export class InstitutionsComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let newOptionEvent = this.contractService.optionFactories[
       this.optionFactoryId
-    ].NewOption({ filter: { _buyer: this.contractService.account } }, function (
+    ].NewOption({ filter: { _buyer: this.contractService.account } }, function(
       error,
       newOption
     ) {
@@ -234,8 +253,8 @@ export class InstitutionsComponent implements OnInit {
       // converting wei to ether
       console.log(
         'Balance left: ' +
-        newOption.args._balanceLeft / 1000000000000000000 +
-        ' ether'
+          newOption.args._balanceLeft / 1000000000000000000 +
+          ' ether'
       );
     });
   }

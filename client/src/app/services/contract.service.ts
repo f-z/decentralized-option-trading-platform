@@ -26,40 +26,34 @@ export class ContractsService {
   private oracleABI = require('../../assets/oracleABI.json');
   public oracleContract: any;
   // Coinbase , CoinMarketCap, CryptoCompare oracle addresses
-  public oracleAddresses = ['0x747f28e207f73aacc8eddc597d84cc6028f6b0e5',
+  public oracleAddresses = [
+    '0x747f28e207f73aacc8eddc597d84cc6028f6b0e5',
     '0xb8fddce43f4a3ce7450595220230491c3594ccde',
-    '0x127c4f72637e18772641c362c5ca10c02ed52556'];
+    '0x127c4f72637e18772641c362c5ca10c02ed52556'
+  ];
 
   constructor() {
     if (typeof window.web3 !== 'undefined') {
       // using Mist/MetaMask's provider
       this.web3 = new Web3(window.web3.currentProvider);
 
-      this.registryContract = this.web3.eth.contract(
-        this.registryABI
-      );
-      this.registry = this.registryContract.at(
-        this.registryAddress
-      );
+      this.registryContract = this.web3.eth.contract(this.registryABI);
+      this.registry = this.registryContract.at(this.registryAddress);
 
       this.optionFactoryContract = this.web3.eth.contract(
         this.optionFactoryABI
       );
 
       for (let i = 0; i < this.optionFactoryAddresses.length; i++) {
-        this.optionFactories.push(this.optionFactoryContract.at(
-          this.optionFactoryAddresses[i])
+        this.optionFactories.push(
+          this.optionFactoryContract.at(this.optionFactoryAddresses[i])
         );
       }
 
-      this.oracleContract = this.web3.eth.contract(
-        this.oracleABI
-      );
+      this.oracleContract = this.web3.eth.contract(this.oracleABI);
 
       for (let i = 0; i < this.oracleAddresses.length; i++) {
-        this.oracles.push(this.oracleContract.at(
-          this.oracleAddresses[i])
-        );
+        this.oracles.push(this.oracleContract.at(this.oracleAddresses[i]));
       }
 
       this.web3.version.getNetwork((err, netID) => {
@@ -106,7 +100,7 @@ export class ContractsService {
           gas: 4000000,
           value: this.web3.toWei(0.01, 'ether')
         },
-        function (error, transactionHash) {
+        function(error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -123,7 +117,7 @@ export class ContractsService {
   async checkRegistryDeployment(): Promise<any> {
     // checking and deploying registry contract
     return new Promise((resolve, reject) => {
-      this.web3.eth.getCode(this.registryAddress, function (error, result) {
+      this.web3.eth.getCode(this.registryAddress, function(error, result) {
         if (!error) {
           // checking if provided address corresponds to a contract or just account
           if (
@@ -155,7 +149,7 @@ export class ContractsService {
           data: this.registryData[0].data,
           gas: 4700000
         },
-        function (e, contract) {
+        function(e, contract) {
           if (typeof contract.address !== 'undefined') {
             console.log('Registry smart contract mined');
             console.log('Address: ' + contract.address);
@@ -175,7 +169,7 @@ export class ContractsService {
    */
   async getCountOfInstitutions(): Promise<number> {
     return new Promise((resolve, reject) => {
-      this.registry.size(function (error, count) {
+      this.registry.size(function(error, count) {
         if (error) {
           alert(error);
           return;
@@ -189,7 +183,7 @@ export class ContractsService {
   // retrieving the factory of the current user account
   async getInstitutionByAddress(account: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.registry.institutions(account, function (error, institution) {
+      this.registry.institutions(account, function(error, institution) {
         if (error) {
           alert(error);
           return;
@@ -208,8 +202,15 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       const optionFactory = __this.optionFactoryAddresses[id];
 
-      if (optionFactory !== '' && optionFactory !== undefined && optionFactory !== null) {
-        __this.web3.eth.getCode(__this.optionFactoryAddresses[id], function (error, result) {
+      if (
+        optionFactory !== '' &&
+        optionFactory !== undefined &&
+        optionFactory !== null
+      ) {
+        __this.web3.eth.getCode(__this.optionFactoryAddresses[id], function(
+          error,
+          result
+        ) {
           if (!error) {
             // checking if provided address corresponds to a contract or just account
             if (
@@ -238,13 +239,14 @@ export class ContractsService {
   async deployFactory(markupPercentage: number): Promise<string> {
     console.log('Deploying factory smart contract...');
     const optionFactory = (await new Promise((resolve, reject) => {
-      this.optionFactoryContract.new(markupPercentage,
+      this.optionFactoryContract.new(
+        markupPercentage,
         {
           from: this.web3.eth.accounts[0],
           data: this.optionFactoryData[0].data,
           gas: '4700000'
         },
-        function (e, contract) {
+        function(e, contract) {
           if (typeof contract.address !== 'undefined') {
             console.log('Factory smart contract mined');
             console.log('Address: ' + contract.address);
@@ -272,7 +274,7 @@ export class ContractsService {
           from: this.web3.eth.accounts[0],
           gas: 4000000
         },
-        function (error, transactionHash) {
+        function(error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -289,7 +291,7 @@ export class ContractsService {
   async checkOracleDeployment(oracleAddress: string): Promise<any> {
     // checking and deploying oracle
     return new Promise((resolve, reject) => {
-      this.web3.eth.getCode(oracleAddress, function (error, result) {
+      this.web3.eth.getCode(oracleAddress, function(error, result) {
         if (!error) {
           // checking if provided address corresponds to a contract or just account
           if (
@@ -312,16 +314,25 @@ export class ContractsService {
     });
   }
 
-  async deployOracle(name: string, urlPart1: string, symbol: string, urlPart2: string): Promise<string> {
+  async deployOracle(
+    name: string,
+    urlPart1: string,
+    symbol: string,
+    urlPart2: string
+  ): Promise<string> {
     console.log('Deploying ' + name + ' oracle...');
     const oracle = (await new Promise((resolve, reject) => {
-      this.oracleContract.new(name, urlPart1, symbol, urlPart2,
+      this.oracleContract.new(
+        name,
+        urlPart1,
+        symbol,
+        urlPart2,
         {
           from: this.web3.eth.accounts[0],
           data: this.oracleData[0].data,
           gas: 4700000
         },
-        function (e, contract) {
+        function(e, contract) {
           if (typeof contract.address !== 'undefined') {
             console.log(name + ' oracle smart contract mined');
             console.log(name + ' address: ' + contract.address);
@@ -364,7 +375,7 @@ export class ContractsService {
 
   async getOptionCount(id: number): Promise<number> {
     return new Promise((resolve, reject) => {
-      this.optionFactories[id].getOptionCount.call(this.account, function (
+      this.optionFactories[id].getOptionCount.call(this.account, function(
         error,
         result
       ) {
@@ -381,7 +392,7 @@ export class ContractsService {
   async getContractBalance(id: number): Promise<number> {
     return new Promise((resolve, reject) => {
       const web3 = this.web3;
-      this.optionFactories[id].getBalance.call(function (error, result) {
+      this.optionFactories[id].getBalance.call(function(error, result) {
         if (error) {
           alert(error);
           return;
@@ -403,7 +414,7 @@ export class ContractsService {
           gas: 4000000,
           value: amount
         },
-        function (error, transactionHash) {
+        function(error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -431,7 +442,7 @@ export class ContractsService {
           gas: 4000000,
           value: this.web3.toWei(0.0001, 'ether')
         },
-        function (error, transactionHash) {
+        function(error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -465,7 +476,7 @@ export class ContractsService {
           gas: 4000000,
           value: premium
         },
-        function (error, transactionHash) {
+        function(error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
@@ -482,7 +493,7 @@ export class ContractsService {
   // exercising the option, if it is past its maturity date
   async exerciseOption(id: number, option: number): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.optionFactories[id].exerciseOption(option, function (error, hash) {
+      this.optionFactories[id].exerciseOption(option, function(error, hash) {
         if (error) {
           alert(error);
           return;
@@ -496,7 +507,10 @@ export class ContractsService {
   // retrieving all options of the current user account
   async getOptionsByBuyer(id: number, account: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactories[id].getOptionsByBuyer(account, function (error, array) {
+      this.optionFactories[id].getOptionsByBuyer(account, function(
+        error,
+        array
+      ) {
         if (error) {
           alert(error);
           return;
@@ -513,7 +527,7 @@ export class ContractsService {
 
   async getOption(id: number, option: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.optionFactories[id].options(option, function (error, optionInfo) {
+      this.optionFactories[id].options(option, function(error, optionInfo) {
         if (error) {
           alert(error);
           return;
@@ -534,13 +548,15 @@ export class ContractsService {
           gas: 4000000,
           value: this.web3.toWei(0.0001, 'ether')
         },
-        function (error, transactionHash) {
+        function(error, transactionHash) {
           // getting the transaction hash as callback from the function
           if (error) {
             alert(error);
             return;
           } else {
-            console.log('Option premium calculation transaction sent successfully');
+            console.log(
+              'Option premium calculation transaction sent successfully'
+            );
             console.log('Transaction hash: ' + transactionHash);
           }
         }
@@ -554,7 +570,7 @@ export class ContractsService {
    */
   async getTransaction(hash: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.web3.eth.getTransaction(hash, function (error, transactionInfo) {
+      this.web3.eth.getTransaction(hash, function(error, transactionInfo) {
         if (error) {
           alert(error);
           return;
