@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import { ContractsService } from '../../services/contract.service';
 import { Option } from '../../services/option.service';
 import { Router } from '@angular/router';
@@ -15,7 +14,7 @@ export class TransactionsComponent implements OnInit {
 
   private count: number;
 
-  institutions = [];
+  sellers = [];
 
   // material table elements
   displayedColumns: string[] = [
@@ -50,7 +49,7 @@ export class TransactionsComponent implements OnInit {
       __this.contractService.selectedOptionFactoryId
     );
 
-    this.institutions = this.contractService.institutions;
+    this.sellers = this.contractService.sellers;
 
     __this.contractService.getAccount().then(account => {
       console.log('User account: ' + account);
@@ -162,7 +161,7 @@ export class TransactionsComponent implements OnInit {
     return false;
   }
 
-  switchInstitution() {
+  switchSeller() {
     this.retrieveTransactionData();
   }
 }

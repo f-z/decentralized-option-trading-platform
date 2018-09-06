@@ -3,11 +3,11 @@
     <mat-toolbar color="primary">
       <mat-toolbar-row>
         <span routerLink="/">
-          SMART OPTIONS SYSTEM
+          OPTION TRADING PLATFORM
         </span>
         <span class="fill-remaining-space"></span>
         <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/transactions">Transactions</button>
-        <button mat-button *ngIf="authService.loggedIn()" routerLink="/institutions">Institutions</button>
+        <button mat-button *ngIf="authService.loggedIn()" routerLink="/sellers">Sellers</button>
         <button mat-button *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
           routerLink="/rates">Market Rates</button>
         <button mat-button *ngIf="authService.loggedIn()" routerLink="/profile">Profile</button>

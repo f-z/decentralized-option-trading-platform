@@ -22,7 +22,7 @@ import {
 } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
-import { InstitutionsComponent } from './components/institutions/institutions.component';
+import { SellersComponent } from './components/sellers/sellers.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 import {
@@ -51,7 +51,7 @@ import { APP_BASE_HREF } from '../../node_modules/@angular/common';
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    InstitutionsComponent,
+    SellersComponent,
     PublicProfileComponent
   ],
   imports: [

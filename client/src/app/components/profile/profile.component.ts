@@ -11,7 +11,7 @@ export class ProfileComponent implements OnInit {
   username = '';
   email = '';
 
-  isInstitution: boolean;
+  isSeller: boolean;
 
   accountAddress = '';
   factoryAddress = '';
@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
       __this.email = profile.user.email; // setting e-mail
     });
 
-    __this.isInstitution = true;
+    __this.isSeller = true;
 
     __this.contractService.getAccount().then(account => {
       __this.accountAddress = account;
@@ -47,17 +47,17 @@ export class ProfileComponent implements OnInit {
         });
 
       __this.contractService
-        .getInstitutionByAddress(__this.accountAddress)
-        .then(institution => {
+        .getSellerByAddress(__this.accountAddress)
+        .then(seller => {
           // logging for demonstration and debugging purposes
-          console.log('Account information from registry: ' + institution);
-          // if the account is not an institution
-          if (institution[0] === '') {
-            __this.isInstitution = false;
+          console.log('Account information from registry: ' + seller);
+          // if the account is not an seller
+          if (seller[0] === '') {
+            __this.isSeller = false;
           } else {
-            __this.username = institution[0];
-            __this.accountAddress = institution[1];
-            __this.factoryAddress = institution[2];
+            __this.username = seller[0];
+            __this.accountAddress = seller[1];
+            __this.factoryAddress = seller[2];
           }
         });
     });

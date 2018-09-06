@@ -1,25 +1,6 @@
 [
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "_buyer",
-				"type": "address"
-			}
-		],
-		"name": "getOptionCount",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
 		"inputs": [],
 		"name": "getBalance",
 		"outputs": [
@@ -34,12 +15,7 @@
 	},
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "_buyer",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"name": "getOptionsByBuyer",
 		"outputs": [
 			{
@@ -231,6 +207,20 @@
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [],
+		"name": "getOptionCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -293,7 +283,7 @@
 		"constant": true,
 		"inputs": [
 			{
-				"name": "v",
+				"name": "value",
 				"type": "uint256"
 			}
 		],
@@ -357,6 +347,23 @@
 		"inputs": [
 			{
 				"indexed": true,
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "premium",
+				"type": "uint256"
+			}
+		],
+		"name": "OptionPremium",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"name": "_buyer",
 				"type": "address"
 			},
@@ -372,23 +379,6 @@
 			}
 		],
 		"name": "NewOption",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "premium",
-				"type": "uint256"
-			}
-		],
-		"name": "OptionPremium",
 		"type": "event"
 	},
 	{

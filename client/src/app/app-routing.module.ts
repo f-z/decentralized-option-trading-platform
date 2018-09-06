@@ -6,7 +6,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
-import { InstitutionsComponent } from './components/institutions/institutions.component';
+import { SellersComponent } from './components/sellers/sellers.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 
@@ -42,8 +42,8 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {
-    path: 'institutions',
-    component: InstitutionsComponent, // institutions route
+    path: 'sellers',
+    component: SellersComponent, // sellers route
     canActivate: [AuthGuard] // user must be logged in to view this route
   },
   {

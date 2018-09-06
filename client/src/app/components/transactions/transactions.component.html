@@ -60,9 +60,9 @@
   <br>
 
   <mat-form-field>
-    <mat-select placeholder="Institution" [(value)]="this.contractService.selectedOptionFactoryId">
-      <mat-option *ngFor="let institution of institutions; let i = index" [value]="i">
-        {{ institution[0] }}
+    <mat-select placeholder="Seller" [(value)]="this.contractService.selectedOptionFactoryId">
+      <mat-option *ngFor="let seller of sellers; let i = index" [value]="i">
+        {{ seller[0] }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -70,9 +70,9 @@
   <br>
   <br>
 
-  <!-- Switch institution (option factory contract) button -->
-  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="switchInstitution();">Switch
-    institution
+  <!-- Switch seller (option factory contract) button -->
+  <button mat-raised-button class="button" name="button" color="primary" type="submit" (click)="switchSeller();">Switch
+    seller
   </button>
 
 </div>

@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   usernameValid;
   usernameMessage;
 
-  isInstitution: any;
+  isSeller: any;
 
   constructor(
     public contractService: ContractsService,
@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
           return;
         }
 
-        console.log('Institution registered with registry smart contract');
+        console.log('Seller registered with registry smart contract');
         console.log('Name: ' + registrationInfo.args.name);
         console.log('Account address: ' + registrationInfo.args.account);
 
@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
       ])],
       // Confirm password input
       confirm: ['', Validators.required], // Field is required
-      'isInstitution': new FormControl('')
+      'isSeller': new FormControl('')
     }, { validator: this.matchingPasswords('password', 'confirm') }); // Add custom validator to form for matching passwords
   }
 
@@ -182,9 +182,9 @@ export class RegisterComponent implements OnInit {
         this.processing = false; // re-enabling submit button
         this.enableForm(); // re-enabling form
       } else {
-        if (!this.form.controls['isInstitution'].value) { // if not an institution, then go straight to login page
+        if (!this.form.controls['isSeller'].value) { // if not an seller, then go straight to login page
           this.goToLogin(data);
-        } else { // if institution, then register with registry smart contract
+        } else { // if seller, then register with registry smart contract
           this.registerWithRegistrySmartContract();
           // and wait for event confirmation
           this.listeningForRegistrationEvents(data);

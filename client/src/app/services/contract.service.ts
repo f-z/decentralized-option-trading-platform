@@ -13,14 +13,14 @@ export class ContractsService {
   private registryData = require('../../assets/registryData.json');
   private registryABI = require('../../assets/registryABI.json');
   private registryContract: any;
-  public registryAddress = '0xd7303fafe84917a550834ea01e43db473a5e71c9';
+  public registryAddress = '0x0ac768cff44b463b51a946407488676c16590707';
 
   public optionFactories = [];
   private optionFactoryData = require('../../assets/factoryData.json');
   private optionFactoryABI = require('../../assets/factoryABI.json');
   public optionFactoryContract: any;
   public optionFactoryAddresses = [];
-  public institutions = [];
+  public sellers = [];
 
   public oracles = [];
   private oracleData = require('../../assets/oracleData.json');
@@ -96,26 +96,26 @@ export class ContractsService {
         // deploying new registry version by force
         // __this.contractService.deployRegistry();
 
-        // getting the number of institutions registered
-        __this.getCountOfInstitutions().then(count => {
+        // getting the number of sellers registered
+        __this.getCountOfSellers().then(count => {
           for (let i = 0; i < count; i++) {
-            // getting each registered institution's account address
+            // getting each registered seller's account address
             __this.registry.addressLUT(i, function(error, address) {
               if (error) {
                 return;
               }
 
-              // getting each institution's information from its account address
-              __this.getInstitutionByAddress(address).then(institution => {
-                // saving the institution to the array of institutions
-                __this.institutions.push(institution);
+              // getting each seller's information from its account address
+              __this.getSellerByAddress(address).then(seller => {
+                // saving the seller to the array of sellers
+                __this.sellers.push(seller);
                 // storing a default value for the premium, before it has actually been calculated
-                institution.push('...');
-                // saving the institution's factory address to the option factory addresses array
-                __this.optionFactoryAddresses.push(institution[2]);
+                seller.push('...');
+                // saving the seller's factory address to the option factory addresses array
+                __this.optionFactoryAddresses.push(seller[2]);
                 // storing the factory contract object at the specified address to the array of option factories
                 __this.optionFactories.push(
-                  __this.optionFactoryContract.at(institution[2])
+                  __this.optionFactoryContract.at(seller[2])
                 );
               });
             });
@@ -208,9 +208,9 @@ export class ContractsService {
   }
 
   /**
-   * Retrieving the number of institutions registered with the master registry smart contract
+   * Retrieving the number of sellers registered with the master registry smart contract
    */
-  async getCountOfInstitutions(): Promise<number> {
+  async getCountOfSellers(): Promise<number> {
     return new Promise((resolve, reject) => {
       this.registry.size(function(error, count) {
         if (error) {
@@ -224,14 +224,14 @@ export class ContractsService {
   }
 
   // retrieving the factory of the current user account
-  async getInstitutionByAddress(account: string): Promise<any> {
+  async getSellerByAddress(account: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.registry.institutions(account, function(error, institution) {
+      this.registry.sellers(account, function(error, seller) {
         if (error) {
           alert(error);
           return;
         } else {
-          resolve(institution);
+          resolve(seller);
         }
       });
     }) as Promise<any>;
@@ -265,7 +265,11 @@ export class ContractsService {
                 resolve(address);
               });
             } else {
-              console.log('Option factory smart contract at address ' + __this.optionFactoryAddresses[id] + ' already deployed');
+              console.log(
+                'Option factory smart contract at address ' +
+                  __this.optionFactoryAddresses[id] +
+                  ' already deployed'
+              );
               resolve(__this.optionFactoryAddresses[id]);
             }
           } else {
@@ -346,7 +350,11 @@ export class ContractsService {
               resolve(address);
             });
           } else {
-            console.log('Oracle smart contract at address ' + oracleAddress + ' already deployed');
+            console.log(
+              'Oracle smart contract at address ' +
+                oracleAddress +
+                ' already deployed'
+            );
             resolve(oracleAddress);
           }
         } else {
@@ -472,7 +480,10 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
-  async setMinimumDepositAmount(id: number, minimumAmount: number) {
+  async setMinimumDepositAmount(
+    id: number,
+    minimumAmount: number
+  ): Promise<any> {
     // letting the user know that the transaction has been sent
     console.log('Setting minimum deposit amount...');
     // sending the transaction to our contract
@@ -505,7 +516,7 @@ export class ContractsService {
     exercisePrice: number,
     expirationDate: number,
     premium: number
-  ) {
+  ): Promise<any> {
     // letting the user know that the transaction has been sent
     console.log('Buying the option contract; this may take a while...');
     // sending the transaction to our contract
